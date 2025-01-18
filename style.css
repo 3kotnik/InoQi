@@ -90,7 +90,7 @@ nav {
     padding: 2rem;
     background-color: rgba(0, 0, 0, 0.5); /* Add a slight overlay to ensure text readability */
     width: 100%;
-    max-width: 800px;
+    max-width: 1245px;
     margin: auto;
 }
 
@@ -98,11 +98,14 @@ nav {
 section {
     padding: 2rem 1rem; /* Add padding for lower resolutions */
     width: 100%;
-    max-width: 1245px;
     margin: 0 auto; /* Remove top and bottom margin */
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+section .content {
+    width: 100%;
+    max-width: 1245px;
 }
 
 /* Section Colors */
@@ -160,8 +163,7 @@ footer {
     text-align: center;
     padding: 1rem;
     width: 100%;
-    max-width: 1245px;
-    margin: auto;
+    margin: 0 auto;
 }
 
 /* Responsive Design */
