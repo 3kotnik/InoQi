@@ -30,7 +30,8 @@ nav {
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    max-width: 1200px;
+    max-width: 1245px;
+    padding: 0 1rem; /* Add padding for lower resolutions */
 }
 .logo {
     font-size: 1.5rem;
@@ -95,12 +96,11 @@ nav {
 
 /* Sections */
 section {
-    padding: 2rem;
+    padding: 2rem 1rem; /* Add padding for lower resolutions */
     background-color: #444;
-    margin: 1rem 0;
     width: 100%;
-    max-width: 1200px;
-    margin: auto;
+    max-width: 1245px;
+    margin: 1rem auto;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -145,7 +145,7 @@ footer {
     padding: 1rem;
     margin-top: 2rem;
     width: 100%;
-    max-width: 1200px;
+    max-width: 1245px;
     margin: auto;
 }
 

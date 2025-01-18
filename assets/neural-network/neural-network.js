@@ -20,10 +20,10 @@ var opts = {
     dataToConnections: 1, // Data to connections ratio
     baseSpeed: .005, // Base speed of data
     addedSpeed: .005, // Additional speed of data
-    baseGlowSpeed: .4, // Base glow speed of nodes
-    addedGlowSpeed: .4, // Additional glow speed of nodes
-    rotVelX: .001, // Rotation velocity on X-axis
-    rotVelY: .0009, // Rotation velocity on Y-axis
+    baseGlowSpeed: .0, // Base glow speed of nodes
+    addedGlowSpeed: .0, // Additional glow speed of nodes
+    rotVelX: .0002, // Rotation velocity on X-axis
+    rotVelY: .00002, // Rotation velocity on Y-axis
     repaintColor: '#111', // Background color
     connectionColor: 'hsla(174,63%,light%,alp)', // Connection color
     rootColor: 'hsla(214,31%,light%,alp)', // Root node color
