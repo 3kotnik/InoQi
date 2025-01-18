@@ -20,6 +20,12 @@
             </ul>
         </nav>
     </header>
+    
+    <!-- Test Section for Neural Network -->
+    <section class="test-neural-network">
+        <canvas id="test-canvas"></canvas>
+    </section>
+    
     <section class="hero" id="hero">
         <canvas id="c"></canvas>
         <div class="hero-content">
@@ -61,5 +67,17 @@
         <p>© 2024 Your Name. All rights reserved.</p>
     </footer>
     <script src="assets/neural-network/neural-network.js"></script>
+    <script>
+        // Initialize neural network animation on the test canvas
+        var testCanvas = document.getElementById('test-canvas');
+        testCanvas.width = window.innerWidth;
+        testCanvas.height = window.innerHeight;
+        var ctx = testCanvas.getContext('2d');
+        // Ensure opts is defined and use the initialization function from neural-network.js
+        if (typeof opts !== 'undefined') {
+            opts.vanishPoint = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+            init();
+        }
+    </script>
 </body>
 </html>

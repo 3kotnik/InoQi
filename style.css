@@ -43,7 +43,7 @@ nav {
     height: 100vh;
     position: relative;
 }
-#c {
+#c, #test-canvas {
     position: absolute;
     top: 0;
     left: 0;
