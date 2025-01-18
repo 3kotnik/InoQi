@@ -11,6 +11,11 @@
     <header>
         <nav>
             <div class="logo">Your Logo</div>
+            <div class="hamburger">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
             <ul class="nav-links">
                 <li><a href="#hero">Home</a></li>
                 <li><a href="#ar-vr">AR/VR</a></li>
@@ -18,11 +23,6 @@
                 <li><a href="#generative-ai">Generative AI</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
-            <div class="hamburger">
-                <div></div>
-                <div></div>
-                <div></div>
-            </div>
         </nav>
     </header>
     
@@ -70,7 +70,7 @@
             </form>
         </div>
     </section>
-    
+
     <footer>
         <div class="content">
             <p>© 2024 Your Name. All rights reserved.</p>
@@ -78,6 +78,8 @@
     </footer>
     <script src="assets/neural-network/neural-network.js"></script>
     <script>
+        console.log('neural-network.js script loaded');
+
         // Hamburger menu toggle
         const hamburger = document.querySelector('.hamburger');
         const navLinks = document.querySelector('.nav-links');
