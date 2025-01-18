@@ -1,0 +1,360 @@
+/* Reset some default styles */
+body, h1, h2, h3, p, ul, li, form {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+body {
+    font-family: 'Roboto', sans-serif;
+    line-height: 1.6;
+    scroll-behavior: smooth;
+    background-color: #1a1a1a;
+    color: #fff;
+    overflow-x: hidden; /* Prevent horizontal scroll */
+}
+/* Header and Nav Styles */
+header {
+    background-color: #1a1a1a;
+    color: white;
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid #292929;
+}
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+.nav-links {
+    list-style: none;
+    display: flex;
+}
+.nav-links li {
+    margin-left: 20px;
+}
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+.nav-links a:hover {
+    color: #ccc;
+}
+/* Hero Section Styles */
+.hero {
+     height: 100vh;
+    background-color: #1a1a1a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    text-align: center;
+    overflow: hidden;
+    position: relative;
+}
+.hero::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+      background-image: url('https://images.unsplash.com/photo-1554415707-6e8cfc93785f?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+    background-size: cover;
+     background-position: center;
+    z-index: -2; /* Below the background and hero content */
+   opacity: 0.4;
+       transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.hero::after {
+    content: "";
+    position: absolute;
+      top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+     background-color: #1a1a1a;
+   z-index: -1;
+    opacity: 0.7;
+    transition: opacity 0.5s ease;
+}
+.hero.active::before {
+   transform: scale(1.1);
+}
+.hero.active::after{
+      opacity: 0.2;
+}
+.hero-content {
+     max-width: 800px;
+     position: relative;
+    z-index: 1;
+     opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.hero.active .hero-content {
+     opacity: 1;
+     transform: translateY(0);
+}
+.hero-content h1 {
+    font-size: clamp(3rem, 8vw, 4.5rem);
+    margin-bottom: 10px;
+      font-weight: 700;
+    letter-spacing: -2px;
+}
+.hero-content p {
+    font-size: clamp(1.2rem, 2vw, 1.5rem);
+    margin-bottom: 20px;
+       font-weight: 300;
+    letter-spacing: -0.5px;
+}
+#unity-container {
+     width: 100%;
+     height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.placeholder-unity {
+     border: 2px dashed #ccc;
+    width: 80%;
+    height: 80%;
+    display: flex;
+     align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #888;
+     font-style: italic;
+}
+/* Content Section Styles */
+section {
+    padding: 6rem 0;
+    text-align: center;
+    position: relative;
+      overflow: hidden;
+    display: flex; /* Enable flexbox for vertical alignment */
+    align-items: center; /* Align items vertically to the center */
+    justify-content: center; /* Align content to center */
+}
+
+section.even {
+   background-color: #1f1f1f;
+}
+section.odd {
+    background-color: #1a1a1a;
+}
+.section-background {
+     position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+     height: 100%;
+    background-size: cover;
+    background-position: center;
+   z-index: -1;
+    opacity: 0.4;
+     transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.section-background.parallax-slow {
+    transform: translateZ(-10px) scale(1.1);
+}
+.section-background.parallax-fast {
+   transform: translateZ(-5px) scale(1.05);
+}
+section.active .section-background {
+      transform: translateZ(0) scale(1);
+}
+
+.ar-vr .section-background {
+    background-image: url('https://images.unsplash.com/photo-1551836022-c9f733772888?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+}
+.3d-assets .section-background {
+       background-image: url('https://images.unsplash.com/photo-1592001228341-07f209ad6829?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+}
+.generative-ai .section-background {
+    background-image: url('https://images.unsplash.com/photo-1682685797500-958767470a83?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+}
+.contact .section-background {
+     background-image: url('https://images.unsplash.com/photo-1609608477432-25a4bf1b9446?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+}
+.section-content {
+     max-width: 1200px;
+    margin: 0 auto;
+     padding: 0 20px;
+   position: relative;
+      z-index: 1;
+     opacity: 0;
+   transform: translateY(50px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+  text-align: left; /* Align the text to left for the inner section elements */
+
+    display: flex; /* Add flex container for image/text alignment */
+     flex-wrap: wrap;
+    align-items: center;
+      justify-content: space-between;
+
+}
+section.active .section-content {
+    opacity: 1;
+    transform: translateY(0);
+}
+section .content-text {
+    flex: 1; /* Take remaining space */
+   padding-right: 20px;
+}
+section .content-image {
+     flex: 1; /* Take remaining space */
+     display: flex;
+     justify-content: center;
+
+}
+section .content-image img {
+   max-width: 100%; /* To have the same width as the image itself*/
+   max-height: 400px;
+   object-fit: contain;
+}
+section h2 {
+  margin-bottom: 20px;
+    font-size: clamp(2.2rem, 5vw, 3rem);
+      font-weight: 700;
+    letter-spacing: -1.5px;
+      display: inline-block;
+   position: relative;
+    overflow: hidden;
+}
+section h2::before{
+    content:"";
+      position: absolute;
+     left:0;
+     top:0;
+     width: 100%;
+    height: 100%;
+    background-color: #29abe2;
+  transform-origin: left;
+    transform: scaleX(0);
+       transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+       z-index:-1;
+
+}
+section.active h2::before {
+     transform: scaleX(1);
+}
+section h2 .text-color {
+    position: absolute;
+    top: 0;
+     left: 0;
+      display: inline-block;
+     -webkit-text-stroke: 1px #29abe2;
+   text-fill-color:transparent;
+       white-space: nowrap;
+
+}
+
+section p {
+     margin-bottom: 30px;
+    font-size: clamp(1rem, 2vw, 1.3rem);
+       font-weight: 300;
+    letter-spacing: -0.5px;
+}
+section img {
+  max-width: 100%;
+     height: auto;
+    margin-top: 20px;
+}
+.ar-vr {
+}
+.3d-assets {
+}
+.generative-ai {
+}
+.contact {
+}
+
+/* Contact Form */
+form {
+    display: flex;
+    flex-direction: column;
+    max-width: 500px;
+   margin: 20px auto;
+}
+form input, form textarea, form button {
+    margin-bottom: 15px;
+     padding: 10px;
+     border: 1px solid #ccc;
+      background-color: #333;
+      color: #fff;
+}
+form textarea {
+   min-height: 150px;
+}
+form button {
+    background-color: #666;
+  color: white;
+    cursor: pointer;
+   border: none;
+    transition: background-color 0.3s ease;
+}
+form button:hover {
+    background-color: #555;
+}
+/* Footer Styles */
+footer {
+   background-color: #1a1a1a;
+   color: white;
+    text-align: center;
+  padding: 1rem 0;
+     border-top: 1px solid #292929;
+}
+/* Responsive Design */
+@media (max-width: 768px) {
+  .nav-links {
+      flex-direction: column;
+     text-align: center;
+    }
+    .nav-links li {
+       margin: 10px 0;
+   }
+   .hero {
+    height: 100vh;
+    padding: 1rem;
+    }
+     .hero-content h1 {
+        font-size: 2.5em;
+   }
+    .hero-content p {
+      font-size: 1.1em;
+   }
+     #unity-container {
+        height: 200px;
+    }
+  section {
+   padding: 4rem 0;
+    }
+    section h2 {
+        font-size: 2em;
+  }
+    section p {
+        font-size: 1.1em;
+  }
+     .section-content {
+          flex-direction: column;
+
+     }
+    .section-content .content-text {
+       padding-right:0;
+    }
+     .section-content .content-image {
+        padding: 0;
+         margin: 20px auto;
+  }
+}
