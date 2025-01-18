@@ -1,4 +1,5 @@
 // Canvas dimensions
+var c = document.getElementById('c');
 var w = c.width = window.innerWidth,
     h = c.height = window.innerHeight,
     ctx = c.getContext('2d');
@@ -88,7 +89,7 @@ function Connection(x, y, z, size) {
     this.x = x;
     this.y = y;
     this.z = z;
-    this.size = size;
+    this.size = size > 0 ? size : 0.1; // Ensure size is positive
     this.screen = {};
     this.links = [];
     this.probabilities = [];
@@ -171,7 +172,7 @@ Connection.rootStep = function () {
 Connection.prototype.draw = function () {
     ctx.fillStyle = this.screen.color;
     ctx.beginPath();
-    ctx.arc(this.screen.x, this.screen.y, this.screen.scale * this.size, 0, Tau);
+    ctx.arc(this.screen.x, this.screen.y, Math.max(this.screen.scale * this.size, 0.1), 0, Tau); // Ensure radius is positive
     ctx.fill();
 };
 

@@ -7,20 +7,30 @@
 
 /* Body and Font Settings */
 body {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Montserrat', sans-serif; /* Use Montserrat from Google Fonts */
     background-color: #1a1a1a;
     color: white;
+    margin: 0; /* No margin on body */
+    overflow-x: hidden; /* Prevent horizontal scrolling */
 }
 
 /* Header and Navigation */
 header {
     background-color: #333;
     padding: 1rem;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
 }
 nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 100%;
+    max-width: 1200px;
 }
 .logo {
     font-size: 1.5rem;
@@ -29,26 +39,46 @@ nav {
 .nav-links {
     list-style: none;
     display: flex;
-}
-.nav-links li {
-    margin-left: 20px;
+    gap: 20px;
 }
 .nav-links a {
     color: white;
     text-decoration: none;
+    padding: 0.5rem 1rem;
+    transition: background-color 0.3s ease;
+}
+.nav-links a:hover {
+    background-color: #555;
+}
+
+/* Hamburger Menu for Mobile */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+}
+.hamburger div {
+    width: 25px;
+    height: 3px;
+    background-color: white;
+    margin: 4px 0;
 }
 
 /* Hero Section */
 .hero {
+    margin-top: 70px; /* Offset for fixed header */
     height: 100vh;
     position: relative;
     background: linear-gradient(to bottom, rgba(68, 68, 68, 0) 0%, rgba(68, 68, 68, 1) 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 #c {
     position: absolute;
     top: 0;
-    left: 0;
-    width: 100%;
+    left: 50%;
+    transform: translateX(-50%);
     height: 100%;
     z-index: -1;
 }
@@ -57,13 +87,23 @@ nav {
     z-index: 1;
     text-align: center;
     padding: 2rem;
+    background-color: rgba(0, 0, 0, 0.5); /* Add a slight overlay to ensure text readability */
+    width: 100%;
+    max-width: 800px;
+    margin: auto;
 }
 
 /* Sections */
 section {
     padding: 2rem;
     background-color: #444;
-    margin: 1rem;
+    margin: 1rem 0;
+    width: 100%;
+    max-width: 1200px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 section h2 {
     font-size: 2rem;
@@ -82,11 +122,14 @@ section img {
 form {
     display: flex;
     flex-direction: column;
+    width: 100%;
+    max-width: 800px;
 }
 form input, form textarea, form button {
     margin-bottom: 1rem;
     padding: 0.5rem;
     border: none;
+    width: 100%;
 }
 form button {
     background-color: #555;
@@ -101,4 +144,26 @@ footer {
     text-align: center;
     padding: 1rem;
     margin-top: 2rem;
+    width: 100%;
+    max-width: 1200px;
+    margin: auto;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        background-color: #333;
+    }
+    .nav-links.active {
+        display: flex;
+    }
+    .hamburger {
+        display: flex;
+    }
 }
