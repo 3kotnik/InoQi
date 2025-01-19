@@ -6,6 +6,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
     <title>InoQI – veščine prihodnosti</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="assets/favicon.png"> <!-- Added favicon -->
 </head>
 <body>
     <header id="header">
@@ -29,7 +30,7 @@
             </ul>
         </nav>
     </header>
-    
+
     <section class="hero" id="hero">
         <video autoplay muted loop id="hero-video">
             <source src="assets/JC_ShowreelOne_Short_1080p.mp4" type="video/mp4" media="(min-width: 768px)">
@@ -38,18 +39,19 @@
         </video>
         <div class="hero-content">
             <h1>InoQI – veščine prihodnosti</h1>
-            <h2>Zavod za spodbujanje kreativnosti in digitalne kulture</h2>
-            <p>InoQI je zavod ustvarjalcev, izobraževalcev, inovatorjev in večnih radovednežev, povezanih zaradi skupne strasti do novodobnih tehnologij ter možnosti, ki jih prinašajo. Svojo strast želimo širiti in novo generacijo opremiti z znanji in veščinami prihodnosti.</p>
-            <div class="qualities">
-                <p>Inovativni pristopi</p>
-                <p>Praktične izkušnje</p>
-                <p>Napredne tehnologije in orodja</p>
-                <p>Kreativnost in kritičen pogled</p>
+            <div class="hero-overlay">
+                <h2>Zavod za spodbujanje kreativnosti in digitalne kulture</h2>
+                <p>InoQI je zavod ustvarjalcev, izobraževalcev, inovatorjev in večnih radovednežev, povezanih zaradi skupne strasti do novodobnih tehnologij ter možnosti, ki jih prinašajo. Svojo strast želimo širiti in novo generacijo opremiti z znanji in veščinami prihodnosti.</p>
+                <div class="qualities">
+                    <p>Inovativni pristopi</p>
+                    <p>Praktične izkušnje</p>
+                    <p>Napredne tehnologije in orodja</p>
+                    <p>Kreativnost in kritičen pogled</p>
+                </div>
+                <button class="news-button">Prijavite se na novice</button>
             </div>
-            <button class="news-button">Prijavite se na novice</button>
         </div>
     </section>
-
 
     <section class="about-us" id="about-us">
         <div class="content">
@@ -162,10 +164,10 @@
         <div class="content">
             <h2>Pridružite se InoQI skupnosti</h2>
             <form>
-                <label for="name">Ime in priimek:</label>
+                <label for="name">Ime:</label>
                 <input type="text" id="name" name="name" required>
-                <label for="age">Starost:</label>
-                <input type="number" id="age" name="age" required>
+                <label for="surname">Priimek:</label>
+                <input type="text" id="surname" name="surname" required>
                 <label for="workshop">Izbrana delavnica:</label>
                 <select id="workshop" name="workshop" required>
                     <option value="KidoKoda">KidoKoda</option>
@@ -249,7 +251,7 @@
 
         // Smooth scroll to sections
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
+            anchor.addEventListener('click', function (e) {
                 e.preventDefault();
                 document.querySelector(this.getAttribute('href')).scrollIntoView({
                     behavior: 'smooth'
@@ -270,7 +272,7 @@
                 logo.style.transform = 'scale(1)';
             } else {
                 header.classList.remove('scrolled');
-                logo.style.transform = 'scale(2)';
+                logo.style.transform = 'scale(1.5)';
             }
         });
     </script>

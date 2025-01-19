@@ -37,8 +37,11 @@ nav {
 }
 
 .logo img {
-    width: 150px;
+    width: auto;
+    height: 50px;
     transition: transform 0.3s ease;
+    transform: scale(1.5);
+    padding-left: 1rem;
 }
 /* Adjust the logo size and add transition */
 .hamburger {
@@ -74,10 +77,11 @@ nav {
     .nav-links a {
         color: white;
         text-decoration: none;
-        padding: 0.5rem 1rem;
+        padding: 1rem 0;
         transition: background-color 0.3s ease;
+        margin-bottom: 1rem;
     }
-
+        /* Increased vertical space */
         .nav-links a:hover {
             background-color: #555;
         }
@@ -110,6 +114,8 @@ nav {
     max-width: 1245px;
     margin: auto;
     color: white;
+    position: relative;
+    z-index: 1;
 }
 
     .hero-content h1 {
@@ -118,44 +124,19 @@ nav {
         font-weight: bold;
     }
 
-    .hero-content h2 {
-        font-size: 1.75rem;
-        margin-bottom: 1rem;
-        font-weight: normal;
-    }
-
-    .hero-content p {
-        font-size: 1.25rem;
-        margin-bottom: 1rem;
-    }
-
-.qualities {
-    margin: 1rem 0;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 1rem;
+.hero-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 33.33%;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(34, 34, 34, 0.9) 100%);
+    padding: 2rem;
+    text-align: center;
 }
 
-    .qualities p {
-        font-size: 1.25rem;
-        margin: 0.25rem 0;
-        font-weight: bold;
-        color: #ff5a5f;
-    }
-
-.news-button {
-    background-color: #ff5a5f;
-    color: white;
-    padding: 0.75rem 1.5rem;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    border-radius: 5px;
-}
-
-    .news-button:hover {
-        background-color: #e04e50;
+    .hero-overlay h2, .hero-overlay p, .hero-overlay .qualities, .hero-overlay .news-button {
+        color: white;
     }
 
 /* About Us Section */
@@ -353,8 +334,10 @@ nav {
         display: flex;
         flex-direction: column;
         align-items: center;
+        max-width: 40%;
+        margin: 0 auto;
     }
-
+        /* Form width on desktop */
         .apply form label {
             width: 100%;
             font-size: 1.25rem;
@@ -585,11 +568,16 @@ footer {
             width: 100%;
         }
 
-    .location iframe {
-        height: 200px;
-    }
-
     .hero {
         height: 66vh;
     }
+
+    .apply form {
+        max-width: 100%;
+    }
+    /* Form width on mobile */
+    .gallery-grid img:nth-child(n+5) {
+        display: none;
+    }
+    /* Display only first 4 images on mobile */
 }
