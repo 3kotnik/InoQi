@@ -10,7 +10,9 @@
 <body>
     <header id="header">
         <nav>
-            <div class="logo">InoQI</div>
+            <div class="logo">
+                <img src="assets/logo2.png" alt="InoQI Logo">
+            </div>
             <div class="hamburger">
                 <div></div>
                 <div></div>
@@ -27,7 +29,7 @@
             </ul>
         </nav>
     </header>
-
+    
     <section class="hero" id="hero">
         <video autoplay muted loop id="hero-video">
             <source src="assets/JC_ShowreelOne_Short_1080p.mp4" type="video/mp4" media="(min-width: 768px)">
@@ -47,6 +49,7 @@
             <button class="news-button">Prijavite se na novice</button>
         </div>
     </section>
+
 
     <section class="about-us" id="about-us">
         <div class="content">
@@ -246,7 +249,7 @@
 
         // Smooth scroll to sections
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
+            anchor.addEventListener('click', function(e) {
                 e.preventDefault();
                 document.querySelector(this.getAttribute('href')).scrollIntoView({
                     behavior: 'smooth'
@@ -255,16 +258,19 @@
             });
         });
 
-        // Change header background on scroll
+        // Change header background and logo size on scroll
         window.addEventListener('scroll', () => {
             const header = document.getElementById('header');
+            const logo = document.querySelector('.logo img');
             const aboutUsSection = document.getElementById('about-us');
             const sectionTop = aboutUsSection.getBoundingClientRect().top;
 
             if (sectionTop <= window.innerHeight / 2) {
                 header.classList.add('scrolled');
+                logo.style.transform = 'scale(1)';
             } else {
                 header.classList.remove('scrolled');
+                logo.style.transform = 'scale(2)';
             }
         });
     </script>
