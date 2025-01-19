@@ -146,13 +146,19 @@ nav {
         font-weight: bold;
     }
 
+    .hero-content h2 {
+        font-size: 1.75rem;
+        margin-bottom: 1rem;
+        font-weight: normal;
+    }
+
 .hero-overlay {
     position: absolute;
     bottom: 0;
     left: 0;
     width: 100%;
     height: 33.33%;
-    background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(34, 34, 34, 0.9) 100%);
+    background: linear-gradient(to top, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
     display: flex;
     align-items: center;
     justify-content: center;
@@ -162,11 +168,54 @@ nav {
     text-align: center;
     padding: 2rem;
     color: white;
+    max-width: 800px;
+    margin: auto;
 }
 
-    .hero-overlay h2, .hero-overlay p, .hero-overlay .qualities, .hero-overlay .news-button {
-        color: white;
+
+    .overlay-content p {
+        font-size: 1.25rem;
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
     }
+
+    .overlay-content .qualities {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        margin-top: 2rem;
+        gap: 1rem;
+    }
+
+        .overlay-content .qualities p {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            flex: 1 1 calc(50% - 1rem);
+            margin: 0;
+            text-align: center;
+            font-size: 1rem;
+        }
+
+    .overlay-content .news-button {
+        margin-top: 2rem;
+        background-color: #ff5a5f;
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        border-radius: 5px;
+        font-size: 1.25rem;
+    }
+
+        .overlay-content .news-button:hover {
+            background-color: #e04e50;
+        }
+
+
+
+
 
 /* About Us Section */
 .about-us {
@@ -579,12 +628,12 @@ footer {
     .hero {
         height: 66vh;
     }
-}
 
     .apply form {
         max-width: 100%;
     }
     /* Form width on mobile */
+
     .gallery-grid img:nth-child(n+5) {
         display: none;
     }
