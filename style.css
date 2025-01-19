@@ -8,7 +8,7 @@
 /* Body and Font Settings */
 body {
     font-family: 'Montserrat', sans-serif; /* Use Montserrat from Google Fonts */
-    background-color: #1a1a1a;
+    background-color: transparent; /* Ensure full transparency */
     color: white;
     margin: 0; /* No margin on body */
     overflow-x: hidden; /* Prevent horizontal scrolling */
@@ -231,4 +231,6 @@ footer {
         }
 
     .hamburger {
-        display: flex
+        display: flex;
+    }
+}

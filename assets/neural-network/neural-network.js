@@ -6,36 +6,34 @@ var w = c.width = window.innerWidth,
 
 // Options for the neural network animation
 var opts = {
-    range: 4000, // Range of the network
-    baseConnections: 3, // Base number of connections
-    addedConnections: 5, // Additional connections
-    baseSize: 5, // Base size of the nodes
-    minSize: 1, // Minimum size of the nodes
-    dataToConnectionSize: .4, // Data to connection size ratio
-    sizeMultiplier: .7, // Size multiplier for connections
-    allowedDist: 50, // Allowed distance between nodes
-    baseDist: 50, // Base distance for connections
-    addedDist: 30, // Additional distance for connections
-    connectionAttempts: 10, // Number of connection attempts
-    dataToConnections: 1, // Data to connections ratio
-    baseSpeed: .005, // Base speed of data
-    addedSpeed: .005, // Additional speed of data
-    baseGlowSpeed: .0, // Base glow speed of nodes
-    addedGlowSpeed: .0, // Additional glow speed of nodes
-    rotVelX: .0002, // Rotation velocity on X-axis
-    rotVelY: .00002, // Rotation velocity on Y-axis
-    repaintColor: '#111', // Background color
-    connectionColor: 'hsla(174,63%,light%,alp)', // Connection color
-    rootColor: 'hsla(214,31%,light%,alp)', // Root node color
-    endColor: 'hsla(160,20%,light%,alp)', // End node color
-    dataColor: 'hsla(40,80%,light%,alp)', // Data color
-    wireframeWidth: .1, // Wireframe width
-    wireframeColor: '#88f', // Wireframe color
-    depth: 250, // Depth of the network
-    focalLength: 300, // Focal length for perspective
+    range: 4000,
+    baseConnections: 3,
+    addedConnections: 5,
+    baseSize: 5,
+    minSize: 1,
+    dataToConnectionSize: 0.2,
+    sizeMultiplier: 0.7,
+    allowedDist: 50,
+    baseDist: 50,
+    addedDist: 30,
+    connectionAttempts: 10,
+    dataToConnections: 1,
+    baseSpeed: 0.005,
+    addedSpeed: 0.005,
+    rotVelX: 0.00015, // Slower rotation velocity on X-axis
+    rotVelY: 0.000015, // Slower rotation velocity on Y-axis
+    repaintColor: '#111',
+    connectionColor: 'hsla(174,63%,light%,alp)',
+    rootColor: 'hsla(214,31%,light%,alp)',
+    endColor: 'hsla(160,20%,light%,alp)',
+    dataColor: 'hsla(80,50%,light%,alp)',
+    wireframeWidth: 0.1,
+    wireframeColor: '#88f',
+    depth: 350,
+    focalLength: 700,
     vanishPoint: {
-        x: w / 2, // Vanishing point X-coordinate
-        y: h / 2 // Vanishing point Y-coordinate
+        x: w / 2,
+        y: h / 2
     }
 };
 
@@ -50,7 +48,6 @@ var squareRange = opts.range * opts.range,
     data = [],
     all = [],
     tick = 0,
-    totalProb = 0,
     animating = false,
     Tau = Math.PI * 2;
 
@@ -92,9 +89,7 @@ function Connection(x, y, z, size) {
     this.size = size > 0 ? size : 0.1; // Ensure size is positive
     this.screen = {};
     this.links = [];
-    this.probabilities = [];
     this.isEnd = false;
-    this.glowSpeed = opts.baseGlowSpeed + opts.addedGlowSpeed * Math.random();
 }
 
 Connection.prototype.link = function () {
@@ -151,7 +146,7 @@ Connection.prototype.link = function () {
 
 Connection.prototype.step = function () {
     this.setScreen();
-    this.screen.color = (this.isEnd ? opts.endColor : opts.connectionColor).replace('light', 30 + tick * this.glowSpeed % 30).replace('alp', .2 + (1 - this.screen.z / mostDistant) * .8);
+    this.screen.color = (this.isEnd ? opts.endColor : opts.connectionColor).replace('light', 30).replace('alp', 0.2 + (1 - this.screen.z / mostDistant) * 0.8);
 
     for (var i = 0; i < this.links.length; ++i) {
         ctx.moveTo(this.screen.x, this.screen.y);
@@ -161,7 +156,7 @@ Connection.prototype.step = function () {
 
 Connection.rootStep = function () {
     this.setScreen();
-    this.screen.color = opts.rootColor.replace('light', 30 + tick * this.glowSpeed % 30).replace('alp', (1 - this.screen.z / mostDistant) * .8);
+    this.screen.color = opts.rootColor.replace('light', 30).replace('alp', (1 - this.screen.z / mostDistant) * 0.8);
 
     for (var i = 0; i < this.links.length; ++i) {
         ctx.moveTo(this.screen.x, this.screen.y);
@@ -177,7 +172,6 @@ Connection.prototype.draw = function () {
 };
 
 function Data(connection) {
-    this.glowSpeed = opts.baseGlowSpeed + opts.addedGlowSpeed * Math.random();
     this.speed = opts.baseSpeed + opts.addedSpeed * Math.random();
     this.screen = {};
     this.setConnection(connection);
@@ -202,12 +196,12 @@ Data.prototype.step = function () {
     this.screen.lastX = this.screen.x;
     this.screen.lastY = this.screen.y;
     this.setScreen();
-    this.screen.color = opts.dataColor.replace('light', 40 + tick * this.glowSpeed % 50).replace('alp', .2 + (1 - this.screen.z / mostDistant) * .6);
+    this.screen.color = opts.dataColor.replace('light', 40).replace('alp', 0.2 + (1 - this.screen.z / mostDistant) * 0.6);
 };
 
 Data.prototype.draw = function () {
     if (this.ended)
-        return --this.ended; // not sure why the thing lasts 2 frames, but it does
+        return --this.ended;
 
     ctx.beginPath();
     ctx.strokeStyle = this.screen.color;
@@ -303,11 +297,6 @@ function anim() {
     ctx.globalCompositeOperation = 'source-over';
     all.sort(function (a, b) { return b.screen.z - a.screen.z; });
     all.map(function (item) { item.draw(); });
-
-    /*ctx.beginPath();
-    ctx.strokeStyle = 'red';
-    ctx.arc(opts.vanishPoint.x, opts.vanishPoint.y, opts.range * opts.focalLength / opts.depth, 0, Tau);
-    ctx.stroke();*/
 }
 
 window.addEventListener('resize', function () {
@@ -316,3 +305,5 @@ window.addEventListener('resize', function () {
     ctx.fillRect(0, 0, w, h);
 });
 window.addEventListener('click', init);
+
+init();
