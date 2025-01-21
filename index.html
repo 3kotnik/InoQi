@@ -1,17 +1,15 @@
-
 <!DOCTYPE html>
 <html lang="sl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700&display=swap" rel="stylesheet">
     <title>InoQI – veščine prihodnosti</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="image/png" href="assets/favicon2.png"> <!-- Added favicon -->
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <link rel="preload" as="video" href="assets/JC_ShowreelOne_Short_1080p.mp4" media="(min-width: 769px)">
-    <link rel="preload" as="video" href="assets/JC_ShowreelOne_Short_720p.mp4" media="(max-width: 768px)">
+    <link rel="icon" type="image/png" href="assets/favicon2.png">
+    <link rel="preload" as="video" href="assets/JC_ShowreelOne_Short_1080p.mp4" media="(min-width: 992px)">
+    <link rel="preload" as="video" href="assets/JC_ShowreelOne_Short_720p.mp4" media="(min-width: 768px)">
+    <link rel="preload" as="video" href="assets/JC_ShowreelOne_Short_Square.mp4" media="(max-width: 767px)">
 </head>
 <body>
     <header id="header">
@@ -37,9 +35,10 @@
     </header>
 
     <section class="hero" id="hero">
-        <video autoplay muted loop id="hero-video">
-            <source src="assets/JC_ShowreelOne_Short_1080p.mp4" type="video/mp4" media="(min-width: 768px)">
-            <source src="assets/JC_ShowreelOne_Short_720p.mp4" type="video/mp4" media="(max-width: 767px)">
+        <video autoplay muted loop playsinline id="hero-video">
+            <source src="assets/JC_ShowreelOne_Short_1080p.mp4" type="video/mp4" media="(min-width: 992px)">
+            <source src="assets/JC_ShowreelOne_Short_720p.mp4" type="video/mp4" media="(min-width: 768px)">
+            <source src="assets/JC_ShowreelOne_Short_Square.mp4" type="video/mp4" media="(max-width: 767px)">
             Your browser does not support the video tag.
         </video>
         <div class="hero-content">
@@ -61,91 +60,49 @@
     <section class="workshops" id="workshops">
         <div class="content">
             <div class="intro-text">
-                <p>InoQI je zavod ustvarjalcev, izobraževalcev, inovatorjev in večnih radovednežev, povezanih zaradi skupne strasti do novodobnih tehnologij ter možnosti, ki jih prinašajo. Svojo strast želimo širiti in novo generacijo opremiti z znanji in veščinami prihodnosti.</p>
+                <p>InoQI je zavod ustvarjalcev, izobraževalcev, inovatorjev in večnih radovednežev, povezanih zaradi skupne strasti do novodobnih tehnologij ter možnosti, ki jih prinašajo.</p>
             </div>
             <h2>InoQI delavnice</h2>
             <div class="workshop-list">
                 <div class="workshop-item">
-                    <img src="https://placehold.co/300x200" alt="Placeholder Image">
-                    <p>KidoKoda, tečaj programiranja za OŠ</p>
+                    <img src="https://placehold.co/600x300" alt="KidoKoda Workshop">
+                    <div class="workshop-text">
+                        <h3>KidoKoda</h3>
+                        <p>Tečaj programiranja za OŠ</p>
+                    </div>
                 </div>
                 <div class="workshop-item">
-                    <img src="https://placehold.co/300x200" alt="Placeholder Image">
-                    <p>Prvi virtualni koraki - začetni tečaj 3D oblikovanja in uporabe imerzivnih tehnologij (VR/AR/MR) za OŠ</p>
+                    <img src="https://placehold.co/600x300" alt="Prvi virtualni koraki Workshop">
+                    <div class="workshop-text">
+                        <h3>Prvi virtualni koraki</h3>
+                        <p>Začetni tečaj 3D oblikovanja in uporabe imerzivnih tehnologij (VR/AR/MR) za OŠ</p>
+                    </div>
                 </div>
                 <div class="workshop-item">
-                    <img src="https://placehold.co/300x200" alt="Placeholder Image">
-                    <p>Robotske avanture: Programiranje in gradnja robotov za praktične izzive za OŠ</p>
+                    <img src="https://placehold.co/600x300" alt="Robotske avanture Workshop">
+                    <div class="workshop-text">
+                        <h3>Robotske avanture</h3>
+                        <p>Programiranje in gradnja robotov za praktične izzive za OŠ</p>
+                    </div>
                 </div>
                 <div class="workshop-item">
-                    <img src="https://placehold.co/300x200" alt="Placeholder Image">
-                    <p>3D umetniki: Odkrijte umetnost oblikovanja v digitalnem prostoru, za 13 - 18 let</p>
+                    <img src="https://placehold.co/600x300" alt="3D umetniki Workshop">
+                    <div class="workshop-text">
+                        <h3>3D umetniki</h3>
+                        <p>Odkrijte umetnost oblikovanja v digitalnem prostoru, za 13 - 18 let</p>
+                    </div>
                 </div>
                 <div class="workshop-item">
-                    <img src="https://placehold.co/300x200" alt="Placeholder Image">
-                    <p>XR svetovi (za najdrznejše): Raziskujte in ustvarjajte v razširjeni resničnost: uvod v okolje Unity, razvoj lastne 3d igre od ideje do izvedbe, 14-18</p>
+                    <img src="https://placehold.co/600x300" alt="XR svetovi Workshop">
+                    <div class="workshop-text">
+                        <h3>XR svetovi</h3>
+                        <p>Raziskujte in ustvarjajte v razširjeni resničnosti: uvod v okolje Unity, razvoj lastne 3D igre od ideje do izvedbe, 14-18 let</p>
+                    </div>
                 </div>
             </div>
             <p class="special-features">Možnost prilagoditve programov za skupine in šole.</p>
-            <button class="more-info-button">Več informacij</button>
-            <button class="apply-button">Prijavi se</button>
-        </div>
-    </section>
-
-    <section class="events" id="events">
-        <div class="content">
-            <h2>Dogodki</h2>
-            <div class="upcoming">
-                <div class="event-item">
-                    <img src="https://placehold.co/600x200" alt="Placeholder Image">
-                    <div class="event-text">
-                        <h3>Placeholder Event 1</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                    </div>
-                </div>
-                <div class="event-item">
-                    <img src="https://placehold.co/600x200" alt="Placeholder Image">
-                    <div class="event-text">
-                        <h3>Placeholder Event 2</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                    </div>
-                </div>
-                <div class="event-item">
-                    <img src="https://placehold.co/600x200" alt="Placeholder Image">
-                    <div class="event-text">
-                        <h3>Placeholder Event 3</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                    </div>
-                </div>
-                <div class="event-item">
-                    <img src="https://placehold.co/600x200" alt="Placeholder Image">
-                    <div class="event-text">
-                        <h3>Placeholder Event 4</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                    </div>
-                </div>
-                <div class="event-item">
-                    <img src="https://placehold.co/600x200" alt="Placeholder Image">
-                    <div class="event-text">
-                        <h3>Placeholder Event 5</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="calendar">
-                <h3>Koledar dogodkov</h3>
-                <!-- Calendar implementation goes here -->
-            </div>
-            <div class="special-events">
-                <h3>Posebni dogodki</h3>
-                <div class="special-event-item">
-                    <p>InoQI poletni kamp (julij, avgust 2025)</p>
-                    <button class="apply-button">Prijavi se</button>
-                </div>
-                <div class="special-event-item">
-                    <p>Hackathon za ustvarjalne mlade (maj 2025)</p>
-                    <button class="apply-button">Prijavi se</button>
-                </div>
+            <div class="workshop-actions">
+                <button class="more-info-button">Več informacij</button>
             </div>
         </div>
     </section>
@@ -153,26 +110,62 @@
     <section class="apply" id="apply">
         <div class="content">
             <h2>Prijavi se</h2>
-            <form>
-                <label for="name">Ime:</label>
-                <input type="text" id="name" name="name" required>
-                <label for="surname">Priimek:</label>
-                <input type="text" id="surname" name="surname" required>
-                <label for="workshop">Izbrana delavnica:</label>
-                <select id="workshop" name="workshop" required>
-                    <option value="KidoKoda">KidoKoda</option>
-                    <option value="Prvi koraki">Prvi koraki</option>
-                    <option value="Robotske avanture">Robotske avanture</option>
-                    <option value="3D umetniki">3D umetniki</option>
-                    <option value="XR svetovi">XR svetovi</option>
-                </select>
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
-                <label for="phone">Telefon:</label>
-                <input type="tel" id="phone" name="phone" required>
-                <button type="submit">Pošlji prijavo</button>
+            <form class="application-form">
+                <div class="form-row">
+                    <label for="name">Ime:</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-row">
+                    <label for="surname">Priimek:</label>
+                    <input type="text" id="surname" name="surname" required>
+                </div>
+                <div class="form-row">
+                    <label for="age">Starost:</label>
+                    <input type="number" id="age" name="age" min="6" max="99" required>
+                </div>
+                <div class="form-row">
+                    <label for="workshop">Izbrana delavnica:</label>
+                    <select id="workshop" name="workshop" required>
+                        <option value="">Izberi delavnico</option>
+                        <option value="KidoKoda">KidoKoda</option>
+                        <option value="Prvi koraki">Prvi virtualni koraki</option>
+                        <option value="Robotske avanture">Robotske avanture</option>
+                        <option value="3D umetniki">3D umetniki</option>
+                        <option value="XR svetovi">XR svetovi</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-row">
+                    <label for="phone">Telefon:</label>
+                    <input type="tel" id="phone" name="phone" required>
+                </div>
+                <div class="disclaimer">
+                    Your personal information will be used in accordance with our privacy policy and application conditions.
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="submit-button">Pošlji prijavo</button>
+                </div>
             </form>
-            <p class="disclaimer">Your personal information will be used in accordance with our privacy policy and application conditions.</p>
+        </div>
+    </section>
+
+    <section class="gallery" id="gallery">
+        <div class="content">
+            <h2>Utrinki iz delavnic</h2>
+            <div class="gallery-grid">
+                <img src="https://placehold.co/600x400" alt="Workshop Moment 1">
+                <img src="https://placehold.co/600x400" alt="Workshop Moment 2">
+                <img src="https://placehold.co/600x400" alt="Workshop Moment 3">
+                <img src="https://placehold.co/600x400" alt="Workshop Moment 4">
+                <img src="https://placehold.co/600x400" alt="Workshop Moment 5">
+                <img src="https://placehold.co/600x400" alt="Workshop Moment 6">
+                <img src="https://placehold.co/600x400" alt="Workshop Moment 7">
+                <img src="https://placehold.co/600x400" alt="Workshop Moment 8">
+                <img src="https://placehold.co/600x400" alt="Workshop Moment 9">
+            </div>
         </div>
     </section>
 
@@ -181,74 +174,65 @@
             <h2>Kdo smo?</h2>
             <p>InoQI smo zavod in smo skupnost. Združuje nas raziskovalni duh, navdušenost nad novimi tehnologijami in strast do poučevanja.</p>
             <h3>Vizija</h3>
-            <p>Naša vizija je navdihovati novo generacijo za kreativno in odgovorno uporabo naprednih tehnologij, usmerjeno k izboljšanju kakovosti življenja v družbi, ki bo spodbujala povezovanje, sodelovanje in trajnostni razvoj.</p>
+            <p>Naša vizija je navdihovati novo generacijo za kreativno in odgovorno uporabo naprednih tehnologij, usmerjeno k izboljšanju kakovosti življenja v družbi, ki bo spodbujala povezovanje.</p>
             <h3>Poslanstvo</h3>
-            <p>Izvajanje kreativnih delavnic z uporabo naprednih tehnologij, ustvarjanje kakovostnih, na uporabnika osredotočenih novomedijskih vsebin, razvoj in inovativna uporaba novih tehnologij ter spodbujanje kritičnega in kreativnega mišljenja.</p>
+            <p>Izvajanje kreativnih delavnic z uporabo naprednih tehnologij, ustvarjanje kakovostnih, na uporabnika osredotočenih novomedijskih vsebin, razvoj in inovativna uporaba novih tehnologij.</p>
             <h3>Ekipa</h3>
             <div class="team">
-                <img src="https://placehold.co/150x150" alt="Placeholder Image">
-                <img src="https://placehold.co/150x150" alt="Placeholder Image">
-                <img src="https://placehold.co/150x150" alt="Placeholder Image">
-                <img src="https://placehold.co/150x150" alt="Placeholder Image">
+                <img src="https://placehold.co/150x150" alt="Team Member 1">
+                <img src="https://placehold.co/150x150" alt="Team Member 2">
+                <img src="https://placehold.co/150x150" alt="Team Member 3">
+                <img src="https://placehold.co/150x150" alt="Team Member 4">
             </div>
-        </div>
-    </section>
-
-    <section class="gallery" id="gallery">
-        <div class="content">
-            <h2>Utrinki iz delavnic</h2>
-            <div class="gallery-grid">
-                <img src="https://placehold.co/300x200" alt="Placeholder Image">
-                <img src="https://placehold.co/300x200" alt="Placeholder Image">
-                <img src="https://placehold.co/300x200" alt="Placeholder Image">
-                <img src="https://placehold.co/300x200" alt="Placeholder Image">
-                <img src="https://placehold.co/300x200" alt="Placeholder Image">
-                <img src="https://placehold.co/300x200" alt="Placeholder Image">
-                <img src="https://placehold.co/300x200" alt="Placeholder Image">
-                <img src="https://placehold.co/300x200" alt="Placeholder Image">
-                <img src="https://placehold.co/300x200" alt="Placeholder Image">
-            </div>
-        </div>
-    </section>
-
-    <section class="blog" id="blog">
-        <div class="content">
-            <img src="https://placehold.co/1200x400" alt="Placeholder Image">
-            <h2>Blog</h2>
         </div>
     </section>
 
     <section class="contact" id="contact">
         <div class="content">
             <h2>Stopite v stik</h2>
-            <form>
-                <label for="email-contact">E-pošta:</label>
-                <input type="email" id="email-contact" name="email-contact" required>
-                <button type="submit">Pošlji sporočilo</button>
+            <form class="contact-form">
+                <div class="form-row">
+                    <label for="email-contact">E-pošta:</label>
+                    <input type="email" id="email-contact" name="email-contact" required>
+                </div>
+                <div class="form-actions">
+                    <button type="submit">Pošlji sporočilo</button>
+                </div>
             </form>
             <div class="contact-info">
                 <p>Telefon: +386 40 123 456</p>
                 <p>E-pošta: info@inoqi.si</p>
                 <div class="location">
                     <h3>Lokacija</h3>
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2762.112018930663!2d15.639353315401695!3d46.55465097912959!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x476f1f8c7d8e3f5f:0x8b5f9a7d8e8f7f5d!2sInoQi!5e0!3m2!1ssl!2ssi!4v1611234567890!5m2!1ssl!2ssi" style="border: 0;" allowfullscreen="" loading="lazy"></iframe>
+                    <div class="map-container">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2762.112018930663!2d15.639353315401695!3d46.55465097912959!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s" frameborder="0" allowfullscreen></iframe>
+                    </div>
                 </div>
                 <div class="social-media">
                     <h3>Spremljajte nas</h3>
-                    <a href="#"><img src="https://placehold.co/30x30" alt="Facebook"></a>
-                    <a href="#"><img src="https://placehold.co/30x30" alt="Instagram"></a>
-                    <a href="#"><img src="https://placehold.co/30x30" alt="Twitter"></a>
+                    <div class="social-links">
+                        <a href="#" aria-label="Facebook"><img src="https://placehold.co/30x30" alt="Facebook"></a>
+                        <a href="#" aria-label="Instagram"><img src="https://placehold.co/30x30" alt="Instagram"></a>
+                        <a href="#" aria-label="Twitter"><img src="https://placehold.co/30x30" alt="Twitter"></a>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
     <footer>
-        <p>© 2025 Zavod InoQi. Vse pravice pridržane.</p>
-        <p>Pravno obvestilo | Politika zasebnosti | Pogoji uporabe</p>
+        <div class="footer-content">
+            <p>&copy; 2025 Zavod InoQi. Vse pravice pridržane.</p>
+            <div class="footer-links">
+                <a href="#">Pravno obvestilo</a>
+                <span>|</span>
+                <a href="#">Politika zasebnosti</a>
+                <span>|</span>
+                <a href="#">Pogoji uporabe</a>
+            </div>
+        </div>
     </footer>
 
-    
     <script src="main.js"></script>
 </body>
 </html>
