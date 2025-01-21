@@ -13,15 +13,10 @@
 </head>
 <body>
     <header id="header">
+        <div class="logo">
+            <img src="assets/logo3.png" alt="InoQI Logo">
+        </div>
         <nav>
-            <div class="logo">
-                <img src="assets/logo3.png" alt="InoQI Logo">
-            </div>
-            <div class="hamburger">
-                <div></div>
-                <div></div>
-                <div></div>
-            </div>
             <ul class="nav-links">
                 <li><a href="#hero">Domov</a></li>
                 <li><a href="#about-us">O nas</a></li>
@@ -32,6 +27,11 @@
                 <li><a href="#contact">Kontakt</a></li>
             </ul>
         </nav>
+        <div class="hamburger">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
     </header>
 
     <section class="hero" id="hero">
@@ -41,27 +41,28 @@
             <source src="assets/JC_ShowreelOne_Short_Square.mp4" type="video/mp4" media="(max-width: 767px)">
             Your browser does not support the video tag.
         </video>
-        <div class="hero-content">
-            <h1>Veščine prihodnosti</h1>
-            <h2>Zavod za spodbujanje kreativnosti in digitalne kulture</h2>
-        </div>
         <div class="hero-overlay">
-            <div class="overlay-content">
-                <div class="qualities">
-                    <p>Inovativni pristopi</p>
-                    <p>Praktične izkušnje</p>
-                    <p>Napredne tehnologije in orodja</p>
-                    <p>Kreativnost in kritičen pogled</p>
-                </div>
+            <div class="hero-content">
+                <h1>Veščine prihodnosti</h1>
+                <h2>Zavod za spodbujanje kreativnosti in digitalne kulture</h2>
             </div>
+            <div class="qualities">
+                <p>Inovativni pristopi</p>
+                <p>Praktične izkušnje</p>
+                <p>Napredne tehnologije in orodja</p>
+                <p>Kreativnost in kritičen pogled</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="intro" id="intro">
+        <div class="content">
+            <p class="main-intro">InoQI je zavod ustvarjalcev, izobraževalcev, inovatorjev in večnih radovednežev, povezanih zaradi skupne strasti do novodobnih tehnologij ter možnosti, ki jih prinašajo.</p>
         </div>
     </section>
 
     <section class="workshops" id="workshops">
         <div class="content">
-            <div class="intro-text">
-                <p>InoQI je zavod ustvarjalcev, izobraževalcev, inovatorjev in večnih radovednežev, povezanih zaradi skupne strasti do novodobnih tehnologij ter možnosti, ki jih prinašajo.</p>
-            </div>
             <h2>InoQI delavnice</h2>
             <div class="workshop-list">
                 <div class="workshop-item">
@@ -100,9 +101,11 @@
                     </div>
                 </div>
             </div>
-            <div class="action-group">
-                <p class="special-features">Možnost prilagoditve programov za skupine in šole.</p>
-                <button class="button more-info-button">Več informacij</button>
+            <div class="action-footer">
+                <div class="action-group">
+                    <p class="special-features">Možnost prilagoditve programov za skupine in šole.</p>
+                    <button class="button">Več informacij</button>
+                </div>
             </div>
         </div>
     </section>
@@ -110,49 +113,44 @@
     <section class="events" id="events">
         <div class="content">
             <h2>Dogodki</h2>
-            <div class="upcoming">
+            <div class="event-list">
                 <div class="event-item">
-                    <img src="https://placehold.co/600x200" alt="Placeholder Image">
+                    <img src="https://placehold.co/600x300" alt="Event 1">
                     <div class="event-text">
-                        <h3>Placeholder Event 1</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                        <h3>InoQI Game Jam</h3>
+                        <p>48-urni maraton razvoja iger (marec 2025)</p>
                     </div>
                 </div>
                 <div class="event-item">
-                    <img src="https://placehold.co/600x200" alt="Placeholder Image">
+                    <img src="https://placehold.co/600x300" alt="Event 2">
                     <div class="event-text">
-                        <h3>Placeholder Event 2</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                        <h3>Tech Talks</h3>
+                        <p>Mesečna srečanja z vodilnimi strokovnjaki v industriji</p>
                     </div>
                 </div>
                 <div class="event-item">
-                    <img src="https://placehold.co/600x200" alt="Placeholder Image">
+                    <img src="https://placehold.co/600x300" alt="Event 3">
                     <div class="event-text">
-                        <h3>Placeholder Event 3</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                        <h3>Workshop Weekend</h3>
+                        <p>Intenzivni vikend delavnic za vse nivoje znanja</p>
                     </div>
                 </div>
                 <div class="event-item">
-                    <img src="https://placehold.co/600x200" alt="Placeholder Image">
+                    <img src="https://placehold.co/600x300" alt="Event 4">
                     <div class="event-text">
-                        <h3>Placeholder Event 4</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                        <h3>3D Modeling Challenge</h3>
+                        <p>Tekmovanje v 3D modeliranju (april 2025)</p>
                     </div>
                 </div>
                 <div class="event-item">
-                    <img src="https://placehold.co/600x200" alt="Placeholder Image">
+                    <img src="https://placehold.co/600x300" alt="Event 5">
                     <div class="event-text">
-                        <h3>Placeholder Event 5</h3>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                        <h3>VR Experience Day</h3>
+                        <p>Dan odprtih vrat z VR tehnologijami</p>
                     </div>
                 </div>
             </div>
-            <div class="calendar">
-                <h3>Koledar dogodkov</h3>
-                <!-- Calendar implementation goes here -->
-            </div>
-            <div class="special-events">
-                <h3>Posebni dogodki</h3>
+            <div class="action-footer">
                 <div class="action-group">
                     <p>InoQI poletni kamp (julij, avgust 2025)</p>
                     <button class="button">Prijavi se</button>
@@ -165,8 +163,61 @@
         </div>
     </section>
 
-    <section class="apply" id="apply">
+    <section class="about-us" id="about-us">
         <div class="content">
+            <h2>Kdo smo?</h2>
+            <p class="main-intro">InoQI smo zavod in smo skupnost. Združuje nas raziskovalni duh, navdušenost nad novimi tehnologijami in strast do poučevanja.</p>
+
+            <div class="vision-mission">
+                <div class="vision">
+                    <h3>Vizija</h3>
+                    <p>Naša vizija je navdihovati novo generacijo za kreativno in odgovorno uporabo naprednih tehnologij, usmerjeno k izboljšanju kakovosti življenja v družbi, ki bo spodbujala povezovanje.</p>
+                </div>
+                <div class="mission">
+                    <h3>Poslanstvo</h3>
+                    <p>Izvajanje kreativnih delavnic z uporabo naprednih tehnologij, ustvarjanje kakovostnih, na uporabnika osredotočenih novomedijskih vsebin, razvoj in inovativna uporaba novih tehnologij.</p>
+                </div>
+            </div>
+
+            <div class="team-section">
+                <h3>Ekipa</h3>
+                <div class="team-grid">
+                    <div class="team-member">
+                        <img src="assets/images/team_JC.jpg" alt="Team Member 1">
+                    </div>
+                    <div class="team-member">
+                        <img src="assets/images/team_JC.jpg" alt="Team Member 2">
+                    </div>
+                    <div class="team-member">
+                        <img src="assets/images/team_JC.jpg" alt="Team Member 3">
+                    </div>
+                    <div class="team-member">
+                        <img src="assets/images/team_JC.jpg" alt="Team Member 4">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="gallery" id="gallery">
+        <div class="content">
+            <h2>Utrinki iz delavnic</h2>
+            <div class="gallery-grid">
+                <img src="https://placehold.co/600x400" alt="Workshop Moment 1">
+                <img src="https://placehold.co/600x400" alt="Workshop Moment 2">
+                <img src="https://placehold.co/600x400" alt="Workshop Moment 3">
+                <img src="https://placehold.co/600x400" alt="Workshop Moment 4">
+                <img src="https://placehold.co/600x400" alt="Workshop Moment 5">
+                <img src="https://placehold.co/600x400" alt="Workshop Moment 6">
+                <img src="https://placehold.co/600x400" alt="Workshop Moment 7">
+                <img src="https://placehold.co/600x400" alt="Workshop Moment 8">
+                <img src="https://placehold.co/600x400" alt="Workshop Moment 9">
+            </div>
+        </div>
+    </section>
+
+    <section class="apply" id="apply">
+        <div class="form-wrapper">
             <h2>Prijavi se</h2>
             <form class="application-form">
                 <div class="form-row">
@@ -204,69 +255,37 @@
                     Your personal information will be used in accordance with our privacy policy and application conditions.
                 </div>
                 <div class="form-actions">
-                    <button type="submit" class="submit-button">Pošlji prijavo</button>
+                    <button type="submit" class="button">Pošlji prijavo</button>
                 </div>
             </form>
         </div>
     </section>
 
-    <section class="gallery" id="gallery">
-        <div class="content">
-            <h2>Utrinki iz delavnic</h2>
-            <div class="gallery-grid">
-                <img src="https://placehold.co/600x400" alt="Workshop Moment 1">
-                <img src="https://placehold.co/600x400" alt="Workshop Moment 2">
-                <img src="https://placehold.co/600x400" alt="Workshop Moment 3">
-                <img src="https://placehold.co/600x400" alt="Workshop Moment 4">
-                <img src="https://placehold.co/600x400" alt="Workshop Moment 5">
-                <img src="https://placehold.co/600x400" alt="Workshop Moment 6">
-                <img src="https://placehold.co/600x400" alt="Workshop Moment 7">
-                <img src="https://placehold.co/600x400" alt="Workshop Moment 8">
-                <img src="https://placehold.co/600x400" alt="Workshop Moment 9">
-            </div>
+    <section class="contact" id="contact">
+        <div class="form-wrapper">
+            <h2>Stopite v stik</h2>
+            <form class="contact-form">
+                <div class="form-row">
+                    <label for="email-contact">E-pošta:</label>
+                    <input type="email" id="email-contact" name="email-contact" required>
+                </div>
+                <div class="form-row">
+                    <label for="message">Sporočilo:</label>
+                    <textarea id="message" name="message" rows="4" required></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="button">Pošlji sporočilo</button>
+                </div>
+            </form>
+        </div>
+        <div class="map-container">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2762.112018930663!2d15.639353315401695!3d46.55465097912959!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0!2s0x0!5e0!3m2!1sen!2ssi!4v1234567890"
+                    allowfullscreen=""
+                    loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
         </div>
     </section>
-
-    <section class="about-us" id="about-us">
-        <div class="content">
-            <h2>Kdo smo?</h2>
-            <div class="about-content">
-                <div class="about-text">
-                    <p class="intro">InoQI smo zavod in smo skupnost. Združuje nas raziskovalni duh, navdušenost nad novimi tehnologijami in strast do poučevanja.</p>
-
-                    <div class="vision-mission">
-                        <div class="vision">
-                            <h3>Vizija</h3>
-                            <p>Naša vizija je navdihovati novo generacijo za kreativno in odgovorno uporabo naprednih tehnologij, usmerjeno k izboljšanju kakovosti življenja v družbi, ki bo spodbujala povezovanje.</p>
-                        </div>
-                        <div class="mission">
-                            <h3>Poslanstvo</h3>
-                            <p>Izvajanje kreativnih delavnic z uporabo naprednih tehnologij, ustvarjanje kakovostnih, na uporabnika osredotočenih novomedijskih vsebin, razvoj in inovativna uporaba novih tehnologij.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="team-section">
-                    <h3>Ekipa</h3>
-                    <div class="team-grid">
-                        <div class="team-member">
-                            <img src="assets/images/team_JC.jpg" alt="Team Member 1">
-                        </div>
-                        <div class="team-member">
-                            <img src="assets/images/team_JC.jpg" alt="Team Member 2">
-                        </div>
-                        <div class="team-member">
-                            <img src="assets/images/team_JC.jpg" alt="Team Member 3">
-                        </div>
-                        <div class="team-member">
-                            <img src="assets/images/team_JC.jpg" alt="Team Member 4">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
 
     <footer>
         <div class="footer-content">
