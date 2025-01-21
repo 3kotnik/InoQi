@@ -25,7 +25,7 @@
 /* Body and Font Settings */
 body {
     font-family: 'Montserrat', sans-serif;
-    background-color: #f5f5f5;
+    background-color: #CCC;
     color: var(--text-color);
     line-height: 1.6;
     overflow-x: hidden;
