@@ -1,0 +1,17 @@
+﻿/* Bright Mode */
+body {
+    color: var(--text-color); /* Ensure text color is always dark */
+}
+
+/* Dark Mode */
+@media (prefers-color-scheme: dark) {
+    body {
+        color: var(--text-color); /* Ensure text color is always dark */
+    }
+
+    /* Hero and Intro sections should always have white text */
+    .hero-content,
+    .intro {
+        color: var(--white);
+    }
+}

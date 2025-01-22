@@ -259,29 +259,6 @@ section {
     }
 
 /* Workshop and Event Sections */
-
-/* Event Details Slide-Down */
-.event-item {
-    position: relative;
-    overflow: hidden;
-}
-
-.event-details {
-    display: none; /* Hidden by default */
-    background: #f9f9f9;
-    padding: 1rem 1.5rem;
-    border-top: 1px solid #ddd;
-    transition: max-height 0.4s ease, opacity 0.4s ease;
-    max-height: 0; /* Start with max-height 0 */
-    opacity: 0; /* Start with opacity 0 */
-}
-
-.event-details.open {
-    display: block; /* Make the details visible */
-    /* The max-height will be set dynamically via JavaScript */
-}
-
-
 .workshop-list,
 .event-list {
     display: flex;
@@ -481,76 +458,6 @@ footer {
 
     .footer-links span {
         color: rgba(255, 255, 255, 0.5);
-    }
-
-/* ========== MODAL STYLES ========== */
-.modal {
-    /* Hidden by default */
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0, 0, 0, 0.6);
-    z-index: 2000;
-    /* Use flex to center the .modal-content vertically/horizontally */
-    justify-content: center;
-    align-items: center;
-}
-
-.modal-content {
-    background: var(--white);
-    max-width: 600px;
-    width: 90%;
-    padding: 2rem;
-    border-radius: 10px;
-    position: relative;
-    /* Optional smooth animation */
-    transform: translateY(-30px);
-    opacity: 0;
-    transition: var(--transition);
-}
-
-.modal.show .modal-content {
-    transform: translateY(0);
-    opacity: 1;
-}
-
-.modal-close {
-    position: absolute;
-    top: 0.75rem;
-    right: 1rem;
-    font-size: 1.5rem;
-    cursor: pointer;
-}
-
-/* ========== EVENT SLIDE-DOWN STYLES ========== */
-.event-details {
-    display: none; /* hidden by default */
-    background: #f9f9f9;
-    padding: 1rem 1.5rem;
-    border-top: 1px solid #ddd;
-    transition: max-height 0.4s ease, opacity 0.4s ease;
-    overflow: hidden;
-    position: relative;
-}
-
-    .event-details .event-overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.6);
-        z-index: -1;
-    }
-
-    /* Optional: style for open state. We'll handle the height with JS. */
-    .event-details.open {
-        display: block;
-        /* We'll set max-height in JS for a smoother transition. */
-        /* Alternatively, you could guess a max-height here, but dynamic approach is often better. */
     }
 
 /* Responsive Design */
