@@ -263,6 +263,7 @@ const eventItems = document.querySelectorAll('[data-event-panel]');
  */
 function toggleEventDetails(item) {
     const details = item.querySelector('.event-details');
+    const currentOverlay = item.querySelector('.event-text');
 
     // Close previously open event if different from the clicked one
     if (currentlyOpenEvent && currentlyOpenEvent !== item) {
