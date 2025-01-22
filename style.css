@@ -56,13 +56,14 @@ header {
 }
 
     header.scrolled {
-        background-color: rgba(51, 51, 51, 0.95);
+        background-color: rgba(51, 51, 51, 0.85); /* Increased transparency */
         backdrop-filter: blur(5px);
         height: var(--header-height-scrolled);
     }
 
 .logo {
-    padding-left: calc(var(--header-padding) * 2);
+    padding-left: 1rem; /* Adjusted padding to be more consistent */
+    padding-top: 1rem; /* Increased top padding */
     display: flex;
     align-items: center;
     height: 100%;
@@ -76,7 +77,8 @@ header {
     }
 
 header.scrolled .logo img {
-    height: calc(var(--header-height-scrolled) * 0.6);
+    height: calc(var(--header-height-scrolled) * 0.7); /* Increased size */
+    padding: 0.5rem; /* Consistent padding on all sides */
 }
 
 nav {
@@ -167,7 +169,7 @@ nav {
     left: 0;
     width: 100%;
     height: 65%;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+    background: linear-gradient(to top, rgba(10, 10, 10, 1), transparent); /* 100% opaque at the bottom */
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
@@ -194,6 +196,22 @@ nav {
         font-weight: normal;
     }
 
+/* Intro Section */
+.intro {
+    background-color: rgba(10, 10, 10, 1); /* Match the overlay color */
+    color: #ccc; /* Light gray text */
+    padding: 2rem 0;
+}
+
+.main-intro {
+    font-size: 1.5rem;
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto 2rem;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
 .qualities {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -210,16 +228,6 @@ nav {
         text-align: center;
         color: var(--white);
     }
-
-/* Intro Section */
-.main-intro {
-    font-size: 1.5rem;
-    text-align: center;
-    max-width: 800px;
-    margin: 0 auto 2rem;
-    font-weight: 500;
-    line-height: 1.4;
-}
 
 /* Sections Common Styles */
 section {
@@ -479,7 +487,7 @@ footer {
     }
 
     .logo {
-        padding-left: var(--header-padding);
+        padding-left: 1rem; /* Adjusted padding to be more consistent */
     }
 
     .hamburger {
@@ -487,7 +495,7 @@ footer {
     }
 
     .logo img {
-        height: calc(var(--header-height-mobile) * 0.6);
+        height: calc(var(--header-height-mobile) * 0.5); /* Reduced from 0.6 to 0.5 */
     }
 
     .hero {

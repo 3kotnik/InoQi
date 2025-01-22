@@ -176,6 +176,17 @@ function initializeEventListeners() {
     // Form submissions
     forms.forEach(form => {
         form.addEventListener('submit', handleFormSubmit);
+            /**
+             * Handles header appearance based on scroll position
+             */
+            function handleScroll() {
+                const heroSection = document.getElementById('hero');
+                const sectionTop = heroSection.getBoundingClientRect().top;
+                const shouldScrollHeader = sectionTop <= window.innerHeight / 2;
+
+                header.classList.toggle('scrolled', shouldScrollHeader);
+                logo.style.transform = shouldScrollHeader ? 'scale(1)' : 'scale(1.5)';
+            }
     });
 }
 
