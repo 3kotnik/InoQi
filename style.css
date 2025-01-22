@@ -56,6 +56,76 @@ header {
     padding: 0 var(--header-padding);
 }
 
+
+
+
+
+
+
+/* ========== MODAL STYLES ========== */
+.modal {
+    /* Hidden by default */
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 2000;
+    /* Use flex to center the .modal-content vertically/horizontally */
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: var(--white);
+    max-width: 600px;
+    width: 90%;
+    padding: 2rem;
+    border-radius: 10px;
+    position: relative;
+    /* Optional smooth animation */
+    transform: translateY(-30px);
+    opacity: 0;
+    transition: var(--transition);
+}
+
+.modal.show .modal-content {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.modal-close {
+    position: absolute;
+    top: 0.75rem;
+    right: 1rem;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+/* ========== EVENT SLIDE-DOWN STYLES ========== */
+.event-details {
+    display: none; /* hidden by default */
+    background: #f9f9f9;
+    padding: 1rem 1.5rem;
+    border-top: 1px solid #ddd;
+    transition: max-height 0.4s ease, opacity 0.4s ease;
+    overflow: hidden;
+}
+
+    /* Optional: style for open state. We'll handle the height with JS. */
+    .event-details.open {
+        display: block;
+        /* We'll set max-height in JS for a smoother transition. */
+        /* Alternatively, you could guess a max-height here, but dynamic approach is often better. */
+    }
+
+
+
+
+
+
     header.scrolled {
         background-color: rgba(51, 51, 51, 0.85); /* Increased transparency */
         backdrop-filter: blur(5px);
