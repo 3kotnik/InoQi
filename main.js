@@ -13,7 +13,7 @@ const forms = document.querySelectorAll('form');
 // Animation Variables
 const NOTIFICATION_DURATION = 3000; // 3 seconds
 const NOTIFICATION_ANIMATION_DURATION = 300; // 0.3 seconds
-const SCROLL_DEBOUNCE_DELAY = 10; // 10ms
+const SCROLL_DEBOUNCE_DELAY = 100; // Increased to 100ms for better performance
 const RESIZE_DEBOUNCE_DELAY = 250; // 250ms
 
 // Breakpoints
@@ -21,7 +21,6 @@ const MOBILE_BREAKPOINT = 768;
 
 // State Variables
 let isMenuOpen = false;
-let lastScrollPosition = 0;
 
 /**
  * Debounce function to limit the rate at which a function is called
@@ -32,12 +31,8 @@ let lastScrollPosition = 0;
 function debounce(func, wait) {
     let timeout;
     return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
         clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
+        timeout = setTimeout(() => func.apply(this, args), wait);
     };
 }
 
@@ -176,17 +171,6 @@ function initializeEventListeners() {
     // Form submissions
     forms.forEach(form => {
         form.addEventListener('submit', handleFormSubmit);
-            /**
-             * Handles header appearance based on scroll position
-             */
-            function handleScroll() {
-                const heroSection = document.getElementById('hero');
-                const sectionTop = heroSection.getBoundingClientRect().top;
-                const shouldScrollHeader = sectionTop <= window.innerHeight / 2;
-
-                header.classList.toggle('scrolled', shouldScrollHeader);
-                logo.style.transform = shouldScrollHeader ? 'scale(1)' : 'scale(1.5)';
-            }
     });
 }
 
@@ -216,3 +200,9 @@ document.addEventListener('DOMContentLoaded', () => {
     handleVideoSources();
     handleScroll();
 });
+
+/* Potential enhancements:
+   - Consider modularizing code using ES6 modules or bundlers like Webpack.
+   - Implement form validation for better user experience.
+   - Integrate real backend services for form submissions.
+*/
