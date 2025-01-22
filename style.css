@@ -15,9 +15,9 @@
     --max-width: 1245px;
     --form-max-width: 800px;
     --header-height: 90px;
-    --header-height-mobile: 70px;
+    --header-height-mobile: 60px; /* Reduced height for mobile */
     --header-height-scrolled: 70px;
-    --header-padding: 2rem;
+    --header-padding: 1rem; /* Adjusted padding for consistency */
     --overlay-bg: rgba(0, 0, 0, 0.7);
     --transition: all 0.3s ease;
 }
@@ -53,6 +53,7 @@ header {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 0 var(--header-padding);
 }
 
     header.scrolled {
@@ -62,11 +63,10 @@ header {
     }
 
 .logo {
-    padding-left: 1rem; /* Adjusted padding to be more consistent */
-    padding-top: 1rem; /* Increased top padding */
     display: flex;
     align-items: center;
     height: 100%;
+    padding: var(--header-padding); /* Consistent padding on all sides */
 }
 
     .logo img {
@@ -77,8 +77,7 @@ header {
     }
 
 header.scrolled .logo img {
-    height: calc(var(--header-height-scrolled) * 0.7); /* Increased size */
-    padding: 0.5rem; /* Consistent padding on all sides */
+    height: calc(var(--header-height-scrolled) * 0.7);
 }
 
 nav {
@@ -90,7 +89,7 @@ nav {
 }
 
 .hamburger {
-    padding-right: calc(var(--header-padding) * 2);
+    padding-right: var(--header-padding);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -487,7 +486,7 @@ footer {
     }
 
     .logo {
-        padding-left: 1rem; /* Adjusted padding to be more consistent */
+        padding: var(--header-padding); /* Consistent padding on all sides */
     }
 
     .hamburger {
@@ -495,7 +494,7 @@ footer {
     }
 
     .logo img {
-        height: calc(var(--header-height-mobile) * 0.5); /* Reduced from 0.6 to 0.5 */
+        height: calc(var(--header-height-mobile) * 0.5);
     }
 
     .hero {

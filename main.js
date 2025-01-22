@@ -40,12 +40,16 @@ function debounce(func, wait) {
  * Handles header appearance based on scroll position
  */
 function handleScroll() {
-    const workshopsSection = document.getElementById('workshops');
-    const sectionTop = workshopsSection.getBoundingClientRect().top;
-    const shouldScrollHeader = sectionTop <= window.innerHeight / 2;
+    const introSection = document.getElementById('intro');
+    const introTop = introSection.getBoundingClientRect().top;
+    const heroHeight = document.getElementById('hero').offsetHeight;
+    const triggerPoint = heroHeight / 2;
 
-    header.classList.toggle('scrolled', shouldScrollHeader);
-    logo.style.transform = shouldScrollHeader ? 'scale(1)' : 'scale(1.5)';
+    if (introTop <= window.innerHeight - triggerPoint) {
+        header.classList.add('scrolled');
+    } else {
+        header.classList.remove('scrolled');
+    }
 }
 
 /**
@@ -200,9 +204,3 @@ document.addEventListener('DOMContentLoaded', () => {
     handleVideoSources();
     handleScroll();
 });
-
-/* Potential enhancements:
-   - Consider modularizing code using ES6 modules or bundlers like Webpack.
-   - Implement form validation for better user experience.
-   - Integrate real backend services for form submissions.
-*/
