@@ -148,6 +148,26 @@ function showNotification(message, type = 'success') {
 }
 
 /**
+ * Fetches and inserts content into modals
+ * @param {string} modalSelector - The selector for the modal
+ */
+function fetchModalContent(modalSelector) {
+    const modal = document.querySelector(modalSelector);
+    if (!modal) return;
+
+    // Fetch and insert content
+    const contentUrl = modal.getAttribute('data-content-url');
+    if (contentUrl) {
+        fetch(contentUrl)
+            .then(response => response.text())
+            .then(data => {
+                modal.querySelector('.modal-text').textContent = data;
+            })
+            .catch(error => console.error('Error loading content:', error));
+    }
+}
+
+/**
  * Initializes all event listeners
  */
 function initializeEventListeners() {
@@ -204,4 +224,3 @@ document.addEventListener('DOMContentLoaded', () => {
     handleVideoSources();
     handleScroll();
 });
-

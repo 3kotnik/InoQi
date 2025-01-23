@@ -17,6 +17,9 @@ function openModal(modalSelector) {
     const modal = document.querySelector(modalSelector);
     if (!modal) return;
 
+    // Fetch and insert content
+    fetchModalContent(modalSelector);
+
     modal.style.display = 'flex';    // Make the modal visible
     // Force reflow before adding 'show' for transition
     requestAnimationFrame(() => {
@@ -129,4 +132,3 @@ eventItems.forEach(item => {
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize modals and slide-downs
 });
-

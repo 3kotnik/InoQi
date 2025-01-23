@@ -20,9 +20,10 @@
     <link rel="icon" type="image/png" href="assets/favicon2.png">
 
     <!-- Preload Videos -->
+    <link rel="preload" as="video" href="assets/JC_ShowreelOne_Short_Square.mp4" media="(max-width: 767px)">
     <link rel="preload" as="video" href="assets/JC_ShowreelOne_Short_1080p.mp4" media="(min-width: 992px)">
     <link rel="preload" as="video" href="assets/JC_ShowreelOne_Short_720p.mp4" media="(min-width: 768px)">
-    <link rel="preload" as="video" href="assets/JC_ShowreelOne_Short_Square.mp4" media="(max-width: 767px)">
+    
 
     <!-- For search engines: This is a test page, please do not index -->
     <!-- You can remove the following meta tag when the page is ready -->
@@ -92,19 +93,11 @@
                     </div>
                 </div>
                 <!-- Modal for Workshop 1 -->
-                <div class="modal" id="modal-workshop-1">
+                <div class="modal" id="modal-workshop-1" data-content-url="assets/content/W1-kidoKoda.txt">
                     <div class="modal-content">
                         <span class="modal-close" data-modal-close>&times;</span>
                         <h3>KidoKoda</h3>
-                        <p>
-                            Na naši delavnici KidoKoda se otroci naučijo osnov programiranja skozi interaktivne projekte, kjer obdelujemo preproste linearne strukture
-                            in pisanje kratkih programčkov. Poudarek je na razvoju analitičnega mišljenja in
-                            kreativnega pristopa pri iskanju rešitev. Udeleženci v sproščenem okolju ustvarjajo
-                            svoje mini igre, s čimer se postopoma spoznavajo s programsko logiko in računalniškimi
-                            koncepti. Izkušeni mentorji spodbujajo zanimanje za nove tehnologije ter sodelovanje
-                            v majhnih ekipah. Program je prilagojen starostni skupini in spodbuja postopno
-                            nadgrajevanje znanja pri vsakem koraku.
-                        </p>
+                        <p class="modal-text"></p>
                         <button class="button">Prijava</button>
                     </div>
                 </div>
@@ -118,27 +111,75 @@
                     </div>
                 </div>
                 <!-- Modal for Workshop 2 -->
-                <div class="modal" id="modal-workshop-2">
+                <div class="modal" id="modal-workshop-2" data-content-url="assets/content/W2-prviVirtualniKoraki.txt">
                     <div class="modal-content">
                         <span class="modal-close" data-modal-close>&times;</span>
                         <h3>Prvi virtualni koraki</h3>
-                        <p>
-                            Udeleženci se naučijo osnov 3D-oblikovanja in razumevanja prostora, kjer preizkušajo
-                            različne digitalne orodje za risanje in modeliranje enostavnih oblik. Delavnica
-                            spodbuja razvoj prostorskega razmišljanja in ustvarjalnosti, medtem ko mladi odkrivajo
-                            tehnike preoblikovanja 2D skic v 3D modele. Skozi praktične primere se učijo urejati
-                            različne strukture in jih pripraviti za virtualno predstavitev ali 3D-tisk.
-                            Velik poudarek je na samostojnem raziskovanju, pri čemer mentorji usmerjajo pri pravilni
-                            uporabi funkcij ter ponujajo nasvete za naprednejše projekte. Delavnica je primerna
-                            za vse, ki jih zanima digitalna umetnost in inovativna uporaba tehnoloških orodij.
-                        </p>
+                        <p class="modal-text"></p>
                         <button class="button">Prijava</button>
                     </div>
                 </div>
 
-                <!-- Repeat similar blocks for other workshops (Robotske avanture, 3D umetniki, XR svetovi)... -->
+                <!-- Workshop 3 with Modal Trigger -->
+                <div class="workshop-item" data-modal-target="#modal-workshop-3">
+                    <img src="assets/images/W3_Roboti.webp" alt="Robotske avanture Workshop">
+                    <div class="workshop-text">
+                        <h3>Robotske avanture</h3>
+                        <p>Programiranje in gradnja robotov za praktične izzive (OŠ)</p>
+                    </div>
+                </div>
+                <!-- Modal for Workshop 3 -->
+                <div class="modal" id="modal-workshop-3" data-content-url="assets/content/W3-robotskeAvanture.txt">
+                    <div class="modal-content">
+                        <span class="modal-close" data-modal-close>&times;</span>
+                        <h3>Robotske avanture</h3>
+                        <p class="modal-text"></p>
+                        <button class="button">Prijava</button>
+                    </div>
+                </div>
+
+                <!-- Workshop 4 with Modal Trigger -->
+                <div class="workshop-item" data-modal-target="#modal-workshop-4">
+                    <img src="https://placehold.co/600x300" alt="3D umetniki Workshop">
+                    <div class="workshop-text">
+                        <h3>3D umetniki</h3>
+                        <p>Odkrijte umetnost oblikovanja v digitalnem prostoru (13 - 18 let)</p>
+                    </div>
+                </div>
+                <!-- Modal for Workshop 4 -->
+                <div class="modal" id="modal-workshop-4" data-content-url="assets/content/W4-3dUmetniki.txt">
+                    <div class="modal-content">
+                        <span class="modal-close" data-modal-close>&times;</span>
+                        <h3>3D umetniki</h3>
+                        <p class="modal-text"></p>
+                        <button class="button">Prijava</button>
+                    </div>
+                </div>
+
+                <!-- Workshop 5 with Modal Trigger -->
+                <div class="workshop-item" data-modal-target="#modal-workshop-5">
+                    <img src="https://placehold.co/600x300" alt="3D umetniki Workshop">
+                    <div class="workshop-text">
+                        <h3>XR svetovi</h3>
+                        <p>Raziskujte in ustvarjajte v razširjeni resničnosti (14-18 let)</p>
+                    </div>
+                </div>
+                <!-- Modal for Workshop 5 -->
+                <div class="modal" id="modal-workshop-5" data-content-url="assets/content/W5-xrSvetovi.txt">
+                    <div class="modal-content">
+                        <span class="modal-close" data-modal-close>&times;</span>
+                        <h3>XR svetovi</h3>
+                        <p class="modal-text"></p>
+                        <button class="button">Prijava</button>
+                    </div>
+                </div>
             </div>
-            <!-- ...existing action-footer for workshops... -->
+            <div class="action-footer">
+                <div class="action-group">
+                    <p class="special-features">Možnost prilagoditve programov za skupine in šole.</p>
+                    <button class="button">Več informacij</button>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -154,15 +195,9 @@
                         <p>Mesečna srečanja z vodilnimi strokovnjaki v industriji</p>
                     </div>
                     <!-- Slide-down content -->
-                    <div class="event-details">
+                    <div class="event-details" data-content-url="assets/content/E1-techTalks.txt">
                         <div class="event-overlay"></div>
-                        <p>
-                            Na dogodku Tech Talks se udeleženci srečajo z najnovejšimi tehnološkimi trendi in razvojno usmeritvijo
-                            različnih podjetij. Vsako srečanje vključuje predstavitve, krajših pogovorov in priložnosti za mreženje.
-                            Vključen je praktičen vpogled v tehnologije, ki spreminjajo svetovno industrijo in omogočajo razvijanje
-                            inovativnih produktov. Dogodek je namenjen različnim generacijam ter spodbuja medsebojno izmenjavo
-                            izkušenj in idej.
-                        </p>
+                        <p class="event-text-content"></p>
                         <button class="button">Prijava</button>
                     </div>
                 </div>
@@ -173,15 +208,9 @@
                         <h3>Workshop Weekend</h3>
                         <p>Intenzivni vikend delavnic za vse nivoje znanja</p>
                     </div>
-                    <div class="event-details">
+                    <div class="event-details" data-content-url="assets/content/E2-workshopWeekend.txt">
                         <div class="event-overlay"></div>
-                        <p>
-                            Workshop Weekend je dvodnevni dogodek, kjer udeleženci delujejo v manjših skupinah, da spoznajo različne
-                            aspekte digitalnega ustvarjanja, od programiranja do medijske produkcije. Vsebine so razdeljene na več
-                            sklopov, pri čemer lahko vsakdo izbere tisto področje, ki ga najbolj zanima. Poleg izkušenih mentorjev
-                            spodbujamo medsebojno tutorstvo in raziskovanje. Ta sproščen in razgiban pristop mladim, študentom ter
-                            tistim z več izkušnjami omogoča hitro napredovanje.
-                        </p>
+                        <p class="event-text-content"></p>
                         <button class="button">Prijava</button>
                     </div>
                 </div>
@@ -192,16 +221,9 @@
                         <h3>VR Experience Day</h3>
                         <p>Dan odprtih vrat z VR tehnologijami</p>
                     </div>
-                    <div class="event-details">
+                    <div class="event-details" data-content-url="assets/content/E3-vrExperienceDay.txt">
                         <div class="event-overlay"></div>
-                        <p>
-                            Udeleženci VR Experience Daya na enem mestu izkusijo več vrst virtualne resničnosti, od preprostih iger
-                            do zahtevnejših simulacij. Med različnimi postajami spoznavajo interaktivne principe, ki stojijo za
-                            navidezno resničnostjo, in tehnologije, potrebne za oblikovanje takšnih okolij. Obiskovalci lahko
-                            preizkusijo VR očala, krmilnike in senzorje za zaznavanje gibanja. Elemente raznolikih virtualnih konceptov
-                            raziščejo tako v izobraževalne kot tudi v zabavne namene, hkrati pa se spoznajo z varnim in odgovornim
-                            pristopom k uporabi VR tehnologij.
-                        </p>
+                        <p class="event-text-content"></p>
                         <button class="button">Prijava</button>
                     </div>
                 </div>
@@ -323,7 +345,7 @@
                 </div>
             </form>
         </div>
-        <div class="map-container">
+       <div class="map-container">
             <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2762.112018930663!2d15.639353315401695!3d46.55465097912959!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0!2s0x0!5e0!3m2!1sen!2ssi!4v1234567890"
                     allowfullscreen=""
                     loading="lazy"
