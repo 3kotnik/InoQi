@@ -105,8 +105,17 @@ function handleFormSubmit(e) {
     const submitButton = form.querySelector('button[type="submit"]');
     const originalText = submitButton.textContent;
 
+    // Basic validation
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+
+    if (name === '' || email === '') {
+        showNotification('Vsa polja morajo biti zapolnjena!', 'error');
+        return;
+    }
+
     submitButton.disabled = true;
-    submitButton.textContent = 'Pošiljam...';
+    submitButton.textContent = 'Pošlji prijavo...';
 
     // Simulate form submission (replace with actual API call)
     setTimeout(() => {
@@ -168,7 +177,7 @@ function fetchModalContent(modalSelector) {
 }
 
 /**
- * Initializes all event listeners
+ * Initialize all event listeners
  */
 function initializeEventListeners() {
     // Scroll handling
@@ -178,9 +187,7 @@ function initializeEventListeners() {
     hamburger.addEventListener('click', toggleMenu);
 
     // Smooth scroll
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', smoothScroll);
-    });
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => anchor.addEventListener('click', smoothScroll));
 
     // Window resize
     window.addEventListener('resize', debounce(handleVideoSources, RESIZE_DEBOUNCE_DELAY));
@@ -193,9 +200,7 @@ function initializeEventListeners() {
     });
 
     // Form submissions
-    forms.forEach(form => {
-        form.addEventListener('submit', handleFormSubmit);
-    });
+    forms.forEach(form => form.addEventListener('submit', handleFormSubmit));
 }
 
 /**
@@ -208,7 +213,7 @@ function setupNotificationAnimations() {
             from { transform: translateX(100%); opacity: 0; }
             to { transform: translateX(0); opacity: 1; }
         }
-        
+
         @keyframes slideOut {
             from { transform: translateX(0); opacity: 1; }
             to { transform: translateX(100%); opacity: 0; }
@@ -217,10 +222,38 @@ function setupNotificationAnimations() {
     document.head.appendChild(style);
 }
 
+/**
+ * Toggle between light and dark mode
+ */
+function toggleMode() {
+    const body = document.body;
+    if (body.classList.contains('light-mode')) {
+        body.classList.remove('light-mode');
+        body.classList.add('dark-mode');
+    } else {
+        body.classList.remove('dark-mode');
+        body.classList.add('light-mode');
+    }
+}
+
 // Initialize everything when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     setupNotificationAnimations();
     initializeEventListeners();
     handleVideoSources();
     handleScroll();
+
+    // Update text color for header content and qualities
+    const heroContent = document.querySelector('.hero-content h1, .hero-content h2');
+    const qualities = document.querySelectorAll('.qualities p');
+
+    updateTextColor(heroContent);
+    qualities.forEach(quality => updateTextColor(quality));
+
+    // Update text color for sections
+    const sections = document.querySelectorAll('section');
+    sections.forEach(section => {
+        const sectionContent = section.querySelector('h1, h2, p, a');
+        if (sectionContent) updateTextColor(sectionContent);
+    });
 });

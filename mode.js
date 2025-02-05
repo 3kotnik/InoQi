@@ -1,4 +1,3 @@
-
 // Ensure text color remains dark in both bright and dark modes
 function applyModeStyles() {
     const style = document.createElement('style');
@@ -9,13 +8,13 @@ function applyModeStyles() {
 
         @media (prefers-color-scheme: dark) {
             body {
-                color: var(--text-color); /* Ensure text color is always dark */
+                color: var(--white);
             }
 
             /* Hero and Intro sections should always have white text */
-            .hero-content,
-            .intro {
-                color: var(--white);
+            .hero-content, 
+            .intro { 
+                color: var(--white); 
             }
         }
     `;
@@ -26,4 +25,3 @@ function applyModeStyles() {
 document.addEventListener('DOMContentLoaded', () => {
     applyModeStyles();
 });
-

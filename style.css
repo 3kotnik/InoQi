@@ -9,15 +9,16 @@
 :root {
     --primary-color: #ff5a5f;
     --secondary-color: #333;
-    --text-color: #333;
+    --text-color-light: #333; /* Light text color for light mode */
+    --text-color-dark: #fff; /* Dark text color for dark mode */
     --team-border-color: rgb(30, 30, 30);
     --white: #ffffff;
-    --max-width: 1245px;
+    --max-width: 1400px; /* Updated max width */
     --form-max-width: 800px;
     --header-height: 90px;
-    --header-height-mobile: 60px; /* Reduced height for mobile */
+    --header-height-mobile: 60px;
     --header-height-scrolled: 70px;
-    --header-padding: 1rem; /* Adjusted padding for consistency */
+    --header-padding: 1rem;
     --overlay-bg: rgba(0, 0, 0, 0.7);
     --transition: all 0.3s ease;
 }
@@ -25,13 +26,20 @@
 /* Body and Font Settings */
 body {
     font-family: 'Raleway', sans-serif;
-    background-color: #CCC;
-    color: var(--text-color);
-    line-height: 1.6;
-    overflow-x: hidden;
+    background-color: #f8f8f8; /* Updated background color for light mode */
     margin: 0;
     padding-top: var(--header-height);
 }
+
+    body.light-mode {
+        --text-color-light: #333; /* Light text color for light mode */
+        --background-color-light: #f8f8f8;
+    }
+
+    body.dark-mode {
+        --text-color-light: #fff; /* Dark text color for dark mode */
+        --background-color-light: #121212;
+    }
 
 /* Content Container */
 .content {
@@ -57,7 +65,7 @@ header {
 }
 
     header.scrolled {
-        background-color: rgba(51, 51, 51, 0.65); /* Increased transparency */
+        background-color: rgba(51, 51, 51, 0.65);
         backdrop-filter: blur(5px);
         height: var(--header-height-scrolled);
     }
@@ -66,7 +74,7 @@ header {
     display: flex;
     align-items: center;
     height: 100%;
-    padding: var(--header-padding); /* Consistent padding on all sides */
+    padding: var(--header-padding);
 }
 
     .logo img {
@@ -147,8 +155,16 @@ nav {
     position: relative;
     overflow: hidden;
     margin-top: calc(-1 * var(--header-height));
-    background-color: #000;
+    background-color: #000; /* Updated background color for light mode */
 }
+
+    .hero.light-mode {
+        background-color: rgba(248, 248, 248, 0.8); /* Light gradient for light mode */
+    }
+
+    .hero.dark-mode {
+        background-color: rgba(17, 17, 17, 0.8); /* Dark gradient for dark mode */
+    }
 
     .hero video {
         position: absolute;
@@ -168,15 +184,19 @@ nav {
     left: 0;
     width: 100%;
     height: 65%;
-    background: linear-gradient(to top, rgba(10, 10, 10, 1), transparent); /* 100% opaque at the bottom */
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    padding-bottom: 5vh;
+    background: linear-gradient(to top, rgba(10, 10, 10, 1), transparent); /* Updated background color for light mode */
 }
 
+    .hero-overlay.light-mode {
+        background: linear-gradient(to top, rgba(248, 248, 248, 0.3), rgba(255, 255, 255, 0)); /* Light gradient for light mode */
+    }
+
+    .hero-overlay.dark-mode {
+        background: linear-gradient(to top, rgba(17, 17, 17, 0.3), rgba(18, 18, 18, 0)); /* Dark gradient for dark mode */
+    }
+
 .hero-content {
-    color: var(--white);
+    color: var(--text-color-light); /* Default to light text */
     text-align: center;
     max-width: var(--max-width);
     margin: 0 auto;
@@ -197,10 +217,20 @@ nav {
 
 /* Intro Section */
 .intro {
-    background-color: rgba(10, 10, 10, 1); /* Match the overlay color */
-    color: #ccc; /* Light gray text */
+    background-color: rgba(10, 10, 10, 0.8); /* Updated background color for light mode */
+    color: #ccc; /* Updated text color for light mode */
     padding: 2rem 0;
 }
+
+    .intro.light-mode {
+        background-color: rgba(255, 255, 255, 0.9); /* Light gradient for light mode */
+        color: var(--text-color-light); /* Dark text color for dark mode */
+    }
+
+    .intro.dark-mode {
+        background-color: rgba(17, 17, 17, 0.8); /* Dark gradient for dark mode */
+        color: var(--text-color-light); /* Dark text color for dark mode */
+    }
 
 .main-intro {
     font-size: 1.5rem;
@@ -221,17 +251,27 @@ nav {
 }
 
     .qualities p {
-        background: rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.1); /* Updated background color for light mode */
         padding: 1rem;
         border-radius: 5px;
         text-align: center;
-        color: var(--white);
+        color: var(--text-color-light); /* Default to light text */
     }
 
 /* Sections Common Styles */
 section {
     padding: 4rem 0;
 }
+
+    section.light-mode {
+        background-color: rgba(255, 255, 255, 0.9); /* Light gradient for light mode */
+        color: var(--text-color-light); /* Dark text color for dark mode */
+    }
+
+    section.dark-mode {
+        background-color: rgba(17, 17, 17, 0.8); /* Dark gradient for dark mode */
+        color: var(--text-color-light); /* Dark text color for dark mode */
+    }
 
     section h2 {
         font-size: 2.5rem;
@@ -258,38 +298,34 @@ section {
         transform: translateY(-2px);
     }
 
+
 /* Workshop and Event Sections */
-.workshop-list,
-.event-list {
+.workshop-list, .event-list {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
     margin-bottom: 2rem;
 }
 
-.workshop-item,
-.event-item {
+.workshop-item, .event-item {
     position: relative;
     border-radius: 5px;
     overflow: hidden;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-    .workshop-item img,
-    .event-item img {
+    .workshop-item img, .event-item img {
         width: 100%;
         height: auto;
         display: block;
         transition: var(--transition);
     }
 
-    .workshop-item:hover img,
-    .event-item:hover img {
+    .workshop-item:hover img, .event-item:hover img {
         transform: scale(1.05);
     }
 
-.workshop-text,
-.event-text {
+.workshop-text, .event-text {
     position: absolute;
     bottom: 0;
     left: 0;
@@ -373,8 +409,7 @@ section {
     padding: 0 1rem;
 }
 
-.application-form,
-.contact-form {
+.application-form, .contact-form {
     background: var(--white);
     padding: 2rem;
     border-radius: 10px;
@@ -391,9 +426,7 @@ section {
         font-weight: 500;
     }
 
-    .form-row input,
-    .form-row select,
-    .form-row textarea {
+    .form-row input, .form-row select, .form-row textarea {
         width: 100%;
         padding: 0.75rem;
         border: 1px solid #ddd;
@@ -486,7 +519,7 @@ footer {
     }
 
     .logo {
-        padding: var(--header-padding); /* Consistent padding on all sides */
+        padding: var(--header-padding);
     }
 
     .hamburger {
@@ -556,8 +589,7 @@ footer {
         font-size: 1.1rem;
     }
 
-    .workshop-text,
-    .event-text {
+    .workshop-text, .event-text {
         padding: 1rem;
     }
 

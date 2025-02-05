@@ -1,7 +1,5 @@
-﻿
-/* ========== MODAL STYLES ========== */
+﻿/* ========== MODAL STYLES ========== */
 .modal {
-    /* Hidden by default */
     display: none;
     position: fixed;
     top: 0;
@@ -10,7 +8,6 @@
     height: 100vh;
     background: rgba(0, 0, 0, 0.6);
     z-index: 2000;
-    /* Use flex to center the .modal-content vertically/horizontally */
     justify-content: center;
     align-items: center;
 }
@@ -22,7 +19,6 @@
     padding: 2rem;
     border-radius: 10px;
     position: relative;
-    /* Optional smooth animation */
     transform: translateY(-30px);
     opacity: 0;
     transition: var(--transition);
@@ -43,7 +39,7 @@
 
 /* ========== EVENT SLIDE-DOWN STYLES ========== */
 .event-details {
-    display: none; /* hidden by default */
+    display: none;
     background: #f9f9f9;
     padding: 1rem 1.5rem;
     border-top: 1px solid #ddd;
@@ -62,9 +58,6 @@
         z-index: -1;
     }
 
-    /* Optional: style for open state. We'll handle the height with JS. */
     .event-details.open {
         display: block;
-        /* We'll set max-height in JS for a smoother transition. */
-        /* Alternatively, you could guess a max-height here, but dynamic approach is often better. */
     }
