@@ -1,0 +1,22 @@
+{
+  "title": "Srečanje z mentorji",
+  "type": "event",
+  "description": "Spoznajte naše mentorje! Na srečanju z mentorji boste imeli priložnost spoznati naše izkušene mentorje.",
+  "details": [
+    {
+      "type": "paragraph",
+      "content": "Mentorji vam bodo predstavili svoje izkušnje in vam svetovali pri vaših projektih."
+    },
+    {
+      "type": "paragraph",
+      "content": "Spoznajte mentorje in se povežite z njimi."
+    },
+    {
+      "type": "paragraph",
+      "content": "Pridobite nasvete in se učite iz izkušenj drugih."
+    }
+  ],
+  "image": "assets/images/E3_Mentors.webp",
+  "buttonText": "Prijavi se na Srečanje z mentorji",
+  "buttonLink": "#apply"
+}

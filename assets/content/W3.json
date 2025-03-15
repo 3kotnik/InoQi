@@ -1,0 +1,22 @@
+{
+  "title": "Uvod v Python",
+  "type": "workshop",
+  "description": "Odkrijte moč Pythona! Ta tečaj je namenjen vsem, ki se želijo naučiti programirati v Pythonu.",
+  "details": [
+    {
+      "type": "paragraph",
+      "content": "Na delavnici Uvod v Python se boste naučili osnovnih konceptov programiranja v Pythonu."
+    },
+    {
+      "type": "paragraph",
+      "content": "Skozi praktične primere boste pisali svoje prve programe."
+    },
+    {
+      "type": "paragraph",
+      "content": "Poudarek je na razumevanju osnovnih konceptov in praktični uporabi."
+    }
+  ],
+  "image": "assets/images/W3_Python.webp",
+  "buttonText": "Prijava na Uvod v Python",
+  "buttonLink": "#apply"
+}

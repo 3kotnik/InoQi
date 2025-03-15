@@ -1,0 +1,18 @@
+{
+  "title": "KidoKoda",
+  "type": "workshop",
+  "description": "Naučite se programirati na zabaven način! Ta tečaj je namenjen otrokom osnovnošolske starosti, ki želijo odkriti svet kodiranja.",
+  "details": [
+    {
+      "type": "paragraph",
+      "content": "Na delavnici KidoKoda se otroci naučijo osnov programiranja skozi interaktivne projekte."
+    },
+    {
+      "type": "paragraph",
+      "content": "Poudarek je na razvoju analitičnega mišljenja in kreativnega pristopa pri iskanju rešitev."
+    }
+  ],
+  "image": "assets/images/W1_KidKoda.webp",
+  "buttonText": "Prijava na KidoKoda",
+  "buttonLink": "#apply"
+}

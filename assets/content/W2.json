@@ -1,0 +1,22 @@
+{
+  "title": "Razvoj spletnih strani",
+  "type": "workshop",
+  "description": "Naučite se izdelati svojo spletno stran! Ta tečaj je namenjen vsem, ki želijo osvojiti osnove spletnega razvoja.",
+  "details": [
+    {
+      "type": "paragraph",
+      "content": "Na delavnici Razvoj spletnih strani se boste naučili osnov HTML, CSS in JavaScript."
+    },
+    {
+      "type": "paragraph",
+      "content": "Skozi praktične primere boste izdelali svojo prvo spletno stran."
+    },
+    {
+      "type": "paragraph",
+      "content": "Poudarek je na razumevanju osnovnih konceptov in praktični uporabi."
+    }
+  ],
+  "image": "assets/images/W2_WebDev.webp",
+  "buttonText": "Prijava na Razvoj spletnih strani",
+  "buttonLink": "#apply"
+}

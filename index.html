@@ -1,11 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sl">
+
 <head>
     <!-- Fonts Preconnect -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <!-- Fonts Links -->
-    <link href="https://fonts.googleapis.com/css2?family=Onest:wght@100..900&family=Raleway:ital,wght@0,100..900;1,100..900&family=Montserrat:wght@300;400;500;700&display=swap" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Onest:wght@100..900&family=Raleway:ital,wght@0,100..900;1,100..900&family=Montserrat:wght@300;400;500;700&display=swap"
+        rel="stylesheet" />
 
     <title>InoQI – veščine prihodnosti</title>
 
@@ -23,20 +26,21 @@
     <!-- For search engines: This is a test page, please do not index -->
     <meta name="robots" content="noindex, nofollow" />
 </head>
+
 <body class="light-mode">
     <header id="header">
         <div class="logo">
             <img src="assets/InoQi_logo3.webp" alt="InoQI Logo" />
         </div>
-        <nav>
+        <nav aria-label="Main Navigation">
             <ul class="nav-links">
-                <li><a href="#hero">Domov</a></li>
-                <li><a href="#intro">O nas</a></li>
-                <li><a href="#workshops">Delavnice</a></li>
-                <li><a href="#events">Dogodki</a></li>
-                <li><a href="#apply">Prijava</a></li>
-                <li><a href="#gallery">Galerija</a></li>
-                <li><a href="#contact">Kontakt</a></li>
+                <li><a href="#hero" aria-label="Go to Home section">Domov</a></li>
+                <li><a href="#intro" aria-label="Go to About section">O nas</a></li>
+                <li><a href="#workshops" aria-label="Go to Workshops section">Delavnice</a></li>
+                <li><a href="#events" aria-label="Go to Events section">Dogodki</a></li>
+                <li><a href="#apply" aria-label="Go to Apply section">Prijava</a></li>
+                <li><a href="#gallery" aria-label="Go to Gallery section">Galerija</a></li>
+                <li><a href="#contact" aria-label="Go to Contact section">Kontakt</a></li>
                 <li class="mode-toggle"><button onclick="toggleMode()">Toggle Mode</button></li>
             </ul>
         </nav>
@@ -63,7 +67,8 @@
 
     <section class="intro" id="intro">
         <div class="content">
-            <p class="main-intro">InoQI je zavod ustvarjalcev, izobraževalcev, inovatorjev in večnih radovednežev, povezanih zaradi skupne strasti do novodobnih tehnologij ter možnosti, ki jih prinašajo.</p>
+            <p class="main-intro">InoQI je zavod ustvarjalcev, izobraževalcev, inovatorjev in večnih radovednežev,
+                povezanih zaradi skupne strasti do novodobnih tehnologij ter možnosti, ki jih prinašajo.</p>
             <div class="qualities">
                 <p>Inovativni pristopi</p>
                 <p>Praktične izkušnje</p>
@@ -86,83 +91,93 @@
                     </div>
                 </div>
                 <!-- Modal for Workshop 1 -->
-                <div class="modal" id="modal-workshop-1" data-content-url="assets/content/W1-kidoKoda.txt">
-                    <div class="modal-content">
-                        <span class="modal-close" data-modal-close>&times;</span>
-                        <h3>KidoKoda</h3>
-                        <p class="modal-text"></p>
+                <div class="modal" id="modal-workshop-1" data-content-url="assets/content/W1.json">
+                    <div class="modal-header">
+                        <button data-modal-close class="close-button">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <h3></h3>
+                        <div class="modal-text"></div>
                         <button class="button">Prijava</button>
                     </div>
                 </div>
 
                 <!-- Workshop 2 with Modal Trigger -->
                 <div class="workshop-item" data-modal-target="#modal-workshop-2">
-                    <img src="assets/images/W2_3D.webp" alt="Prvi virtualni koraki Workshop" />
+                    <img src="assets/images/W2_WebDev.webp" alt="Razvoj spletnih strani" />
                     <div class="workshop-text">
-                        <h3>Prvi virtualni koraki</h3>
-                        <p>Začetni tečaj 3D oblikovanja (OŠ)</p>
+                        <h3>Razvoj spletnih strani</h3>
+                        <p>Naučite se izdelati svojo spletno stran!</p>
                     </div>
                 </div>
                 <!-- Modal for Workshop 2 -->
-                <div class="modal" id="modal-workshop-2" data-content-url="assets/content/W2-prviVirtualniKoraki.txt">
-                    <div class="modal-content">
-                        <span class="modal-close" data-modal-close>&times;</span>
-                        <h3>Prvi virtualni koraki</h3>
-                        <p class="modal-text"></p>
+                <div class="modal" id="modal-workshop-2" data-content-url="assets/content/W2.json">
+                    <div class="modal-header">
+                        <button data-modal-close class="close-button">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <h3></h3>
+                        <div class="modal-text"></div>
                         <button class="button">Prijava</button>
                     </div>
                 </div>
 
                 <!-- Workshop 3 with Modal Trigger -->
                 <div class="workshop-item" data-modal-target="#modal-workshop-3">
-                    <img src="assets/images/W3_Roboti.webp" alt="Robotske avanture Workshop" />
+                    <img src="assets/images/W3_Python.webp" alt="Uvod v Python" />
                     <div class="workshop-text">
-                        <h3>Robotske aventure</h3>
-                        <p>Programiranje in gradnja robotov za praktične izzive (OŠ)</p>
+                        <h3>Uvod v Python</h3>
+                        <p>Odkrijte moč Pythona!</p>
                     </div>
                 </div>
                 <!-- Modal for Workshop 3 -->
-                <div class="modal" id="modal-workshop-3" data-content-url="assets/content/W3-robotskeAvanture.txt">
-                    <div class="modal-content">
-                        <span class="modal-close" data-modal-close>&times;</span>
-                        <h3>Robotske aventure</h3>
-                        <p class="modal-text"></p>
+                <div class="modal" id="modal-workshop-3" data-content-url="assets/content/W3.json">
+                    <div class="modal-header">
+                        <button data-modal-close class="close-button">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <h3></h3>
+                        <div class="modal-text"></div>
                         <button class="button">Prijava</button>
                     </div>
                 </div>
 
                 <!-- Workshop 4 with Modal Trigger -->
                 <div class="workshop-item" data-modal-target="#modal-workshop-4">
-                    <img src="https://placehold.co/600x300" alt="3D umetniki Workshop" />
+                    <img src="assets/images/W4_Arduino.webp" alt="Uvod v Arduino" />
                     <div class="workshop-text">
-                        <h3>3D umetniki</h3>
-                        <p>Odkrijte umetnost oblikovanja v digitalnem prostoru (13 - 18 let)</p>
+                        <h3>Uvod v Arduino</h3>
+                        <p>Spoznajte svet Arduina!</p>
                     </div>
                 </div>
                 <!-- Modal for Workshop 4 -->
-                <div class="modal" id="modal-workshop-4" data-content-url="assets/content/W4-3dUmetniki.txt">
-                    <div class="modal-content">
-                        <span class="modal-close" data-modal-close>&times;</span>
-                        <h3>3D umetniki</h3>
-                        <p class="modal-text"></p>
+                <div class="modal" id="modal-workshop-4" data-content-url="assets/content/W4.json">
+                    <div class="modal-header">
+                        <button data-modal-close class="close-button">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <h3></h3>
+                        <div class="modal-text"></div>
                         <button class="button">Prijava</button>
                     </div>
                 </div>
 
                 <!-- Workshop 5 with Modal Trigger -->
                 <div class="workshop-item" data-modal-target="#modal-workshop-5">
-                    <img src="https://placehold.co/600x300" alt="3D umetniki Workshop" />
+                    <img src="assets/images/W5_3D.webp" alt="Uvod v 3D modeliranje" />
                     <div class="workshop-text">
-                        <h3>XR svetovi</h3>
-                        <p>Raziskujte in ustvarjajte v razširjeni resničnosti (14-18 let)</p>
+                        <h3>Uvod v 3D modeliranje</h3>
+                        <p>Odkrijte svet 3D modeliranja!</p>
                     </div>
                 </div>
                 <!-- Modal for Workshop 5 -->
-                <div class="modal" id="modal-workshop-5" data-content-url="assets/content/W5-xrSvetovi.txt">
-                    <div class="modal-content">
-                        <span class="modal-close" data-modal-close>&times;</span>
-                        <h3>XR svetovi</h3>
-                        <p class="modal-text"></p>
+                <div class="modal" id="modal-workshop-5" data-content-url="assets/content/W5.json">
+                    <div class="modal-header">
+                        <button data-modal-close class="close-button">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <h3></h3>
+                        <div class="modal-text"></div>
                         <button class="button">Prijava</button>
                     </div>
                 </div>
@@ -182,13 +197,13 @@
             <div class="event-list">
                 <!-- Event 1 -->
                 <div class="event-item" data-event-panel>
-                    <img src="https://placehold.co/600x300" alt="Event 2" />
+                    <img src="assets/images/E1_TechTalks.webp" alt="Tech Talks" />
                     <div class="event-text">
                         <h3>Tech Talks</h3>
                         <p>Mesečna srečanja z vodilnimi strokovnjaki v industriji</p>
                     </div>
                     <!-- Slide-down content -->
-                    <div class="event-details" data-content-url="assets/content/E1-techTalks.txt">
+                    <div class="event-details" data-content-url="assets/content/E1.json">
                         <div class="event-overlay"></div>
                         <p class="event-text-content"></p>
                         <button class="button">Prijava</button>
@@ -196,12 +211,12 @@
                 </div>
                 <!-- Event 2 -->
                 <div class="event-item" data-event-panel>
-                    <img src="https://placehold.co/600x300" alt="Event 3" />
+                    <img src="assets/images/E2_Hackathon.webp" alt="Hackathon" />
                     <div class="event-text">
-                        <h3>Workshop Weekend</h3>
-                        <p>Intenzivni vikend delavnic za vse nivoje znanja</p>
+                        <h3>Hackathon</h3>
+                        <p>Izzovite se na našem Hackathonu!</p>
                     </div>
-                    <div class="event-details" data-content-url="assets/content/E2-workshopWeekend.txt">
+                    <div class="event-details" data-content-url="assets/content/E2.json">
                         <div class="event-overlay"></div>
                         <p class="event-text-content"></p>
                         <button class="button">Prijava</button>
@@ -209,12 +224,12 @@
                 </div>
                 <!-- Event 3 -->
                 <div class="event-item" data-event-panel>
-                    <img src="https://placehold.co/600x300" alt="Event 5" />
+                    <img src="assets/images/E3_Mentors.webp" alt="Srečanje z mentorji" />
                     <div class="event-text">
-                        <h3>VR Experience Day</h3>
-                        <p>Dan odprtih vrat z VR tehnologijami</p>
+                        <h3>Srečanje z mentorji</h3>
+                        <p>Spoznajte naše mentorje!</p>
                     </div>
-                    <div class="event-details" data-content-url="assets/content/E3-vrExperienceDay.txt">
+                    <div class="event-details" data-content-url="assets/content/E3.json">
                         <div class="event-overlay"></div>
                         <p class="event-text-content"></p>
                         <button class="button">Prijava</button>
@@ -245,7 +260,7 @@
     <section class="apply" id="apply">
         <div class="form-wrapper">
             <h2>Prijavi se</h2>
-            <form class="application-form">
+            <form class="application-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
                 <div class="form-row">
                     <label for="name">Ime:</label>
                     <input type="text" id="name" name="name" required />
@@ -263,10 +278,10 @@
                     <select id="workshop" name="workshop" required>
                         <option value="">Izberi delavnico</option>
                         <option value="KidoKoda">KidoKoda</option>
-                        <option value="Prvi koraki">Prvi virtualni koraki</option>
-                        <option value="Robotske avanture">Robotske aventure</option>
-                        <option value="3D umetniki">3D umetniki</option>
-                        <option value="XR svetovi">XR svetovi</option>
+                        <option value="Razvoj spletnih strani">Razvoj spletnih strani</option>
+                        <option value="Uvod v Python">Uvod v Python</option>
+                        <option value="Uvod v Arduino">Uvod v Arduino</option>
+                        <option value="Uvod v 3D modeliranje">Uvod v 3D modeliranje</option>
                     </select>
                 </div>
                 <div class="form-row">
@@ -278,7 +293,8 @@
                     <input type="tel" id="phone" name="phone" required />
                 </div>
                 <div class="disclaimer">
-                    Your personal information will be used in accordance with our privacy policy and application conditions.
+                    Your personal information will be used in accordance with our privacy policy and application
+                    conditions.
                 </div>
                 <div class="form-actions">
                     <button type="submit" class="button">Pošlji prijavo</button>
@@ -290,81 +306,85 @@
     <section class="about-us" id="about-us">
         <div class="content">
             <h2>Kdo smo?</h2>
-            <p class="main-intro">InoQI smo zavod in smo skupnost. Združuje nas raziskovalni duh, navdušenost nad novimi tehnologijami in strast do poučevanja.</p>
+            <p class="main-intro">InoQI smo zavod in smo skupnost. Združuje nas raziskovalni duh, navdušenost nad novimi
+                tehnologijami in strast do poučevanja.</p>
 
             <div class="vision-mission">
                 <div class="vision">
                     <h3>Vizija</h3>
-                    <p>Naša vizija je navdihovati novo generacijo za kreativno in odgovorno uporabo naprednih tehnologij, usmerjeno k izboljšanju kakovosti življenja v družbi, ki bo spodbujala povezovanje.</p>
+                    <p>Naša vizija je navdihovati novo generacijo za kreativno in odgovorno uporabo naprednih
+                        tehnologij, usmerjeno k izboljšanju kakovosti življenja v družbi, ki bo spodbujala
+                        povezovanje.</p>
                 </div>
                 <div class="mission">
                     <h3>Poslanstvo</h3>
-                    <p>Izvajanje kreativnih delavnic z uporabo naprednih tehnologij, ustvarjanje kakovostnih, na uporabnika osredotočenih novomedijskih vsebin, razvoj in inovativna uporaba novih tehnologij.</p>
-                </div>
-            </div>
-
-            <div class="team-section">
-                <h3>Ekipa</h3>
-                <div class="team-grid">
-                    <div class="team-member">
-                        <img src="assets/images/Team1.jpg" alt="Team Member 1" />
-                    </div>
-                    <div class="team-member">
-                        <img src="assets/images/Team2.jpg" alt="Team Member 2" />
-                    </div>
-                    <div class="team-member">
-                        <img src="assets/images/Team3.jpg" alt="Team Member 3" />
-                    </div>
-                    <div class="team-member">
-                        <img src="assets/images/Team4.jpg" alt="Team Member 4" />
-                    </div>
+                    <p>Izvajanje kreativnih delavnic z uporabo naprednih tehnologij, ustvarjanje kakovostnih, na
+                        uporabnika osredotočenih novomedijskih vsebin, razvoj in inovativna uporaba novih
+                        tehnologij.</p>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</div>
+</section>
 
-    <section class="contact" id="contact">
-        <div class="form-wrapper">
-            <h2>Stopite v stik</h2>
-            <form class="contact-form">
+<section class="contact" id="contact">
+<div class="content">
+    <h2>Kontakt</h2>
+    <div class="contact-wrapper">
+        <div class="contact-info">
+            <p>
+                <img src="assets/icons/location.svg" alt="Location Icon" />
+                <span>Lokacija:</span>
+                <a href="https://maps.app.goo.gl/u4h74h42p7g3Z79S9" target="_blank">
+                    <address>
+                        Tržaška cesta 132, 1000 Ljubljana
+                    </address>
+                </a>
+            </p>
+            <p>
+                <img src="assets/icons/email.svg" alt="Email Icon" />
+                <span>Email:</span>
+                <a href="mailto:info@inoqi.si">info@inoqi.si</a>
+            </p>
+            <p>
+                <img src="assets/icons/phone.svg" alt="Phone Icon" />
+                <span>Telefon:</span>
+                <a href="tel:+38640123456">+386 40 123 456</a>
+            </p>
+        </div>
+        <div class="contact-form-wrapper">
+            <form class="contact-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
                 <div class="form-row">
-                    <label for="email-contact">E-pošta:</label>
-                    <input type="email" id="email-contact" name="email-contact" required />
+                    <label for="contact-name">Ime:</label>
+                    <input type="text" id="contact-name" name="name" required />
                 </div>
                 <div class="form-row">
-                    <label for="message">Sporočilo:</label>
-                    <textarea id="message" name="message" rows="4" required></textarea>
+                    <label for="contact-email">E-pošta:</label>
+                    <input type="email" id="contact-email" name="email" required />
+                </div>
+                <div class="form-row">
+                    <label for="contact-message">Sporočilo:</label>
+                    <textarea id="contact-message" name="message" required></textarea>
                 </div>
                 <div class="form-actions">
-                    <button type="submit" class="button">Pošli sporočilo</button>
+                    <button type="submit" class="button">Pošlji</button>
                 </div>
             </form>
-        </div>
-        <div class="map-container">
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2762.112018930663!2d15.639353315401695!3d46.55465097912959!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDbCsDMzJzE2LjgiTiAxNcKwMzgnMjguNyJF!5e0!3m2!1sen!2ssi!4v1234567890"
-                allowfullscreen=""
-                loading="lazy"
-                referrerpolicy="no-referrer-when-downgrade">
-            </iframe>
-        </div>
-    </section>
+        
+</div>
+</section>
 
-    <footer>
-        <div class="footer-content">
-            <p>&copy; 2025 Zavod InoQi. Vse pravice pridržane.</p>
-            <div class="footer-links">
-                <a href="#">Pravno obvestilo</a>
-                <span>|</span>
-                <a href="#">Politika zasebnosti</a>
-                <span>|</span>
-                <a href="#">Pogoji uporabe</a>
-            </div>
-        </div>
-    </footer>
+<footer>
+<div class="content">
+    <p>&copy; 2023 InoQi</p>
+</div>
+</footer>
 
-    <!-- Scripts -->
-    <script src="main.js"></script>
-    <script src="modal-slide.js"></script>
-    <script src="mode.js"></script>
+<!-- Scripts -->
+<script src="main.js"></script>
+<script src="modal-slide.js"></script>
+<script src="mode.js"></script>
 </body>
+
 </html>

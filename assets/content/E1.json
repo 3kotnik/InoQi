@@ -1,0 +1,22 @@
+{
+  "title": "Tech Talks",
+  "type": "event",
+  "description": "Pridružite se nam na mesečnih srečanjih z vodilnimi strokovnjaki v industriji.",
+  "details": [
+    {
+      "type": "paragraph",
+      "content": "Spoznajte najnovejše trende in se povežite z drugimi navdušenci nad tehnologijo."
+    },
+    {
+      "type": "list",
+      "items": [
+        "Raznolike teme",
+        "Izkušeni govorci",
+        "Mreženje"
+      ]
+    }
+  ],
+  "image": "assets/images/E1_TechTalks.webp",
+  "buttonText": "Prijavi se na Tech Talks",
+  "buttonLink": "#apply"
+}

@@ -1,0 +1,31 @@
+{
+  "title": "Event/Workshop Title",
+  "type": "event/workshop",
+  "description": "Main description of the event/workshop.",
+  "details": [
+    {
+      "type": "paragraph",
+      "content": "Detailed paragraph of the event/workshop."
+    },
+    {
+      "type": "list",
+      "items": [
+        "Item 1",
+        "Item 2",
+        "Item 3"
+      ]
+    },
+    {
+      "type": "bold",
+      "content": "Bold text"
+    },
+    {
+      "type": "link",
+      "content": "Link text",
+      "url": "https://example.com"
+    }
+  ],
+  "image": "assets/images/placeholder.webp",
+  "buttonText": "Button Text",
+  "buttonLink": "#apply"
+}

@@ -1,0 +1,22 @@
+{
+  "title": "Uvod v 3D modeliranje",
+  "type": "workshop",
+  "description": "Odkrijte svet 3D modeliranja! Ta tečaj je namenjen vsem, ki jih zanima 3D oblikovanje.",
+  "details": [
+    {
+      "type": "paragraph",
+      "content": "Na delavnici Uvod v 3D modeliranje se boste naučili osnov 3D modeliranja."
+    },
+    {
+      "type": "paragraph",
+      "content": "Skozi praktične primere boste izdelali svoje prve 3D modele."
+    },
+    {
+      "type": "paragraph",
+      "content": "Poudarek je na razumevanju osnovnih konceptov in praktični uporabi."
+    }
+  ],
+  "image": "assets/images/W5_3D.webp",
+  "buttonText": "Prijava na Uvod v 3D modeliranje",
+  "buttonLink": "#apply"
+}

@@ -1,0 +1,22 @@
+{
+  "title": "Hackathon",
+  "type": "event",
+  "description": "Izzovite se na našem Hackathonu! Tekmujte z drugimi programerji in razvijte inovativne rešitve.",
+  "details": [
+    {
+      "type": "paragraph",
+      "content": "Na Hackathonu boste imeli priložnost pokazati svoje znanje in ustvarjalnost."
+    },
+    {
+      "type": "paragraph",
+      "content": "Tekmovali boste v ekipah in razvijali inovativne rešitve za izzive, ki jih bomo postavili."
+    },
+    {
+      "type": "paragraph",
+      "content": "Najboljše ekipe bodo prejele nagrade."
+    }
+  ],
+  "image": "assets/images/E2_Hackathon.webp",
+  "buttonText": "Prijavi se na Hackathon",
+  "buttonLink": "#apply"
+}

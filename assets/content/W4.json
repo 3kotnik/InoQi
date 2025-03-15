@@ -1,0 +1,22 @@
+{
+  "title": "Uvod v Arduino",
+  "type": "workshop",
+  "description": "Spoznajte svet Arduina! Ta tečaj je namenjen vsem, ki jih zanima elektronika in programiranje.",
+  "details": [
+    {
+      "type": "paragraph",
+      "content": "Na delavnici Uvod v Arduino se boste naučili osnov elektronike in programiranja z Arduinom."
+    },
+    {
+      "type": "paragraph",
+      "content": "Skozi praktične primere boste izdelali svoje prve elektronske projekte."
+    },
+    {
+      "type": "paragraph",
+      "content": "Poudarek je na razumevanju osnovnih konceptov in praktični uporabi."
+    }
+  ],
+  "image": "assets/images/W4_Arduino.webp",
+  "buttonText": "Prijava na Uvod v Arduino",
+  "buttonLink": "#apply"
+}
