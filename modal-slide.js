@@ -39,7 +39,6 @@ async function loadWorkshopData(workshopId, modalId) {
                 }
                 return '';
             }).join('')}
-            <img src="${data.image}" alt="${data.title}" class="img-fluid">
         `;
     } catch (error) {
         console.error(error);
