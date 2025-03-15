@@ -11,20 +11,83 @@ const modalTriggers = document.querySelectorAll('[data-modal-target]');
 const modalCloseButtons = document.querySelectorAll('[data-modal-close]');
 
 /**
+ * Function to load and populate the modal content from JSON
+ */
+async function loadWorkshopData(workshopId, modalId) {
+    try {
+        const response = await fetch(`assets/content/${workshopId}.json`);
+        if (!response.ok) {
+            throw new Error(`Failed to load ${workshopId}.json: ${response.status}`);
+        }
+        const data = await response.json();
+
+        const modalBody = document.getElementById(`${modalId}Body`);
+        const modalButton = document.getElementById(`${modalId}Button`);
+        const modalTitle = document.getElementById(`${modalId}Label`);
+
+        modalTitle.textContent = data.title;
+        modalButton.textContent = data.buttonText;
+        modalButton.href = data.buttonLink;
+
+        modalBody.innerHTML = `
+            <p>${data.description}</p>
+            ${data.details.map(detail => {
+                if (detail.type === 'paragraph') {
+                    return `<p>${detail.content}</p>`;
+                } else if (detail.type === 'list') {
+                    return `<ul>${detail.items.map(item => `<li>${item}</li>`).join('')}</ul>`;
+                }
+                return '';
+            }).join('')}
+            <img src="${data.image}" alt="${data.title}" class="img-fluid">
+        `;
+    } catch (error) {
+        console.error(error);
+        const modalBody = document.getElementById(`${modalId}Body`);
+        modalBody.innerHTML = `<p>Error loading content. Please try again later.</p>`;
+    }
+}
+
+/**
+ * Function to load modal content from text file
+ */
+async function loadModalContent(modal, url) {
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`Failed to load content from ${url}: ${response.status}`);
+        }
+        const text = await response.text();
+        modal.querySelector('.modal-text').textContent = text;
+    } catch (error) {
+        console.error(error);
+        modal.querySelector('.modal-text').textContent = "Error loading content.";
+    }
+}
+
+/**
  * Open modal by adding 'show' to .modal and toggling display
  */
 function openModal(modalSelector) {
     const modal = document.querySelector(modalSelector);
     if (!modal) return;
 
-    // Fetch and insert content
-    fetchModalContent(modalSelector);
-
     modal.style.display = 'flex';    // Make the modal visible
     // Force reflow before adding 'show' for transition
     requestAnimationFrame(() => {
         modal.classList.add('show');
     });
+
+    // Check if the modal is the KidoKoda modal
+    if (modal.id === 'modal-workshop-1') {
+        // KidoKoda modal content is loaded from JSON
+        return; // Do not load content from text file
+    }
+
+    // Check if the modal has data-content-url and load content if it does
+    if (modal.dataset.contentUrl) {
+        loadModalContent(modal, modal.dataset.contentUrl);
+    }
 }
 
 /**
@@ -130,5 +193,6 @@ eventItems.forEach(item => {
 
 // Initialize modals and slide-downs when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    // Initialize modals and slide-downs
+    // Load JSON data for KidoKoda modal
+    loadWorkshopData('W1', 'workshop1Modal');
 });
