@@ -7,15 +7,15 @@
 const cards = document.querySelectorAll('.card');
 
 // Animation Variables
-const SLIDE_ANIMATION_DURATION = 400; // ms
+const SLIDE_ANIMATION_DURATION = 400;
 
 // State Variables
 let activeCard = null;
+let animationInProgress = false;
 
 /**
  * Load JSON content for card
  * @param {HTMLElement} card - The card element
- * @returns {Promise} Promise resolving when content is loaded
  */
 async function loadCardContent(card) {
     try {
@@ -30,64 +30,80 @@ async function loadCardContent(card) {
         }
         
         const data = await response.json();
-        const descriptionElement = card.querySelector('.card-description');
+        renderCardContent(card, data);
         
-        if (descriptionElement) {
-            // Clear any existing content
-            descriptionElement.innerHTML = '';
-            
-            // Add description paragraph
-            if (data.description) {
-                const descParagraph = document.createElement('p');
-                descParagraph.textContent = data.description;
-                descriptionElement.appendChild(descParagraph);
-            }
-            
-            // Add details content
-            if (data.details && Array.isArray(data.details)) {
-                data.details.forEach(detail => {
-                    if (detail.type === 'paragraph') {
-                        const paragraph = document.createElement('p');
-                        paragraph.textContent = detail.content;
-                        descriptionElement.appendChild(paragraph);
-                    } else if (detail.type === 'list' && detail.items) {
-                        const list = document.createElement('ul');
-                        detail.items.forEach(item => {
-                            const listItem = document.createElement('li');
-                            listItem.textContent = item;
-                            list.appendChild(listItem);
-                        });
-                        descriptionElement.appendChild(list);
-                    }
-                });
-            }
-        }
-        
-        // Update button text if provided
-        const button = card.querySelector('.card-button');
-        if (button && data.buttonText) {
-            button.textContent = data.buttonText;
-        }
     } catch (error) {
         console.error('Error loading card content:', error);
-        
-        // Display error message in the card
-        const descriptionElement = card.querySelector('.card-description');
-        if (descriptionElement) {
-            descriptionElement.innerHTML = '<p>Vsebine trenutno ni mogoče naložiti. Prosimo, poskusite znova kasneje.</p>';
-        }
+        showErrorInCard(card);
+    }
+}
+
+/**
+ * Render JSON content in card
+ */
+function renderCardContent(card, data) {
+    const descriptionElement = card.querySelector('.card-description');
+    if (!descriptionElement) return;
+    
+    // Clear existing content
+    descriptionElement.innerHTML = '';
+    
+    // Add description paragraph
+    if (data.description) {
+        const descParagraph = document.createElement('p');
+        descParagraph.textContent = data.description;
+        descriptionElement.appendChild(descParagraph);
+    }
+    
+    // Add details content
+    if (data.details && Array.isArray(data.details)) {
+        data.details.forEach(detail => {
+            if (detail.type === 'paragraph') {
+                const paragraph = document.createElement('p');
+                paragraph.textContent = detail.content;
+                descriptionElement.appendChild(paragraph);
+            } else if (detail.type === 'list' && detail.items) {
+                const list = document.createElement('ul');
+                detail.items.forEach(item => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = item;
+                    list.appendChild(listItem);
+                });
+                descriptionElement.appendChild(list);
+            }
+        });
+    }
+    
+    // Update button text if provided
+    const button = card.querySelector('.card-button');
+    if (button && data.buttonText) {
+        button.textContent = data.buttonText;
+    }
+}
+
+/**
+ * Show error message in card
+ */
+function showErrorInCard(card) {
+    const descriptionElement = card.querySelector('.card-description');
+    if (descriptionElement) {
+        descriptionElement.innerHTML = '<p>Vsebine trenutno ni mogoče naložiti. Prosimo, poskusite znova kasneje.</p>';
     }
 }
 
 /**
  * Toggle card content visibility
- * @param {HTMLElement} card - The card to toggle
  */
 function toggleCard(card) {
+    // Prevent multiple animations
+    if (animationInProgress) return;
+    
     const contentElement = card.querySelector('.card-content');
     const isActive = card.classList.contains('active');
     
-    // If this card is already active, close it
+    animationInProgress = true;
+    
+    // Close card if already active
     if (isActive) {
         closeCard(card);
         return;
@@ -96,70 +112,103 @@ function toggleCard(card) {
     // Close any currently open card
     if (activeCard && activeCard !== card) {
         closeCard(activeCard);
+        
+        // Wait for closing animation to complete before opening new card
+        setTimeout(() => {
+            openCard(card, contentElement);
+        }, SLIDE_ANIMATION_DURATION);
+    } else {
+        openCard(card, contentElement);
     }
+}
+
+/**
+ * Open a card
+ */
+function openCard(card, contentElement) {
+    // Calculate content height before opening
+    contentElement.style.height = 'auto';
+    const targetHeight = contentElement.scrollHeight;
+    contentElement.style.height = '0';
     
-    // Open this card
+    // Force browser to recognize changes before animation
     card.classList.add('active');
     
-    // Animate height from 0 to scrollHeight
-    const contentHeight = contentElement.scrollHeight;
-    contentElement.style.height = '0';
-    contentElement.style.opacity = '0';
-    
-    // Force browser to recognize the starting height before animating
-    window.getComputedStyle(contentElement).getPropertyValue('height');
-    
-    // Start animation
-    contentElement.style.height = contentHeight + 'px';
-    contentElement.style.opacity = '1';
-    
-    // Set as active card
-    activeCard = card;
-    
-    // Smooth scroll to position card optimally in viewport
-    setTimeout(() => {
-        const cardTop = card.getBoundingClientRect().top;
-        const headerHeight = document.querySelector('header').offsetHeight;
-        const targetPosition = window.pageYOffset + cardTop - headerHeight - 20;
-        
-        window.scrollTo({
-            top: targetPosition,
-            behavior: 'smooth'
+    // Use requestAnimationFrame for smoother animation
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            contentElement.style.height = `${targetHeight}px`;
+            contentElement.style.opacity = '1';
+            
+            // Set as active card
+            activeCard = card;
+            
+            // Position card in viewport
+            setTimeout(() => {
+                scrollToCard(card);
+                
+                // Allow height to be auto after animation completes
+                setTimeout(() => {
+                    if (card.classList.contains('active')) {
+                        contentElement.style.height = 'auto';
+                    }
+                    animationInProgress = false;
+                }, SLIDE_ANIMATION_DURATION);
+            }, 50);
         });
-    }, 100);
+    });
 }
 
 /**
  * Close an open card
- * @param {HTMLElement} card - The card to close
  */
 function closeCard(card) {
     const contentElement = card.querySelector('.card-content');
     
-    // Get current height before collapsing
-    contentElement.style.height = contentElement.scrollHeight + 'px';
+    // Set explicit height before animating closed
+    contentElement.style.height = `${contentElement.scrollHeight}px`;
     
-    // Force browser to recognize the explicit height before animating
-    window.getComputedStyle(contentElement).getPropertyValue('height');
+    // Force browser to recognize the explicit height
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            // Start animation
+            contentElement.style.height = '0';
+            contentElement.style.opacity = '0';
+            
+            // Remove active class when animation completes
+            setTimeout(() => {
+                card.classList.remove('active');
+                
+                // Reset active card reference if this was the active one
+                if (activeCard === card) {
+                    activeCard = null;
+                }
+                
+                animationInProgress = false;
+            }, SLIDE_ANIMATION_DURATION);
+        });
+    });
+}
+
+/**
+ * Scroll to position card optimally in viewport
+ */
+function scrollToCard(card) {
+    if (!card) return;
     
-    // Animate closing
-    contentElement.style.height = '0';
-    contentElement.style.opacity = '0';
+    const cardTop = card.getBoundingClientRect().top;
+    const headerHeight = document.querySelector('header').offsetHeight || 0;
+    const buffer = 20; // Extra space between header and card
+    const targetPosition = window.pageYOffset + cardTop - headerHeight - buffer;
     
-    // Remove active class when animation completes
-    setTimeout(() => {
-        card.classList.remove('active');
-        
-        // Reset active card reference if this was the active one
-        if (activeCard === card) {
-            activeCard = null;
-        }
-    }, SLIDE_ANIMATION_DURATION);
+    window.scrollTo({
+        top: targetPosition,
+        behavior: 'smooth'
+    });
 }
 
 /**
  * Handle click on card header to toggle content
- * @param {Event} e - Click event
  */
 function handleCardClick(e) {
     const card = e.currentTarget.closest('.card');
@@ -173,6 +222,43 @@ function handleCardClick(e) {
         });
     } else {
         toggleCard(card);
+    }
+}
+
+/**
+ * Preload card content for better UX
+ */
+function preloadCardContent() {
+    // Use Intersection Observer to preload content when card comes into view
+    if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const card = entry.target;
+                    if (!card.dataset.contentLoaded) {
+                        loadCardContent(card).then(() => {
+                            card.dataset.contentLoaded = 'true';
+                        });
+                    }
+                    observer.unobserve(card);
+                }
+            });
+        }, {
+            rootMargin: '200px' // Start loading when within 200px of viewport
+        });
+        
+        cards.forEach(card => observer.observe(card));
+    } else {
+        // Fallback for browsers without IntersectionObserver
+        setTimeout(() => {
+            cards.forEach(card => {
+                if (!card.dataset.contentLoaded) {
+                    loadCardContent(card).then(() => {
+                        card.dataset.contentLoaded = 'true';
+                    });
+                }
+            });
+        }, 1000);
     }
 }
 
@@ -191,18 +277,34 @@ function initializeCards() {
         if (cardContent) {
             cardContent.style.height = '0';
             cardContent.style.opacity = '0';
-            cardContent.style.transition = `height ${SLIDE_ANIMATION_DURATION/1000}s ease-in-out, opacity ${SLIDE_ANIMATION_DURATION/1000}s ease-in-out`;
+            // Use will-change for better animation performance
+            cardContent.style.willChange = 'height, opacity';
         }
     });
+    
+    // Preload card content for better UX
+    preloadCardContent();
 }
 
 /**
  * Handle clicks outside cards to close open card
- * @param {Event} e - Click event
  */
 function handleOutsideClick(e) {
-    if (activeCard && !e.target.closest('.card')) {
+    if (activeCard && !e.target.closest('.card') && !animationInProgress) {
         closeCard(activeCard);
+    }
+}
+
+/**
+ * Handle window resize to adjust card content height
+ */
+function handleResize() {
+    if (activeCard && !animationInProgress) {
+        const contentElement = activeCard.querySelector('.card-content');
+        if (contentElement) {
+            // Allow height to adjust automatically
+            contentElement.style.height = 'auto';
+        }
     }
 }
 
@@ -215,8 +317,11 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Handle escape key to close active card
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && activeCard) {
+        if (e.key === 'Escape' && activeCard && !animationInProgress) {
             closeCard(activeCard);
         }
     });
+    
+    // Handle window resize for responsive adjustments
+    window.addEventListener('resize', handleResize);
 });
