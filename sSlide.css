@@ -1,5 +1,5 @@
 /* ========================================
-   SIMPLIFIED CARD STYLES
+   SIMPLIFIED CARD STYLES FOR JS ANIMATIONS
    ======================================== */
 .card-list {
     display: flex;
@@ -14,10 +14,15 @@
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
     background-color: #ffffff;
     transition: box-shadow 0.3s ease;
+    position: relative;
 }
 
     .card:hover {
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    .card.opening {
+        box-shadow: 0 0 0 2px var(--primary);
     }
 
 /* Card Header */
@@ -33,6 +38,7 @@
         aspect-ratio: 16 / 9;
         object-fit: cover;
         transition: transform 0.5s ease;
+        will-change: transform;
     }
 
 .card:hover .card-header img {
@@ -69,19 +75,14 @@ time {
     opacity: 0.9;
 }
 
-/* Card Content - Sliding Part */
+/* Card Content - JS controlled animation */
 .card-content {
-    height: 0;
-    overflow: hidden;
-    opacity: 0;
+    display: none;
     padding: 0 1.5rem;
-    transition: all 0.5s ease;
 }
 
 .card.active .card-content {
-    height: auto;
-    opacity: 1;
-    padding: 1.5rem;
+    display: block;
 }
 
 /* Content Styling */
@@ -127,139 +128,6 @@ time {
             font-size: 1.25rem;
         }
 
-    .card.active .card-content {
-        padding: 1.25rem;
-    }
-}
-/* ========================================
-   SIMPLIFIED CARD STYLES
-   ======================================== */
-.card-list {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    margin-bottom: 2rem;
-}
-
-.card {
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-    background-color: #ffffff;
-    transition: box-shadow 0.3s ease;
-}
-
-.card:hover {
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
-}
-
-/* Card Header */
-.card-header {
-    position: relative;
-    overflow: hidden;
-    cursor: pointer;
-}
-
-.card-header img {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 16 / 9;
-    object-fit: cover;
-    transition: transform 0.5s ease;
-}
-
-.card:hover .card-header img {
-    transform: scale(1.05);
-}
-
-/* Card Title */
-.card-title {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 1.5rem;
-    background: rgba(0, 0, 0, 0.7);
-    color: #ffffff;
-}
-
-.card-title h3 {
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
-    font-weight: 600;
-}
-
-.card-title p {
-    font-size: 0.95rem;
-    opacity: 0.9;
-    margin-bottom: 0;
-}
-
-time {
-    display: block;
-    font-size: 0.85rem;
-    margin-top: 0.5rem;
-    opacity: 0.9;
-}
-
-/* Card Content - Sliding Part */
-.card-content {
-    height: 0;
-    overflow: hidden;
-    opacity: 0;
-    padding: 0 1.5rem;
-    transition: all 0.5s ease;
-}
-
-.card.active .card-content {
-    height: auto;
-    opacity: 1;
-    padding: 1.5rem;
-}
-
-/* Content Styling */
-.card-description {
-    margin-bottom: 1.5rem;
-}
-
-.card-description p {
-    margin-bottom: 1rem;
-}
-
-.card-description ul {
-    margin-left: 1.5rem;
-    margin-bottom: 1rem;
-    list-style: disc;
-}
-
-.card-description li {
-    margin-bottom: 0.5rem;
-}
-
-.card-button {
-    display: inline-block;
-    margin-top: 1rem;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .card {
-        border-radius: 0;
-        margin-left: -1rem;
-        margin-right: -1rem;
-        width: calc(100% + 2rem);
-    }
-}
-
-@media (max-width: 576px) {
-    .card-title {
-        padding: 1rem;
-    }
-    
-    .card-title h3 {
-        font-size: 1.25rem;
-    }
-    
     .card.active .card-content {
         padding: 1.25rem;
     }

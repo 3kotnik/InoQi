@@ -1,375 +1,336 @@
 /**
- * InoQI Website - Enhanced Card Sliding JavaScript
- * Provides fluid, coordinated animations for workshop and event cards
+ * InoQI Website - Card Animation System
+ * Uses precise JavaScript animations for reliable sliding
  */
+document.addEventListener('DOMContentLoaded', () => {
+    // DOM Elements
+    const cards = document.querySelectorAll('.card');
 
-// DOM Elements
-const cards = document.querySelectorAll('.card');
+    // Animation Variables
+    const ANIMATION_DURATION = 400; // ms
 
-// Animation Variables
-const ANIMATION_DURATION = 900; // ms for all animations (consistent timing)
-const POSITION_BUFFER = 80; // px of space between header and card
+    // State variables
+    let activeCard = null;
+    let isAnimating = false;
 
-// State Variables
-let activeCard = null;
-let animationInProgress = false;
-let nextCardToOpen = null;
+    /**
+     * Animate element height with precision
+     * @param {HTMLElement} element - Element to animate
+     * @param {number} startHeight - Starting height in pixels
+     * @param {number} endHeight - Ending height in pixels
+     * @param {number} duration - Animation duration in milliseconds
+     * @param {Function} callback - Optional callback when animation completes
+     */
+    function animateHeight(element, startHeight, endHeight, duration, callback) {
+        const startTime = performance.now();
 
-/**
- * Load JSON content for card
- */
-async function loadCardContent(card) {
-    try {
-        const contentId = card.getAttribute('data-content-id');
-        if (!contentId) return;
+        // Set initial height
+        element.style.height = `${startHeight}px`;
+        element.style.display = 'block';
 
-        const contentUrl = `assets/content/${contentId}.json`;
-        const response = await fetch(contentUrl);
+        function step(currentTime) {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
 
-        if (!response.ok) {
-            throw new Error(`Failed to load content from ${contentUrl}`);
-        }
+            // Ease in-out cubic function for smooth animation
+            const easeValue = progress < 0.5
+                ? 4 * progress * progress * progress
+                : 1 - Math.pow(-2 * progress + 2, 3) / 2;
 
-        const data = await response.json();
-        renderCardContent(card, data);
+            // Calculate current height
+            const currentHeight = startHeight + (endHeight - startHeight) * easeValue;
 
-    } catch (error) {
-        console.error('Error loading card content:', error);
-        showErrorInCard(card);
-    }
-}
+            // Apply height
+            element.style.height = `${currentHeight}px`;
 
-/**
- * Render JSON content in card
- */
-function renderCardContent(card, data) {
-    const descriptionElement = card.querySelector('.card-description');
-    if (!descriptionElement) return;
-
-    // Clear existing content
-    descriptionElement.innerHTML = '';
-
-    // Add description paragraph
-    if (data.description) {
-        const descParagraph = document.createElement('p');
-        descParagraph.textContent = data.description;
-        descriptionElement.appendChild(descParagraph);
-    }
-
-    // Add details content
-    if (data.details && Array.isArray(data.details)) {
-        data.details.forEach(detail => {
-            if (detail.type === 'paragraph') {
-                const paragraph = document.createElement('p');
-                paragraph.textContent = detail.content;
-                descriptionElement.appendChild(paragraph);
-            } else if (detail.type === 'list' && detail.items) {
-                const list = document.createElement('ul');
-                detail.items.forEach(item => {
-                    const listItem = document.createElement('li');
-                    listItem.textContent = item;
-                    list.appendChild(listItem);
-                });
-                descriptionElement.appendChild(list);
-            }
-        });
-    }
-
-    // Update button text if provided
-    const button = card.querySelector('.card-button');
-    if (button && data.buttonText) {
-        button.textContent = data.buttonText;
-    }
-}
-
-/**
- * Show error message in card
- */
-function showErrorInCard(card) {
-    const descriptionElement = card.querySelector('.card-description');
-    if (descriptionElement) {
-        descriptionElement.innerHTML = '<p>Vsebine trenutno ni mogoče naložiti. Prosimo, poskusite znova kasneje.</p>';
-    }
-}
-
-/**
- * Set animation durations for CSS elements
- */
-function setAnimationDurations() {
-    const durationInSeconds = ANIMATION_DURATION / 500 + 's';
-    const style = document.createElement('style');
-
-    style.textContent = `
-        .card {
-            transition: 
-                transform ${durationInSeconds} cubic-bezier(0.16, 1, 0.3, 1),
-                box-shadow 0.3s ease;
-        }
-        
-        .card-content {
-            transition: 
-                max-height ${durationInSeconds} cubic-bezier(0.16, 1, 0.3, 1),
-                opacity ${durationInSeconds} cubic-bezier(0.16, 1, 0.3, 1),
-                padding ${durationInSeconds} cubic-bezier(0.16, 1, 0.3, 1),
-                visibility 0s linear ${durationInSeconds};
-        }
-        
-        .card.active .card-content {
-            transition: 
-                max-height ${durationInSeconds} cubic-bezier(0.16, 1, 0.3, 1),
-                opacity ${durationInSeconds} cubic-bezier(0.16, 1, 0.3, 1),
-                padding ${durationInSeconds} cubic-bezier(0.16, 1, 0.3, 1),
-                visibility 0s linear;
-        }
-    `;
-
-    document.head.appendChild(style);
-}
-
-/**
- * Animate scroll with the same timing as card animations
- */
-function smoothScrollTo(targetY) {
-    const startY = window.pageYOffset;
-    const distance = targetY - startY;
-
-    // Skip tiny distances
-    if (Math.abs(distance) < 10) return Promise.resolve();
-
-    return new Promise(resolve => {
-        let startTime = null;
-
-        // Use same easing curve as card animations for consistency
-        function easeOutExpo(t) {
-            return t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
-        }
-
-        function step(timestamp) {
-            if (!startTime) startTime = timestamp;
-            const elapsed = timestamp - startTime;
-            const progress = Math.min(elapsed / ANIMATION_DURATION, 1);
-
-            window.scrollTo(0, startY + distance * easeOutExpo(progress));
-
+            // Continue animation until complete
             if (progress < 1) {
-                window.requestAnimationFrame(step);
+                requestAnimationFrame(step);
             } else {
-                resolve();
+                // Cleanup and callback
+                if (endHeight === 0) {
+                    element.style.display = 'none';
+                } else {
+                    element.style.height = ''; // Remove inline height to allow natural sizing
+                }
+                if (callback) callback();
             }
         }
 
-        window.requestAnimationFrame(step);
-    });
-}
-
-/**
- * Get ideal scroll position for a card
- */
-function getCardScrollPosition(card) {
-    const headerHeight = document.querySelector('header').offsetHeight || 0;
-    const cardTop = card.getBoundingClientRect().top;
-    return window.pageYOffset + cardTop - headerHeight - POSITION_BUFFER;
-}
-
-/**
- * Main function to toggle card open/closed state
- */
-function toggleCard(card) {
-    if (animationInProgress) return;
-    animationInProgress = true;
-
-    const isActive = card.classList.contains('active');
-
-    if (isActive) {
-        // Card is open, close it with fluid animation
-        unifiedCardAnimation(card, false);
-    } else if (activeCard) {
-        // Another card is open, close it and then open this one
-        nextCardToOpen = card;
-        unifiedCardAnimation(activeCard, false);
-    } else {
-        // No card is open, open this one with fluid animation
-        unifiedCardAnimation(card, true);
+        requestAnimationFrame(step);
     }
-}
 
-/**
- * Unified animation for both opening and closing cards
- * @param {HTMLElement} card - The card to animate
- * @param {boolean} isOpening - Whether we're opening or closing the card
- */
-function unifiedCardAnimation(card, isOpening) {
-    // Calculate target scroll position
-    const targetScrollY = getCardScrollPosition(card);
+    /**
+     * Toggle card open/closed
+     * @param {HTMLElement} card - Card to toggle
+     */
+    function toggleCard(card) {
+        if (isAnimating) return;
+        isAnimating = true;
 
-    if (isOpening) {
-        // OPENING ANIMATION
+        const content = card.querySelector('.card-content');
+        const isActive = card.classList.contains('active');
 
-        // Add visual highlight during animation
-        card.classList.add('animating');
-
-        // Start scroll animation and content expansion simultaneously
-        smoothScrollTo(targetScrollY);
-
-        // Start content expansion very slightly after scroll begins (feels more natural)
-        requestAnimationFrame(() => {
-            card.classList.add('active');
-            activeCard = card;
-        });
-
-        // Clean up after animation completes
-        setTimeout(() => {
-            card.classList.remove('animating');
-            animationInProgress = false;
-        }, ANIMATION_DURATION);
-
-    } else {
-        // CLOSING ANIMATION
-
-        // Add visual indication
-        card.classList.add('animating');
-
-        // Remove active class to start collapse
-        card.classList.remove('active');
-
-        // If we're switching to another card, scroll to it while current one collapses
-        if (nextCardToOpen) {
-            const nextCardY = getCardScrollPosition(nextCardToOpen);
-            smoothScrollTo(nextCardY);
-
-            // When animation completes, open next card
-            setTimeout(() => {
-                if (activeCard === card) activeCard = null;
-                card.classList.remove('animating');
-
-                // Now open the next card (without additional scrolling)
-                unifiedCardAnimation(nextCardToOpen, true);
-                nextCardToOpen = null;
-            }, ANIMATION_DURATION);
-
-        } else {
-            // Just closing with no next card
-            setTimeout(() => {
-                if (activeCard === card) activeCard = null;
-                card.classList.remove('animating');
-                animationInProgress = false;
-            }, ANIMATION_DURATION);
-        }
-    }
-}
-
-/**
- * Handle click on card header
- */
-function handleCardClick(e) {
-    if (animationInProgress) return;
-
-    const card = e.currentTarget.closest('.card');
-    if (!card) return;
-
-    // Load content if not already loaded
-    if (!card.dataset.contentLoaded) {
-        loadCardContent(card).then(() => {
-            card.dataset.contentLoaded = 'true';
-            toggleCard(card);
-        });
-    } else {
-        toggleCard(card);
-    }
-}
-
-/**
- * Initialize all cards
- */
-function initializeCards() {
-    // Set animation durations first
-    setAnimationDurations();
-
-    cards.forEach(card => {
-        const cardHeader = card.querySelector('.card-header');
-        if (cardHeader) {
-            cardHeader.addEventListener('click', handleCardClick);
-        }
-    });
-
-    // Preload card content for better user experience
-    preloadCardContents();
-}
-
-/**
- * Preload card contents when they come close to viewport
- */
-function preloadCardContents() {
-    if ('IntersectionObserver' in window) {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const card = entry.target;
-                    if (!card.dataset.contentLoaded) {
-                        loadCardContent(card).then(() => {
-                            card.dataset.contentLoaded = 'true';
-                        });
-                    }
-                    observer.unobserve(card);
-                }
+        if (isActive) {
+            // Close this card
+            closeCardContent(card, content, () => {
+                card.classList.remove('active');
+                activeCard = null;
+                isAnimating = false;
             });
-        }, {
-            rootMargin: '200px'
-        });
+        } else if (activeCard) {
+            // Close active card first, then open this one
+            const activeContent = activeCard.querySelector('.card-content');
 
-        cards.forEach(card => observer.observe(card));
-    } else {
-        // Fallback for browsers without IntersectionObserver
-        setTimeout(() => {
-            cards.forEach(card => {
-                if (!card.dataset.contentLoaded) {
-                    loadCardContent(card).then(() => {
-                        card.dataset.contentLoaded = 'true';
+            closeCardContent(activeCard, activeContent, () => {
+                activeCard.classList.remove('active');
+                activeCard = null;
+
+                // Now open the new card
+                openCardContent(card, content, () => {
+                    card.classList.add('active');
+                    activeCard = card;
+                    isAnimating = false;
+                });
+            });
+        } else {
+            // Just open this card
+            openCardContent(card, content, () => {
+                card.classList.add('active');
+                activeCard = card;
+                isAnimating = false;
+            });
+        }
+    }
+
+    /**
+     * Open card content with controlled animation
+     * @param {HTMLElement} card - Card element
+     * @param {HTMLElement} content - Card content element
+     * @param {Function} callback - Callback after animation completes
+     */
+    function openCardContent(card, content, callback) {
+        // Highlight card being opened
+        card.classList.add('opening');
+
+        // Hide overflow during height measurement
+        content.style.overflow = 'hidden';
+
+        // Temporarily make it visible but with no height to measure content
+        content.style.height = 'auto';
+        content.style.opacity = '0';
+        content.style.display = 'block';
+        content.style.padding = '1.5rem';
+
+        // Measure natural height
+        const targetHeight = content.offsetHeight;
+
+        // Reset to start animation
+        content.style.height = '0';
+        content.style.padding = '0 1.5rem';
+
+        // Force reflow
+        void content.offsetWidth;
+
+        // Fade in while expanding
+        content.style.transition = `opacity ${ANIMATION_DURATION}ms ease`;
+        content.style.opacity = '1';
+
+        // Animate height
+        animateHeight(content, 0, targetHeight, ANIMATION_DURATION, () => {
+            content.style.height = ''; // Remove inline height
+            content.style.overflow = '';
+            content.style.transition = '';
+            card.classList.remove('opening');
+
+            // Execute callback
+            if (callback) callback();
+        });
+    }
+
+    /**
+     * Close card content with controlled animation
+     * @param {HTMLElement} card - Card element
+     * @param {HTMLElement} content - Card content element
+     * @param {Function} callback - Callback after animation completes
+     */
+    function closeCardContent(card, content, callback) {
+        // Prevent nested issues
+        if (!content) {
+            if (callback) callback();
+            return;
+        }
+
+        // Hide overflow during animation
+        content.style.overflow = 'hidden';
+
+        // Get current height
+        const startHeight = content.offsetHeight;
+
+        // Add transition for opacity
+        content.style.transition = `opacity ${ANIMATION_DURATION}ms ease`;
+        content.style.opacity = '0';
+
+        // Animate height to zero
+        animateHeight(content, startHeight, 0, ANIMATION_DURATION, () => {
+            content.style.padding = '0 1.5rem';
+            content.style.overflow = '';
+            content.style.transition = '';
+
+            // Execute callback
+            if (callback) callback();
+        });
+    }
+
+    /**
+     * Load card content via AJAX
+     * @param {HTMLElement} card - Card to load content for
+     * @returns {Promise} - Resolves when content is loaded
+     */
+    async function loadCardContent(card) {
+        try {
+            const contentId = card.getAttribute('data-content-id');
+            if (!contentId) return;
+
+            const contentUrl = `assets/content/${contentId}.json`;
+            const response = await fetch(contentUrl);
+
+            if (!response.ok) {
+                throw new Error(`Failed to load content from ${contentUrl}`);
+            }
+
+            const data = await response.json();
+            const descriptionElement = card.querySelector('.card-description');
+
+            if (descriptionElement) {
+                // Clear any existing content
+                descriptionElement.innerHTML = '';
+
+                // Add description paragraph
+                if (data.description) {
+                    const descParagraph = document.createElement('p');
+                    descParagraph.textContent = data.description;
+                    descriptionElement.appendChild(descParagraph);
+                }
+
+                // Add detailed content
+                if (data.details && Array.isArray(data.details)) {
+                    data.details.forEach(detail => {
+                        if (detail.type === 'paragraph') {
+                            const paragraph = document.createElement('p');
+                            paragraph.textContent = detail.content;
+                            descriptionElement.appendChild(paragraph);
+                        } else if (detail.type === 'list' && detail.items) {
+                            const list = document.createElement('ul');
+                            detail.items.forEach(item => {
+                                const listItem = document.createElement('li');
+                                listItem.textContent = item;
+                                list.appendChild(listItem);
+                            });
+                            descriptionElement.appendChild(list);
+                        }
                     });
                 }
+            }
+
+            // Update button text if provided
+            const button = card.querySelector('.card-button');
+            if (button && data.buttonText) {
+                button.textContent = data.buttonText;
+            }
+
+            // Mark as loaded
+            card.dataset.contentLoaded = 'true';
+
+        } catch (error) {
+            console.error('Error loading card content:', error);
+            showErrorInCard(card);
+        }
+    }
+
+    /**
+     * Display error message in card
+     * @param {HTMLElement} card - Card with error
+     */
+    function showErrorInCard(card) {
+        const descriptionElement = card.querySelector('.card-description');
+        if (descriptionElement) {
+            descriptionElement.innerHTML = '<p>Vsebine trenutno ni mogoče naložiti. Prosimo, poskusite znova kasneje.</p>';
+        }
+    }
+
+    /**
+     * Preload card contents
+     */
+    function preloadCardContents() {
+        if ('IntersectionObserver' in window) {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const card = entry.target;
+                        if (!card.dataset.contentLoaded) {
+                            loadCardContent(card);
+                        }
+                        observer.unobserve(card);
+                    }
+                });
+            }, {
+                rootMargin: '200px'
             });
-        }, 1000);
-    }
-}
 
-/**
- * Handle clicks outside cards to close active card
- */
-function handleOutsideClick(e) {
-    if (activeCard && !e.target.closest('.card') && !animationInProgress) {
-        unifiedCardAnimation(activeCard, false);
-    }
-}
-
-/**
- * Handle window resize to maintain content layout
- */
-function handleResize() {
-    if (activeCard && !animationInProgress) {
-        // Ensure active card still displays properly after resize
-        requestAnimationFrame(() => {
-            activeCard.classList.add('resizing');
-            requestAnimationFrame(() => {
-                activeCard.classList.remove('resizing');
+            cards.forEach(card => observer.observe(card));
+        } else {
+            // Fallback for browsers without IntersectionObserver
+            cards.forEach(card => {
+                if (!card.dataset.contentLoaded) {
+                    loadCardContent(card);
+                }
             });
-        });
+        }
     }
-}
 
-// Initialize cards when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-    initializeCards();
+    // Set up event listeners for cards
+    cards.forEach(card => {
+        const cardHeader = card.querySelector('.card-header');
 
-    // Set up outside click handler
-    document.addEventListener('click', handleOutsideClick);
-
-    // Handle escape key to close active card
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && activeCard && !animationInProgress) {
-            unifiedCardAnimation(activeCard, false);
+        if (cardHeader) {
+            cardHeader.addEventListener('click', () => {
+                if (!card.dataset.contentLoaded) {
+                    loadCardContent(card).then(() => {
+                        toggleCard(card);
+                    });
+                } else {
+                    toggleCard(card);
+                }
+            });
         }
     });
 
-    // Handle window resize for responsive adjustments
-    window.addEventListener('resize', handleResize);
+    // Close active card when clicking outside
+    document.addEventListener('click', (e) => {
+        if (activeCard && !isAnimating && !e.target.closest('.card')) {
+            toggleCard(activeCard);
+        }
+    });
+
+    // Close active card when pressing Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && activeCard && !isAnimating) {
+            toggleCard(activeCard);
+        }
+    });
+
+    // Handle window resize
+    window.addEventListener('resize', () => {
+        if (activeCard && !isAnimating) {
+            const content = activeCard.querySelector('.card-content');
+            if (content && content.style.height !== '') {
+                // Reset height to auto to accommodate content changes
+                content.style.height = '';
+            }
+        }
+    });
+
+    // Preload card contents
+    preloadCardContents();
 });
