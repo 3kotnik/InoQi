@@ -1,6 +1,6 @@
 /**
- * InoQI Website - Card Animation System
- * Fixed broken toggling functionality
+ * InoQI Website - Enhanced Card System
+ * Loads all card content from JSON and handles animations
  */
 document.addEventListener('DOMContentLoaded', () => {
     // DOM Elements
@@ -187,7 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
-     * Load card content via AJAX
+     * Load card content via AJAX and populate all card elements
      */
     async function loadCardContent(card) {
         try {
@@ -202,7 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const data = await response.json();
-            renderCardContent(card, data);
+            populateCardFromJson(card, data);
             card.dataset.contentLoaded = 'true';
         } catch (error) {
             console.error('Error loading card content:', error);
@@ -211,45 +211,81 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
-     * Render JSON content in card
+     * Populate all card elements from JSON data
      */
-    function renderCardContent(card, data) {
+    function populateCardFromJson(card, data) {
+        // Update card image if provided
+        if (data.imageUrl) {
+            const cardImage = card.querySelector('.card-header img');
+            if (cardImage) {
+                cardImage.src = data.imageUrl;
+            }
+        }
+
+        // Update image alt text
+        if (data.imageAlt) {
+            const cardImage = card.querySelector('.card-header img');
+            if (cardImage) {
+                cardImage.alt = data.imageAlt;
+            }
+        }
+
+        // Update card title
+        if (data.title) {
+            const cardTitle = card.querySelector('.card-title h3');
+            if (cardTitle) {
+                cardTitle.textContent = data.title;
+            }
+        }
+
+        // Update short description
+        if (data.shortDescription) {
+            const cardShortDesc = card.querySelector('.card-title p');
+            if (cardShortDesc) {
+                cardShortDesc.textContent = data.shortDescription;
+            }
+        }
+
+        // Update button text
+        if (data.buttonText) {
+            const button = card.querySelector('.card-button');
+            if (button) {
+                button.textContent = data.buttonText;
+            }
+        }
+
+        // Update detailed content
         const descriptionElement = card.querySelector('.card-description');
-        if (!descriptionElement) return;
+        if (descriptionElement) {
+            // Clear any existing content
+            descriptionElement.innerHTML = '';
 
-        // Clear existing content
-        descriptionElement.innerHTML = '';
+            // Add main description
+            if (data.description) {
+                const descParagraph = document.createElement('p');
+                descParagraph.textContent = data.description;
+                descParagraph.classList.add('main-description');
+                descriptionElement.appendChild(descParagraph);
+            }
 
-        // Add description paragraph
-        if (data.description) {
-            const descParagraph = document.createElement('p');
-            descParagraph.textContent = data.description;
-            descriptionElement.appendChild(descParagraph);
-        }
-
-        // Add details content
-        if (data.details && Array.isArray(data.details)) {
-            data.details.forEach(detail => {
-                if (detail.type === 'paragraph') {
-                    const paragraph = document.createElement('p');
-                    paragraph.textContent = detail.content;
-                    descriptionElement.appendChild(paragraph);
-                } else if (detail.type === 'list' && detail.items) {
-                    const list = document.createElement('ul');
-                    detail.items.forEach(item => {
-                        const listItem = document.createElement('li');
-                        listItem.textContent = item;
-                        list.appendChild(listItem);
-                    });
-                    descriptionElement.appendChild(list);
-                }
-            });
-        }
-
-        // Update button text if provided
-        const button = card.querySelector('.card-button');
-        if (button && data.buttonText) {
-            button.textContent = data.buttonText;
+            // Add details content
+            if (data.details && Array.isArray(data.details)) {
+                data.details.forEach(detail => {
+                    if (detail.type === 'paragraph') {
+                        const paragraph = document.createElement('p');
+                        paragraph.textContent = detail.content;
+                        descriptionElement.appendChild(paragraph);
+                    } else if (detail.type === 'list' && detail.items) {
+                        const list = document.createElement('ul');
+                        detail.items.forEach(item => {
+                            const listItem = document.createElement('li');
+                            listItem.textContent = item;
+                            list.appendChild(listItem);
+                        });
+                        descriptionElement.appendChild(list);
+                    }
+                });
+            }
         }
     }
 
@@ -279,42 +315,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     toggleCard(card);
                 });
             }
+
+            // Preload card data right away
+            loadCardContent(card);
         });
-
-        // Preload card contents
-        preloadCardContents();
-    }
-
-    /**
-     * Preload card contents near viewport
-     */
-    function preloadCardContents() {
-        if ('IntersectionObserver' in window) {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const card = entry.target;
-                        if (!card.dataset.contentLoaded) {
-                            loadCardContent(card);
-                        }
-                        observer.unobserve(card);
-                    }
-                });
-            }, {
-                rootMargin: '200px'
-            });
-
-            cards.forEach(card => observer.observe(card));
-        } else {
-            // Fallback for browsers without IntersectionObserver
-            setTimeout(() => {
-                cards.forEach(card => {
-                    if (!card.dataset.contentLoaded) {
-                        loadCardContent(card);
-                    }
-                });
-            }, 1000);
-        }
     }
 
     // Close active card when clicking outside
