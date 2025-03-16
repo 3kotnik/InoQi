@@ -1,5 +1,5 @@
 /* ========================================
-   SIMPLIFIED CARD STYLES FOR JS ANIMATIONS
+   CARD STYLES WITH CLEAN ANIMATION SUPPORT
    ======================================== */
 .card-list {
     display: flex;
@@ -19,10 +19,6 @@
 
     .card:hover {
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
-    }
-
-    .card.opening {
-        box-shadow: 0 0 0 2px var(--primary);
     }
 
 /* Card Header */
@@ -75,14 +71,10 @@ time {
     opacity: 0.9;
 }
 
-/* Card Content - JS controlled animation */
+/* Card Content - Controlled by JS */
 .card-content {
     display: none;
     padding: 0 1.5rem;
-}
-
-.card.active .card-content {
-    display: block;
 }
 
 /* Content Styling */
@@ -104,9 +96,11 @@ time {
         margin-bottom: 0.5rem;
     }
 
+/* Critical for proper bottom spacing */
 .card-button {
     display: inline-block;
     margin-top: 1rem;
+    margin-bottom: 1rem;
 }
 
 /* Responsive adjustments */
@@ -128,7 +122,11 @@ time {
             font-size: 1.25rem;
         }
 
+    .card-content {
+        padding: 0 1rem;
+    }
+
     .card.active .card-content {
-        padding: 1.25rem;
+        padding: 1rem;
     }
 }
