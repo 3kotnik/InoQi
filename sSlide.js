@@ -1,6 +1,6 @@
 /**
  * InoQI Website - Enhanced Card System
- * Loads all card content from JSON and handles animations
+ * With constrained scrolling to keep cards visible
  */
 document.addEventListener('DOMContentLoaded', () => {
     // DOM Elements
@@ -83,6 +83,86 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
+     * Smooth scroll to target with constraints
+     */
+    function smoothScrollTo(targetY) {
+        return new Promise(resolve => {
+            const startY = window.scrollY;
+            const distance = targetY - startY;
+
+            // Skip tiny distances or if already at target
+            if (Math.abs(distance) < 10) {
+                resolve();
+                return;
+            }
+
+            const startTime = performance.now();
+
+            function step(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / ANIMATION_DURATION, 1);
+
+                // Ease out cubic
+                const easeValue = 1 - Math.pow(1 - progress, 3);
+
+                window.scrollTo({
+                    top: startY + distance * easeValue,
+                    behavior: 'auto' // Use our custom animation instead of 'smooth'
+                });
+
+                if (progress < 1) {
+                    requestAnimationFrame(step);
+                } else {
+                    resolve();
+                }
+            }
+
+            requestAnimationFrame(step);
+        });
+    }
+
+    /**
+     * Calculate the optimal scroll position for a card
+     * Ensures the card remains visible within viewport constraints
+     */
+    function getOptimalScrollPosition(card) {
+        const headerHeight = document.querySelector('header').offsetHeight || 0;
+        const buffer = 20; // Space between header and card
+
+        // Get card position relative to viewport
+        const cardRect = card.getBoundingClientRect();
+
+        // Calculate the minimum scroll position (keeping card at top of viewport)
+        const minScrollY = window.scrollY + cardRect.top - headerHeight - buffer;
+
+        // Calculate the maximum scroll position (keeping card bottom visible)
+        const viewport = window.innerHeight;
+        const cardVisible = Math.min(viewport - headerHeight - buffer, cardRect.height * 0.5);
+        const maxScrollY = window.scrollY + cardRect.bottom - cardVisible;
+
+        // Get current scroll position
+        const currentY = window.scrollY;
+
+        // If card is already fully visible, don't scroll
+        if (cardRect.top >= headerHeight + buffer && cardRect.bottom <= viewport) {
+            return currentY;
+        }
+
+        // If card is above viewport, scroll up to minScrollY
+        if (cardRect.top < headerHeight + buffer) {
+            return minScrollY;
+        }
+
+        // If card is below viewport, scroll down but not more than maxScrollY
+        if (cardRect.top > viewport) {
+            return Math.min(minScrollY, maxScrollY);
+        }
+
+        // Default: keep card at top of viewport
+        return minScrollY;
+    }
+
+    /**
      * Toggle card open/closed state
      */
     async function toggleCard(card) {
@@ -104,12 +184,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 await closeCardContent(activeContent);
                 activeCard.classList.remove('active');
 
+                // Calculate optimal scroll position before opening
+                const scrollTarget = getOptimalScrollPosition(card);
+                await smoothScrollTo(scrollTarget);
+
                 // Open new card
                 card.classList.add('active');
                 await openCardContent(content);
                 activeCard = card;
             } else {
-                // Just open this card
+                // Just open this card with optional scrolling
+                const scrollTarget = getOptimalScrollPosition(card);
+                await smoothScrollTo(scrollTarget);
+
                 card.classList.add('active');
                 await openCardContent(content);
                 activeCard = card;
