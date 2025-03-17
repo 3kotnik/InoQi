@@ -1,19 +1,29 @@
 /**
- * cardReveal.js - Position Tracking System
- * Ensures active card always stays visible at header
+ * cardReveal.js - Position Tracking System (Corrected Scroll Amount)
+ * Ensures active card header is visible at top, without over-scrolling
  */
 document.addEventListener('DOMContentLoaded', () => {
+    // ==============================================
+    // CONFIGURABLE ANIMATION SETTINGS
+    // ==============================================
+    const SETTINGS = {
+        // Animation speeds (no changes needed here for scroll behavior)
+        INITIAL_POSITION_DELAY: 150,      // Increased delay (ms) - Important!
+        HEADER_BUFFER: 15,               // Space between header and card (px)
+    };
+    // ==============================================
+
     // State tracking
     let activeCardId = null;
-    let positionMonitorTimer = null;
 
     // Find all cards
     const cards = document.querySelectorAll('.card');
 
     /**
-     * Load card content from JSON
+     * Load card content from JSON (No changes needed)
      */
     async function loadCardContent(card) {
+        // ... (same loadCardContent function as before) ...
         try {
             // Skip if already loaded
             if (card.dataset.loaded === 'true') return;
@@ -105,16 +115,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
-     * Get header height including buffer
+     * Get header height including buffer (No changes needed)
      */
     function getHeaderOffset() {
         const headerHeight = document.getElementById('header').offsetHeight;
-        const buffer = 15; // Additional space below header
-        return headerHeight + buffer;
+        return headerHeight + SETTINGS.HEADER_BUFFER;
     }
 
     /**
-     * Position active card at the header with smooth animation
+     * Position active card at the header with smooth animation (Corrected Scroll)
      */
     function positionActiveCard() {
         if (!activeCardId) return;
@@ -124,66 +133,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const rect = card.getBoundingClientRect();
         const headerOffset = getHeaderOffset();
+        const cardHeaderHeight = card.querySelector('.card-header').offsetHeight; // Get card header height
 
-        // If card is not at the right position (accounting for small tolerance)
-        if (Math.abs(rect.top - headerOffset) > 5) {
+        // Calculate the exact scroll position to align card header just below page header
+        const scrollTarget = window.scrollY + rect.top - headerOffset;
+
+        // Scroll only if card header is below the intended position
+        if (rect.top > headerOffset) {
             window.scrollTo({
-                top: window.scrollY + rect.top - headerOffset,
+                top: scrollTarget,
                 behavior: 'smooth'
             });
         }
+        // else if (rect.top < headerOffset - cardHeaderHeight ) { // Alternative: if card header is above, also scroll. (Optional, if needed in some layouts)
+        //    window.scrollTo({
+        //        top: scrollTarget,
+        //        behavior: 'smooth'
+        //    });
+        //}
     }
 
-    /**
-     * Start monitoring position of active card
-     * This ensures card stays at header even when other elements change size
-     */
-    function startPositionMonitoring() {
-        // Clear any existing timer
-        stopPositionMonitoring();
-
-        // Set up a timer to check and adjust position
-        positionMonitorTimer = setInterval(() => {
-            positionActiveCard();
-        }, 300); // Check every 300ms during transitions
-
-        // Also listen for transition end events
-        document.addEventListener('transitionend', handleTransitionEnd);
-    }
 
     /**
-     * Stop monitoring position
-     */
-    function stopPositionMonitoring() {
-        if (positionMonitorTimer) {
-            clearInterval(positionMonitorTimer);
-            positionMonitorTimer = null;
-        }
-        document.removeEventListener('transitionend', handleTransitionEnd);
-    }
-
-    /**
-     * Handle transition end events
-     */
-    function handleTransitionEnd(e) {
-        // When a size-changing transition completes, check position
-        if (e.propertyName === 'max-height') {
-            positionActiveCard();
-        }
-    }
-
-    /**
-     * Handle card click
+     * Handle card click (No changes needed)
      */
     function handleCardClick(card) {
         const cardId = card.getAttribute('data-content-id');
 
-        // If clicking active card, close it and stop monitoring
+        // If clicking active card, close it
         if (cardId === activeCardId) {
             card.classList.remove('active');
             activeCardId = null;
-            stopPositionMonitoring();
-            return;
+            return; // Important: Stop here, no positioning needed on close
         }
 
         // Close currently open card if any
@@ -197,13 +178,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Initial positioning (with a slight delay to let the DOM update)
         setTimeout(() => {
-            positionActiveCard();
-            // Start monitoring position to keep it in view
-            startPositionMonitoring();
-        }, 50);
+            positionActiveCard(); // Call positionActiveCard once on open
+        }, SETTINGS.INITIAL_POSITION_DELAY);
     }
 
-    // Initialize cards
+    // Initialize cards (No changes needed)
     cards.forEach(card => {
         // Add ID anchor if not present
         const contentId = card.getAttribute('data-content-id');
@@ -221,7 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Handle fragment navigation on page load
+    // Handle fragment navigation on page load (No changes needed)
     if (window.location.hash) {
         const cardId = window.location.hash.substring(1); // Remove the # character
         const targetCard = document.getElementById(cardId);
@@ -231,18 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Stop monitoring when user scrolls manually
-    let userScrollTimer;
-    window.addEventListener('scroll', () => {
-        // Temporarily pause position monitoring during user scroll
-        stopPositionMonitoring();
+    // No more scroll event listener needed for forced scroll prevention!
+    // The user now has full scroll control after the card opens.
 
-        // Resume after user stops scrolling
-        clearTimeout(userScrollTimer);
-        userScrollTimer = setTimeout(() => {
-            if (activeCardId) {
-                startPositionMonitoring();
-            }
-        }, 500);
-    }, { passive: true });
 });
