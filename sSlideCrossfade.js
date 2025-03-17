@@ -1,13 +1,13 @@
 /**
- * InoQI Website - Unified Card Animation System
- * Ensures cards maintain position throughout the entire animation
+ * InoQI Website - Card Animation System with Viewport Priority
+ * Ensures smooth crossfade while keeping cards within viewport constraints
  */
 document.addEventListener('DOMContentLoaded', () => {
     // DOM Elements
     const cards = document.querySelectorAll('.card');
 
     // Configuration
-    const ANIMATION_DURATION = 400; // ms
+    const ANIMATION_DURATION = 800; // ms
     const TOP_PADDING = 100; // Padding from top of viewport after header
 
     // State variables
@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let isAnimating = false;
 
     /**
-     * Measure content height accurately
+     * Measure content height accurately without affecting layout
      */
     function measureContentHeight(content) {
         const originalStyles = {
@@ -43,26 +43,49 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
-     * Create a unified animation that handles all aspects simultaneously
-     * This is key to the smooth experience
+     * Viewport-priority animation - the key improvement
      */
-    function unifiedAnimation({
+    function viewportPriorityAnimation({
         closingCard = null,
         openingCard,
-        onProgress = () => { },
         onComplete = () => { }
     }) {
         const headerHeight = document.querySelector('header').offsetHeight;
-
-        // Get opening card metrics
-        const openingCardRect = openingCard.getBoundingClientRect();
         const openingContent = openingCard.querySelector('.card-content');
         const targetOpeningHeight = measureContentHeight(openingContent);
 
-        // Calculate ideal final scroll position to place card at top with padding
-        const targetScrollY = window.scrollY + openingCardRect.top - headerHeight - TOP_PADDING;
-        const startScrollY = window.scrollY;
-        const scrollDelta = targetScrollY - startScrollY;
+        // CRITICAL: Set up temporary fixed positioning for the opening card
+        // This ensures it stays in viewport regardless of document shifts
+        const openingRect = openingCard.getBoundingClientRect();
+        const cardWidth = openingRect.width;
+
+        // Store original styles before modifying
+        const originalStyles = {
+            position: openingCard.style.position,
+            top: openingCard.style.top,
+            left: openingCard.style.left,
+            width: openingCard.style.width,
+            zIndex: openingCard.style.zIndex
+        };
+
+        // Create a placeholder to prevent layout collapse
+        const placeholder = document.createElement('div');
+        placeholder.style.height = openingRect.height + 'px';
+        placeholder.style.margin = '0';
+        placeholder.style.padding = '0';
+        placeholder.style.display = 'block';
+        placeholder.style.visibility = 'hidden';
+        openingCard.parentNode.insertBefore(placeholder, openingCard);
+
+        // Fix the card in viewport position
+        openingCard.style.position = 'fixed';
+        openingCard.style.top = `${openingRect.top}px`;
+        openingCard.style.left = `${openingRect.left}px`;
+        openingCard.style.width = `${cardWidth}px`;
+        openingCard.style.zIndex = '100';
+
+        // Target position (fixed coordinates) - never above header
+        const targetTop = Math.max(headerHeight + TOP_PADDING, openingRect.top);
 
         // Set up closing card if we have one
         let closingContent = null;
@@ -71,9 +94,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (closingCard) {
             closingContent = closingCard.querySelector('.card-content');
             startClosingHeight = closingContent.offsetHeight;
-
-            // Prepare closing content
             closingContent.style.overflow = 'hidden';
+            closingCard.classList.remove('active');
         }
 
         // Prepare opening content
@@ -86,17 +108,15 @@ document.addEventListener('DOMContentLoaded', () => {
         openingContent.style.paddingLeft = '1.5rem';
         openingContent.style.paddingRight = '1.5rem';
 
-        // Update card classes
-        if (closingCard) closingCard.classList.remove('active');
+        // Add active class to opening card
         openingCard.classList.add('active');
 
-        // Force reflow
-        void (openingContent.offsetHeight);
+        // Calculate scroll target for after animation
+        const finalScrollPosition = window.scrollY + openingRect.top - targetTop;
 
-        // Start time for animation
+        // Start animation
         const startTime = performance.now();
 
-        // Single animation loop that handles everything
         function animate(currentTime) {
             const elapsed = currentTime - startTime;
             let progress = Math.min(elapsed / ANIMATION_DURATION, 1);
@@ -104,8 +124,9 @@ document.addEventListener('DOMContentLoaded', () => {
             // Use cubic ease-out for natural motion
             const easeValue = 1 - Math.pow(1 - progress, 3);
 
-            // Update scroll position
-            window.scrollTo(0, startScrollY + scrollDelta * easeValue);
+            // Update card position (smoothly move to top if needed)
+            const currentTop = openingRect.top + (targetTop - openingRect.top) * easeValue;
+            openingCard.style.top = `${currentTop}px`;
 
             // Update closing content if present
             if (closingContent) {
@@ -119,13 +140,23 @@ document.addEventListener('DOMContentLoaded', () => {
             openingContent.style.height = `${currentOpeningHeight}px`;
             openingContent.style.opacity = easeValue;
 
-            // Call progress callback
-            onProgress(easeValue);
-
             // Continue animation or complete
             if (progress < 1) {
                 requestAnimationFrame(animate);
             } else {
+                // Animation complete - restore card to document flow
+                openingCard.style.position = originalStyles.position;
+                openingCard.style.top = originalStyles.top;
+                openingCard.style.left = originalStyles.left;
+                openingCard.style.width = originalStyles.width;
+                openingCard.style.zIndex = originalStyles.zIndex;
+
+                // Remove placeholder
+                placeholder.parentNode.removeChild(placeholder);
+
+                // Final scroll adjustment to ensure card is properly positioned
+                window.scrollTo(0, finalScrollPosition);
+
                 // Final state adjustments
                 if (closingContent) {
                     closingContent.style.display = 'none';
@@ -190,8 +221,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             requestAnimationFrame(closeAnimation);
         } else if (activeCard) {
-            // Crossfade between cards with unified animation
-            unifiedAnimation({
+            // Use viewport-priority animation between cards
+            viewportPriorityAnimation({
                 closingCard: activeCard,
                 openingCard: card,
                 onComplete: () => {
@@ -200,8 +231,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         } else {
-            // Just open this card
-            unifiedAnimation({
+            // Just open this card using viewport-priority animation
+            viewportPriorityAnimation({
                 openingCard: card,
                 onComplete: () => {
                     activeCard = card;
