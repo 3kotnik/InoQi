@@ -1,13 +1,15 @@
 ﻿/**
- * jcSlide.css - Simplified to ensure content shows
+ * cardReveal.css - Enhanced Card Styling
+ * With improved transitions and anchor support
  */
 
-/* Card List Layout */
+/* Card List */
 .card-list {
     display: flex;
     flex-direction: column;
     gap: 2rem;
     margin-bottom: 2rem;
+    scroll-margin-top: 100px; /* For anchor navigation */
 }
 
 /* Card Base */
@@ -17,15 +19,11 @@
     background-color: #ffffff;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
     transition: box-shadow 0.3s ease, transform 0.3s ease;
-    position: relative;
+    scroll-margin-top: 100px; /* For anchor navigation */
 }
 
     .card:hover {
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
-        transform: translateY(-3px);
-    }
-
-    .card.active {
         transform: translateY(-3px);
     }
 
@@ -81,14 +79,19 @@ time {
     opacity: 0.9;
 }
 
-/* Card Content - SIMPLIFIED */
+/* Card Content Animation */
 .card-content {
-    display: none;
-    padding: 1.5rem;
+    max-height: 0;
+    overflow: hidden;
+    padding: 0 1.5rem;
+    opacity: 0;
+    transition: max-height 0.5s ease, opacity 0.5s ease, padding-top 0.5s ease, padding-bottom 0.5s ease;
 }
 
 .card.active .card-content {
-    display: block;
+    max-height: 2000px; /* Arbitrary large value */
+    padding: 1.5rem;
+    opacity: 1;
 }
 
 /* Content Styling */
@@ -143,11 +146,6 @@ time {
         box-shadow: 0 7px 14px rgba(0, 0, 0, 0.1);
     }
 
-    .card-button:active {
-        transform: translateY(-1px);
-        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
-    }
-
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .card {
@@ -164,23 +162,12 @@ time {
     .card-title p {
         font-size: 1rem;
     }
-}
-
-@media (max-width: 576px) {
-    .card-title {
-        padding: 1rem;
-    }
-
-        .card-title h3 {
-            font-size: 1.25rem;
-            margin-bottom: 0.5rem;
-        }
 
     .card-content {
-        padding: 1.25rem;
+        padding: 0 1rem;
     }
 
-    .card-description .main-description {
-        font-size: 1rem;
+    .card.active .card-content {
+        padding: 1rem;
     }
 }

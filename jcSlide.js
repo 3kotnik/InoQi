@@ -1,34 +1,38 @@
 /**
- * jcSlide.js - Clean Card Animation System
- * A simple, reliable approach to card animations with JSON content loading
+ * jcSlide.js - Fixed version that ensures content appears
  */
 document.addEventListener('DOMContentLoaded', () => {
     // Configuration
-    const ANIMATION_DURATION = 400; // ms
-    const SCROLL_OFFSET = 100; // px space between header and card
+    const ANIMATION_DURATION = 500; // ms
+    const HEADER_BUFFER = 10;       // px
 
     // State
     let activeCard = null;
     let isAnimating = false;
 
-    // DOM Elements
-    const cards = document.querySelectorAll('.card');
-    const siteHeader = document.querySelector('header');
+    /**
+     * Get current header height (accounting for scrolled state)
+     */
+    function getHeaderHeight() {
+        return document.getElementById('header').offsetHeight;
+    }
 
     /**
      * Load card content via AJAX
      */
     async function loadCardContent(card) {
-        try {
-            // Skip if already loaded
-            if (card.dataset.contentLoaded === 'true') return true;
+        // Skip if already loaded
+        if (card.dataset.contentLoaded === 'true') return true;
 
+        try {
             const contentId = card.getAttribute('data-content-id');
             if (!contentId) return false;
 
+            // Use absolute path to ensure it works in all contexts
             const contentUrl = `assets/content/${contentId}.json`;
-            const response = await fetch(contentUrl);
+            console.log(`Loading content from: ${contentUrl}`); // Debug logging
 
+            const response = await fetch(contentUrl);
             if (!response.ok) {
                 throw new Error(`Failed to load content from ${contentUrl}`);
             }
@@ -48,16 +52,12 @@ document.addEventListener('DOMContentLoaded', () => {
      * Populate card with JSON data
      */
     function populateCardFromJson(card, data) {
-        // Update image if provided
+        console.log('Populating card with data:', data); // Debug logging
+
+        // Update card image if provided
         if (data.imageUrl) {
             const cardImage = card.querySelector('.card-header img');
             if (cardImage) cardImage.src = data.imageUrl;
-        }
-
-        // Update image alt text
-        if (data.imageAlt) {
-            const cardImage = card.querySelector('.card-header img');
-            if (cardImage) cardImage.alt = data.imageAlt;
         }
 
         // Update card title
@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (descriptionElement) {
             descriptionElement.innerHTML = '';
 
-            // Add main description
+            // Add main description paragraph
             if (data.description) {
                 const descParagraph = document.createElement('p');
                 descParagraph.textContent = data.description;
@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 descriptionElement.appendChild(descParagraph);
             }
 
-            // Add detailed content
+            // Add detailed content (paragraphs and lists)
             if (data.details && Array.isArray(data.details)) {
                 data.details.forEach(detail => {
                     if (detail.type === 'paragraph') {
@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
-     * Show error in card when content fails to load
+     * Display error message in card
      */
     function showErrorInCard(card) {
         const descriptionElement = card.querySelector('.card-description');
@@ -123,36 +123,35 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
-     * Scroll to position card optimally in viewport
+     * Scroll card to top of viewport, accounting for header height
      */
-    function scrollToCard(card) {
+    function scrollCardIntoView(card) {
         return new Promise(resolve => {
-            const headerHeight = siteHeader.offsetHeight;
+            // Disable built-in smooth scrolling temporarily
+            document.documentElement.style.scrollBehavior = 'auto';
+
+            // Calculate target position
+            const headerHeight = getHeaderHeight();
             const cardTop = card.getBoundingClientRect().top + window.scrollY;
-            const targetScrollY = cardTop - headerHeight - SCROLL_OFFSET;
+            const targetY = cardTop - headerHeight - HEADER_BUFFER;
 
-            // Setup smooth scrolling
+            // Animate scroll
             const startY = window.scrollY;
-            const distance = targetScrollY - startY;
-
-            // If very small distance, don't animate
-            if (Math.abs(distance) < 10) {
-                resolve();
-                return;
-            }
-
+            const distance = targetY - startY;
             const startTime = performance.now();
 
             function step(currentTime) {
-                const elapsedTime = currentTime - startTime;
-                const progress = Math.min(elapsedTime / ANIMATION_DURATION, 1);
-                const ease = 1 - Math.pow(1 - progress, 3); // Cubic ease out
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / ANIMATION_DURATION, 1);
+                const easeValue = 1 - Math.pow(1 - progress, 3); // cubic ease-out
 
-                window.scrollTo(0, startY + (distance * ease));
+                window.scrollTo(0, startY + distance * easeValue);
 
                 if (progress < 1) {
                     requestAnimationFrame(step);
                 } else {
+                    // Re-enable smooth scrolling
+                    document.documentElement.style.scrollBehavior = '';
                     resolve();
                 }
             }
@@ -162,165 +161,69 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
-     * Get natural height of content for animation
+     * Simple toggle of card content with animation
+     * SIMPLIFIED FOR RELIABILITY
      */
-    function getContentHeight(content) {
-        // Save original values
-        const originalStyles = {
-            height: content.style.height,
-            position: content.style.position,
-            visibility: content.style.visibility,
-            display: content.style.display,
-            padding: content.style.padding
-        };
+    function toggleCardContent(card) {
+        // Get references
+        const content = card.querySelector('.card-content');
+        const oldContent = activeCard?.querySelector('.card-content');
 
-        // Measure in hidden state
-        content.style.position = 'absolute';
-        content.style.visibility = 'hidden';
+        // If this is already the active card, close it
+        if (card === activeCard) {
+            content.style.display = 'none';
+            card.classList.remove('active');
+            activeCard = null;
+            return;
+        }
+
+        // First close any open card
+        if (activeCard) {
+            oldContent.style.display = 'none';
+            activeCard.classList.remove('active');
+        }
+
+        // Then open this card
         content.style.display = 'block';
-        content.style.height = 'auto';
-        content.style.padding = '1.5rem';
-
-        // Get the height
-        const height = content.scrollHeight;
-
-        // Restore original styles
-        content.style.position = originalStyles.position;
-        content.style.visibility = originalStyles.visibility;
-        content.style.display = originalStyles.display;
-        content.style.height = originalStyles.height;
-        content.style.padding = originalStyles.padding;
-
-        return height;
+        card.classList.add('active');
+        activeCard = card;
     }
 
     /**
-     * Animate card content opening
+     * Card click handler - manages the full sequence
      */
-    function animateContentOpen(content) {
-        return new Promise(resolve => {
-            content.classList.add('animating');
-
-            // Get target height
-            const targetHeight = getContentHeight(content);
-
-            // Set initial state
-            content.style.height = '0';
-            content.style.opacity = '0';
-            content.style.padding = '0 1.5rem';
-            content.style.display = 'block';
-
-            // Force browser to acknowledge the above styles before changing
-            void content.offsetHeight;
-
-            // Set target state
-            content.style.height = `${targetHeight}px`;
-            content.style.opacity = '1';
-            content.style.padding = '1.5rem';
-
-            // Clean up after animation
-            content.addEventListener('transitionend', function handler(e) {
-                if (e.propertyName === 'height') {
-                    content.classList.remove('animating');
-                    content.style.height = 'auto';
-                    content.removeEventListener('transitionend', handler);
-                    resolve();
-                }
-            });
-        });
-    }
-
-    /**
-     * Animate card content closing
-     */
-    function animateContentClose(content) {
-        return new Promise(resolve => {
-            content.classList.add('animating');
-
-            // Set initial height explicitly
-            content.style.height = `${content.scrollHeight}px`;
-
-            // Force browser to acknowledge the above style before changing
-            void content.offsetHeight;
-
-            // Animate to closed state
-            content.style.height = '0';
-            content.style.opacity = '0';
-            content.style.padding = '0 1.5rem';
-
-            content.addEventListener('transitionend', function handler(e) {
-                if (e.propertyName === 'height') {
-                    content.classList.remove('animating');
-                    content.style.display = 'none';
-                    content.removeEventListener('transitionend', handler);
-                    resolve();
-                }
-            });
-        });
-    }
-
-    /**
-     * Toggle card state
-     */
-    async function toggleCard(card) {
+    async function handleCardClick(card) {
         if (isAnimating) return;
         isAnimating = true;
 
         try {
-            if (card === activeCard) {
-                // Close active card
-                const content = card.querySelector('.card-content');
-                await animateContentClose(content);
-                card.classList.remove('active');
-                activeCard = null;
-            } else {
-                // First scroll card into view
-                await scrollToCard(card);
+            // First load the content
+            await loadCardContent(card);
 
-                // Handle closing active card if one exists
-                if (activeCard) {
-                    const oldContent = activeCard.querySelector('.card-content');
-                    activeCard.classList.remove('active');
-                    await animateContentClose(oldContent);
-                }
+            // Then scroll card into view
+            await scrollCardIntoView(card);
 
-                // Open new card
-                const newContent = card.querySelector('.card-content');
-                card.classList.add('active');
-                await animateContentOpen(newContent);
-                activeCard = card;
-            }
+            // Finally toggle the content
+            toggleCardContent(card);
+
+        } catch (error) {
+            console.error('Error handling card click:', error);
         } finally {
             isAnimating = false;
         }
     }
 
     // Initialize all cards
+    const cards = document.querySelectorAll('.card');
     cards.forEach(card => {
         const cardHeader = card.querySelector('.card-header');
         if (cardHeader) {
-            cardHeader.addEventListener('click', async () => {
-                // Load content if not already loaded
-                await loadCardContent(card);
-                toggleCard(card);
+            cardHeader.addEventListener('click', () => {
+                handleCardClick(card);
             });
         }
 
         // Preload content
         loadCardContent(card);
-    });
-
-    // Add document-level click handler to close active card when clicking outside
-    document.addEventListener('click', (e) => {
-        if (activeCard && !isAnimating && !e.target.closest('.card')) {
-            toggleCard(activeCard);
-        }
-    });
-
-    // Listen for escape key to close active card
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && activeCard && !isAnimating) {
-            toggleCard(activeCard);
-        }
     });
 });
