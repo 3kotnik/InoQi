@@ -1,14 +1,14 @@
 /**
- * InoQI Website - Enhanced Card System with Crossfade Animation
- * Provides fluid, simultaneous transitions between cards
+ * InoQI Website - Unified Card Animation System
+ * Ensures cards maintain position throughout the entire animation
  */
 document.addEventListener('DOMContentLoaded', () => {
     // DOM Elements
     const cards = document.querySelectorAll('.card');
 
-    // Animation Variables
+    // Configuration
     const ANIMATION_DURATION = 400; // ms
-    const SCROLL_OFFSET = 20; // Buffer space between header and card
+    const TOP_PADDING = 100; // Padding from top of viewport after header
 
     // State variables
     let activeCard = null;
@@ -18,279 +18,201 @@ document.addEventListener('DOMContentLoaded', () => {
      * Measure content height accurately
      */
     function measureContentHeight(content) {
-        // Store original styles
         const originalStyles = {
             display: content.style.display,
             height: content.style.height,
             position: content.style.position,
             visibility: content.style.visibility,
-            padding: content.style.padding,
-            opacity: content.style.opacity
+            padding: content.style.padding
         };
 
-        // Set styles for measurement without affecting layout
         content.style.position = 'absolute';
         content.style.visibility = 'hidden';
         content.style.display = 'block';
         content.style.height = 'auto';
         content.style.padding = '1.5rem';
-        content.style.opacity = '0';
 
-        // Get the real height
         const height = content.scrollHeight;
 
         // Restore original styles
-        content.style.position = originalStyles.position;
-        content.style.visibility = originalStyles.visibility;
-        content.style.display = originalStyles.display;
-        content.style.height = originalStyles.height;
-        content.style.padding = originalStyles.padding;
-        content.style.opacity = originalStyles.opacity;
+        Object.keys(originalStyles).forEach(key => {
+            content.style[key] = originalStyles[key];
+        });
 
         return height;
     }
 
     /**
-     * Calculate the optimal scroll position for a card
+     * Create a unified animation that handles all aspects simultaneously
+     * This is key to the smooth experience
      */
-    function getOptimalScrollPosition(card) {
-        const headerHeight = document.querySelector('header').offsetHeight || 0;
+    function unifiedAnimation({
+        closingCard = null,
+        openingCard,
+        onProgress = () => { },
+        onComplete = () => { }
+    }) {
+        const headerHeight = document.querySelector('header').offsetHeight;
 
-        // Get card position relative to viewport
-        const cardRect = card.getBoundingClientRect();
+        // Get opening card metrics
+        const openingCardRect = openingCard.getBoundingClientRect();
+        const openingContent = openingCard.querySelector('.card-content');
+        const targetOpeningHeight = measureContentHeight(openingContent);
 
-        // Calculate desired scroll position with buffer
-        const scrollTarget = window.scrollY + cardRect.top - headerHeight - SCROLL_OFFSET;
+        // Calculate ideal final scroll position to place card at top with padding
+        const targetScrollY = window.scrollY + openingCardRect.top - headerHeight - TOP_PADDING;
+        const startScrollY = window.scrollY;
+        const scrollDelta = targetScrollY - startScrollY;
 
-        // If card is already fully visible, don't scroll
-        if (cardRect.top >= headerHeight + SCROLL_OFFSET &&
-            cardRect.bottom <= window.innerHeight) {
-            return window.scrollY;
-        }
+        // Set up closing card if we have one
+        let closingContent = null;
+        let startClosingHeight = 0;
 
-        return scrollTarget;
-    }
-
-    /**
-     * Smooth scroll to target position
-     */
-    function smoothScrollTo(targetY) {
-        return new Promise(resolve => {
-            const startY = window.scrollY;
-            const distance = targetY - startY;
-
-            // Skip tiny distances
-            if (Math.abs(distance) < 10) {
-                resolve();
-                return;
-            }
-
-            const startTime = performance.now();
-
-            function step(currentTime) {
-                const elapsed = currentTime - startTime;
-                const progress = Math.min(elapsed / ANIMATION_DURATION, 1);
-
-                // Ease out cubic
-                const easeValue = 1 - Math.pow(1 - progress, 3);
-
-                window.scrollTo(0, startY + distance * easeValue);
-
-                if (progress < 1) {
-                    requestAnimationFrame(step);
-                } else {
-                    resolve();
-                }
-            }
-
-            requestAnimationFrame(step);
-        });
-    }
-
-    /**
-     * Animate opacity and height simultaneously
-     */
-    function animateCardContent(element, startHeight, endHeight, startOpacity, endOpacity, duration) {
-        return new Promise(resolve => {
-            const startTime = performance.now();
-
-            // Ensure element is visible
-            element.style.display = 'block';
-            element.style.height = `${startHeight}px`;
-            element.style.opacity = startOpacity;
-            element.style.overflow = 'hidden';
-
-            function step(currentTime) {
-                const elapsed = currentTime - startTime;
-                const progress = Math.min(elapsed / duration, 1);
-
-                // Ease in-out cubic
-                const easeValue = progress < 0.5
-                    ? 4 * progress * progress * progress
-                    : 1 - Math.pow(-2 * progress + 2, 3) / 2;
-
-                // Update height and opacity
-                const currentHeight = startHeight + (endHeight - startHeight) * easeValue;
-                const currentOpacity = startOpacity + (endOpacity - startOpacity) * easeValue;
-
-                element.style.height = `${currentHeight}px`;
-                element.style.opacity = currentOpacity;
-
-                if (progress < 1) {
-                    requestAnimationFrame(step);
-                } else {
-                    // Final state
-                    element.style.height = endHeight === 0 ? '0' : `${endHeight}px`;
-                    element.style.opacity = endOpacity;
-
-                    // Clean up if fully closed
-                    if (endHeight === 0 && endOpacity === 0) {
-                        element.style.display = 'none';
-                    }
-
-                    // Final padding adjustments
-                    if (endHeight > 0) {
-                        element.style.paddingTop = '1.5rem';
-                        element.style.paddingBottom = '1.5rem';
-                        element.style.overflow = 'visible';
-                    }
-
-                    resolve();
-                }
-            }
-
-            requestAnimationFrame(step);
-        });
-    }
-
-    /**
-     * Crossfade between cards - core of the improved animation
-     */
-    async function crossfadeCards(closingCard, openingCard) {
-        try {
-            // Get the content elements
-            const closingContent = closingCard.querySelector('.card-content');
-            const openingContent = openingCard.querySelector('.card-content');
-
-            // Set initial states and measure heights
-            const closingHeight = closingContent.offsetHeight;
-            const openingHeight = measureContentHeight(openingContent);
-
-            // Prepare opening content
-            openingContent.style.overflow = 'hidden';
-            openingContent.style.height = '0';
-            openingContent.style.opacity = '0';
-            openingContent.style.display = 'block';
-            openingContent.style.paddingTop = '0';
-            openingContent.style.paddingBottom = '0';
-            openingContent.style.paddingLeft = '1.5rem';
-            openingContent.style.paddingRight = '1.5rem';
+        if (closingCard) {
+            closingContent = closingCard.querySelector('.card-content');
+            startClosingHeight = closingContent.offsetHeight;
 
             // Prepare closing content
             closingContent.style.overflow = 'hidden';
-
-            // First, calculate optimal scroll position for opening card
-            const scrollTarget = getOptimalScrollPosition(openingCard);
-
-            // Update class states
-            closingCard.classList.remove('active');
-            openingCard.classList.add('active');
-
-            // Start the scroll animation
-            const scrollPromise = smoothScrollTo(scrollTarget);
-
-            // Start crossfading animations simultaneously
-            const closingPromise = animateCardContent(
-                closingContent,
-                closingHeight,
-                0,
-                1,
-                0,
-                ANIMATION_DURATION
-            );
-
-            const openingPromise = animateCardContent(
-                openingContent,
-                0,
-                openingHeight,
-                0,
-                1,
-                ANIMATION_DURATION
-            );
-
-            // Wait for all animations to complete
-            await Promise.all([scrollPromise, closingPromise, openingPromise]);
-
-            // Final cleanup
-            closingContent.style.overflow = '';
-        } catch (error) {
-            console.error('Animation error:', error);
         }
+
+        // Prepare opening content
+        openingContent.style.overflow = 'hidden';
+        openingContent.style.display = 'block';
+        openingContent.style.height = '0';
+        openingContent.style.opacity = '0';
+        openingContent.style.paddingTop = '0';
+        openingContent.style.paddingBottom = '0';
+        openingContent.style.paddingLeft = '1.5rem';
+        openingContent.style.paddingRight = '1.5rem';
+
+        // Update card classes
+        if (closingCard) closingCard.classList.remove('active');
+        openingCard.classList.add('active');
+
+        // Force reflow
+        void (openingContent.offsetHeight);
+
+        // Start time for animation
+        const startTime = performance.now();
+
+        // Single animation loop that handles everything
+        function animate(currentTime) {
+            const elapsed = currentTime - startTime;
+            let progress = Math.min(elapsed / ANIMATION_DURATION, 1);
+
+            // Use cubic ease-out for natural motion
+            const easeValue = 1 - Math.pow(1 - progress, 3);
+
+            // Update scroll position
+            window.scrollTo(0, startScrollY + scrollDelta * easeValue);
+
+            // Update closing content if present
+            if (closingContent) {
+                const currentClosingHeight = startClosingHeight * (1 - easeValue);
+                closingContent.style.height = `${currentClosingHeight}px`;
+                closingContent.style.opacity = 1 - easeValue;
+            }
+
+            // Update opening content
+            const currentOpeningHeight = targetOpeningHeight * easeValue;
+            openingContent.style.height = `${currentOpeningHeight}px`;
+            openingContent.style.opacity = easeValue;
+
+            // Call progress callback
+            onProgress(easeValue);
+
+            // Continue animation or complete
+            if (progress < 1) {
+                requestAnimationFrame(animate);
+            } else {
+                // Final state adjustments
+                if (closingContent) {
+                    closingContent.style.display = 'none';
+                    closingContent.style.height = '0';
+                    closingContent.style.opacity = '0';
+                    closingContent.style.overflow = '';
+                }
+
+                openingContent.style.height = `${targetOpeningHeight}px`;
+                openingContent.style.opacity = '1';
+                openingContent.style.paddingTop = '1.5rem';
+                openingContent.style.paddingBottom = '1.5rem';
+                openingContent.style.overflow = 'visible';
+
+                // Complete callback
+                onComplete();
+            }
+        }
+
+        // Start animation
+        requestAnimationFrame(animate);
     }
 
     /**
-     * Toggle card open/closed state with crossfade
+     * Toggle card open/closed state
      */
-    async function toggleCard(card) {
+    function toggleCard(card) {
         if (isAnimating) return;
         isAnimating = true;
 
-        try {
+        const isActive = card.classList.contains('active');
+
+        if (isActive) {
+            // Close this card
             const content = card.querySelector('.card-content');
-            const isActive = card.classList.contains('active');
+            const startHeight = content.offsetHeight;
 
-            if (isActive) {
-                // Just close this card
-                content.style.overflow = 'hidden';
+            content.style.overflow = 'hidden';
 
-                const height = content.offsetHeight;
-                await animateCardContent(content, height, 0, 1, 0, ANIMATION_DURATION);
+            const startTime = performance.now();
 
-                card.classList.remove('active');
-                content.style.overflow = '';
-                activeCard = null;
-            } else if (activeCard) {
-                // Crossfade between closing active card and opening this one
-                await crossfadeCards(activeCard, card);
-                activeCard = card;
-            } else {
-                // No active card, just open this one
-                content.style.overflow = 'hidden';
-                content.style.height = '0';
-                content.style.opacity = '0';
-                content.style.display = 'block';
-                content.style.paddingTop = '0';
-                content.style.paddingBottom = '0';
-                content.style.paddingLeft = '1.5rem';
-                content.style.paddingRight = '1.5rem';
+            function closeAnimation(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / ANIMATION_DURATION, 1);
+                const easeValue = 1 - Math.pow(1 - progress, 3);
 
-                // Scroll to position
-                const scrollTarget = getOptimalScrollPosition(card);
-                await smoothScrollTo(scrollTarget);
+                const currentHeight = startHeight * (1 - easeValue);
+                content.style.height = `${currentHeight}px`;
+                content.style.opacity = 1 - easeValue;
 
-                // Get final height
-                const height = measureContentHeight(content);
-
-                // Add active class
-                card.classList.add('active');
-
-                // Animate opening
-                await animateCardContent(content, 0, height, 0, 1, ANIMATION_DURATION);
-
-                content.style.paddingTop = '1.5rem';
-                content.style.paddingBottom = '1.5rem';
-                content.style.overflow = 'visible';
-                activeCard = card;
+                if (progress < 1) {
+                    requestAnimationFrame(closeAnimation);
+                } else {
+                    content.style.display = 'none';
+                    content.style.height = '0';
+                    content.style.overflow = '';
+                    card.classList.remove('active');
+                    activeCard = null;
+                    isAnimating = false;
+                }
             }
-        } catch (error) {
-            console.error('Animation error:', error);
-        } finally {
-            isAnimating = false;
+
+            requestAnimationFrame(closeAnimation);
+        } else if (activeCard) {
+            // Crossfade between cards with unified animation
+            unifiedAnimation({
+                closingCard: activeCard,
+                openingCard: card,
+                onComplete: () => {
+                    activeCard = card;
+                    isAnimating = false;
+                }
+            });
+        } else {
+            // Just open this card
+            unifiedAnimation({
+                openingCard: card,
+                onComplete: () => {
+                    activeCard = card;
+                    isAnimating = false;
+                }
+            });
         }
     }
 
     /**
-     * Load card content via AJAX and populate all card elements
+     * Load card content via AJAX and populate card
      */
     async function loadCardContent(card) {
         try {
@@ -403,7 +325,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
-     * Initialize all cards
+     * Initialize the card system
      */
     function initializeCards() {
         // Set up event listeners for cards
@@ -419,33 +341,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             }
 
-            // Preload card data right away
+            // Preload card data
             loadCardContent(card);
         });
 
         // Set up global event listeners
-        setupGlobalEventListeners();
-    }
-
-    /**
-     * Set up global event listeners
-     */
-    function setupGlobalEventListeners() {
-        // Close active card when clicking outside
         document.addEventListener('click', (e) => {
             if (activeCard && !isAnimating && !e.target.closest('.card')) {
                 toggleCard(activeCard);
             }
         });
 
-        // Close active card when pressing Escape key
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && activeCard && !isAnimating) {
                 toggleCard(activeCard);
             }
         });
 
-        // Handle window resize
         window.addEventListener('resize', () => {
             if (activeCard && !isAnimating) {
                 const content = activeCard.querySelector('.card-content');
@@ -457,6 +369,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Initialize cards when document is ready
+    // Initialize
     initializeCards();
 });
