@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // CONFIGURABLE ANIMATION SETTINGS
     // ==============================================
     const SETTINGS = {
-        HEADER_PADDING_PERCENT: 10,    // Percentage of viewport height for header padding
+        HEADER_PADDING_PERCENT: 15,    // Percentage of viewport height for header padding
         HEADER_BUFFER: 15,               // Minimum space below header (px) - fallback
         DEBOUNCE_DELAY: 200,            // Delay for debouncing card clicks (ms)
         SCROLL_TOLERANCE: 2,             // Tolerance for scroll position check (pixels) - for smoother animation
