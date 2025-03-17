@@ -3,6 +3,22 @@
    All card-related styling is here
    ======================================== */
 
+
+/* Header stays in view during animations */
+.card-header-sticky {
+    position: sticky;
+    top: var(--header-scrolled);
+    z-index: 5;
+    background-color: #fff;
+}
+
+/* Prevent layout jumps during animation */
+.card-placeholder {
+    display: block;
+    pointer-events: none;
+}
+
+
 /* Card List Layout */
 .card-list {
     display: flex;

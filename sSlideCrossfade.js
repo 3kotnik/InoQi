@@ -1,232 +1,280 @@
 /**
- * InoQI Website - Enhanced Card Sliding with Crossfade Transitions
- * 
- * This version does not change any external content loading or JSON functionality.
- * Instead, it adjusts the animation:
- *  1. Before animating, the card’s header is scrolled into view.
- *  2. The card header remains in view because its CSS is now sticky (see sSlide.css update).
- *  3. The new card’s content expands (height and opacity) and its padding is animated
- *     from 0 to the desired value (avoiding an abrupt “jump” at the end).
- *  4. If another card is open, its content collapses and fades out concurrently.
+ * InoQI Website - Enhanced Card Sliding with Smooth Crossfade & No Jumps
+ * 1. Prevents headers from moving off screen
+ * 2. Eliminates the padding jump at the end of animation
+ * 3. Preserves all external content loading functionality
  */
 document.addEventListener('DOMContentLoaded', () => {
-    // DOM Elements: all cards in the list
+    // Configuration
+    const ANIM_DURATION = 400; // Animation duration in ms
+    const SCROLL_DURATION = 300; // Scroll animation duration in ms
+    const TOP_PADDING = 90; // Distance from top of viewport to card (matches header height)
+    const CONTENT_PADDING = 24; // Final padding in pixels (equals 1.5rem)
+
+    // State
     const cards = document.querySelectorAll('.card');
-    const ANIM_DURATION = 1500; // Duration for height/opacity/padding animations (ms)
-    const SCROLL_DURATION = 300; // Duration for scroll animation (ms)
-    const TOP_PADDING = 100; // Additional spacing from the top (below the header)
     let activeCard = null;
     let isAnimating = false;
 
     /**
-     * Measure the full height of content without altering layout.
+     * Create a temporary placeholder to prevent layout collapse.
+     * This prevents the page from jumping around during animations.
+     */
+    function createPlaceholder(element, height) {
+        const placeholder = document.createElement('div');
+        placeholder.style.height = `${height}px`;
+        placeholder.style.width = '100%';
+        placeholder.style.margin = '0';
+        placeholder.style.transition = 'height 0.4s ease';
+        placeholder.className = 'card-placeholder';
+        return placeholder;
+    }
+
+    /**
+     * Measure content height without affecting layout
      */
     function measureContentHeight(content) {
+        // Store current styles
         const originalStyles = {
             display: content.style.display,
             height: content.style.height,
             position: content.style.position,
             visibility: content.style.visibility,
-            padding: content.style.padding
+            padding: content.style.padding,
+            paddingTop: content.style.paddingTop,
+            paddingBottom: content.style.paddingBottom
         };
-        // Temporary styles for accurate measurement
-        content.style.display = 'block';
-        content.style.height = 'auto';
+
+        // Set measurement styles
         content.style.position = 'absolute';
         content.style.visibility = 'hidden';
-        content.style.padding = '1.5rem';
+        content.style.display = 'block';
+        content.style.height = 'auto';
+        content.style.paddingTop = `${CONTENT_PADDING}px`;
+        content.style.paddingBottom = `${CONTENT_PADDING}px`;
+        content.style.paddingLeft = '1.5rem';
+        content.style.paddingRight = '1.5rem';
+
+        // Measure
         const height = content.scrollHeight;
+
+        // Restore original styles
         Object.keys(originalStyles).forEach(key => {
             content.style[key] = originalStyles[key];
         });
+
         return height;
     }
 
     /**
-     * Animate element's height from startHeight to endHeight.
+     * Unified animation function that handles all properties simultaneously
+     * This eliminates the "jumping" effect by ensuring all properties animate together
      */
-    function animateHeight(element, startHeight, endHeight, duration) {
+    function animateCardContent(element, start, end, duration) {
         return new Promise(resolve => {
+            // Initial setup
+            element.style.display = 'block';
+            element.style.overflow = 'hidden';
+            element.style.height = `${start.height}px`;
+            element.style.opacity = start.opacity;
+            element.style.paddingTop = `${start.padding}px`;
+            element.style.paddingBottom = `${start.padding}px`;
+
+            // Force reflow
+            void element.offsetHeight;
+
             const startTime = performance.now();
-            element.style.height = `${startHeight}px`;
+
             function step(currentTime) {
                 const elapsed = currentTime - startTime;
                 const progress = Math.min(elapsed / duration, 1);
-                const easeValue = progress < 0.5
-                    ? 4 * progress * progress * progress
-                    : 1 - Math.pow(-2 * progress + 2, 3) / 2;
-                const currentHeight = startHeight + (endHeight - startHeight) * easeValue;
+
+                // Cubic ease-out for smooth deceleration
+                const easeValue = 1 - Math.pow(1 - progress, 3);
+
+                // Calculate current values
+                const currentHeight = start.height + (end.height - start.height) * easeValue;
+                const currentOpacity = start.opacity + (end.opacity - start.opacity) * easeValue;
+                const currentPadding = start.padding + (end.padding - start.padding) * easeValue;
+
+                // Apply all values simultaneously - no property changes after animation
                 element.style.height = `${currentHeight}px`;
-                if (progress < 1) {
-                    requestAnimationFrame(step);
-                } else {
-                    element.style.height = endHeight === 0 ? '0' : `${endHeight}px`;
-                    resolve();
-                }
-            }
-            requestAnimationFrame(step);
-        });
-    }
-
-    /**
-     * Animate element's opacity from startOpacity to endOpacity.
-     */
-    function animateOpacity(element, startOpacity, endOpacity, duration) {
-        return new Promise(resolve => {
-            const startTime = performance.now();
-            function step(currentTime) {
-                const elapsedTime = currentTime - startTime;
-                const progress = Math.min(elapsedTime / duration, 1);
-                const currentOpacity = startOpacity + (endOpacity - startOpacity) * progress;
                 element.style.opacity = currentOpacity;
+                element.style.paddingTop = `${currentPadding}px`;
+                element.style.paddingBottom = `${currentPadding}px`;
+
                 if (progress < 1) {
                     requestAnimationFrame(step);
                 } else {
+                    // Only set final styles when animation completes
+                    element.style.overflow = end.height > 0 ? 'visible' : 'hidden';
+                    if (end.height === 0) {
+                        element.style.display = 'none';
+                    }
                     resolve();
                 }
             }
+
             requestAnimationFrame(step);
         });
     }
 
     /**
-     * Animate padding-top and padding-bottom from start to end (in pixels).
+     * Smooth scroll to position with proper easing
      */
-    function animatePadding(element, startPadding, endPadding, duration) {
+    function smoothScrollTo(targetY) {
         return new Promise(resolve => {
-            const startTime = performance.now();
-            function step(currentTime) {
-                const elapsed = currentTime - startTime;
-                const progress = Math.min(elapsed / duration, 1);
-                const easeValue = progress < 0.5
-                    ? 4 * progress * progress * progress
-                    : 1 - Math.pow(-2 * progress + 2, 3) / 2;
-                const currentPadding = startPadding + (endPadding - startPadding) * easeValue;
-                element.style.paddingTop = currentPadding + "px";
-                element.style.paddingBottom = currentPadding + "px";
-                if (progress < 1) {
-                    requestAnimationFrame(step);
-                } else {
-                    resolve();
-                }
-            }
-            requestAnimationFrame(step);
-        });
-    }
-
-    /**
-     * Smoothly scroll the card header into view so that it never moves off-screen.
-     */
-    function scrollCardIntoView(card) {
-        return new Promise(resolve => {
-            const headerHeight = document.querySelector('header').offsetHeight;
-            const targetY = card.getBoundingClientRect().top + window.scrollY - headerHeight - TOP_PADDING;
             const startY = window.scrollY;
             const distance = targetY - startY;
+
+            // Skip small distances
+            if (Math.abs(distance) < 10) {
+                resolve();
+                return;
+            }
+
             const startTime = performance.now();
+
             function step(currentTime) {
                 const elapsed = currentTime - startTime;
                 const progress = Math.min(elapsed / SCROLL_DURATION, 1);
-                const easeValue = 1 - Math.pow(1 - progress, 3); // Ease-out cubic
-                window.scrollTo(0, startY + distance * easeValue);
+                const easeValue = 1 - Math.pow(1 - progress, 3); // Cubic ease-out
+
+                window.scrollTo({
+                    top: startY + distance * easeValue,
+                    behavior: 'auto' // Use our animation, not browser's smooth scroll
+                });
+
                 if (progress < 1) {
                     requestAnimationFrame(step);
                 } else {
                     resolve();
                 }
             }
+
             requestAnimationFrame(step);
         });
     }
 
     /**
-     * Crossfade the content animation:
-     * - The new card's content expands and fades in.
-     * - If an active card exists, its content collapses and fades out simultaneously.
-     * Additionally, animate padding from 0 to a final value (24px ~ 1.5rem).
+     * Get optimal scroll position for card, respecting header height
      */
-    function crossfadeContent(newCard) {
-        return new Promise(async resolve => {
-            const newContent = newCard.querySelector('.card-content');
-            const targetHeight = measureContentHeight(newContent);
-            // Initial settings for new content.
-            newContent.style.display = 'block';
-            newContent.style.overflow = 'hidden';
-            newContent.style.height = '0';
-            newContent.style.opacity = '0';
-            // Start with zero padding.
-            newContent.style.paddingTop = '0';
-            newContent.style.paddingBottom = '0';
+    function getOptimalScrollPosition(card) {
+        const headerHeight = document.querySelector('header').offsetHeight || TOP_PADDING;
+        const cardRect = card.getBoundingClientRect();
+        const targetY = window.scrollY + cardRect.top - headerHeight - 20; // 20px extra buffer
 
-            let fadeOutPromise = Promise.resolve();
-            if (activeCard && activeCard !== newCard) {
-                const oldContent = activeCard.querySelector('.card-content');
-                fadeOutPromise = animateHeight(oldContent, oldContent.offsetHeight, 0, ANIM_DURATION)
-                    .then(() => {
-                        oldContent.style.display = 'none';
-                        return animateOpacity(oldContent, 1, 0, ANIM_DURATION);
-                    });
-            }
-            const fadeInPromise = Promise.all([
-                animateHeight(newContent, 0, targetHeight, ANIM_DURATION),
-                animateOpacity(newContent, 0, 1, ANIM_DURATION),
-                animatePadding(newContent, 0, 24, ANIM_DURATION)
-            ]);
-            await Promise.all([fadeOutPromise, fadeInPromise]);
-            newContent.style.overflow = 'visible';
-            resolve();
-        });
+        return targetY;
     }
 
     /**
-     * Open a card (for the case when no card is currently open).
-     */
-    async function openCard(card) {
-        const content = card.querySelector('.card-content');
-        const targetHeight = measureContentHeight(content);
-        content.style.display = 'block';
-        content.style.overflow = 'hidden';
-        content.style.height = '0';
-        content.style.opacity = '0';
-        // Start with zero padding.
-        content.style.paddingTop = '0';
-        content.style.paddingBottom = '0';
-        await Promise.all([
-            animateHeight(content, 0, targetHeight, ANIM_DURATION),
-            animateOpacity(content, 0, 1, ANIM_DURATION),
-            animatePadding(content, 0, 24, ANIM_DURATION)
-        ]);
-        content.style.overflow = 'visible';
-    }
-
-    /**
-     * Toggle a card's state.
-     * If already active: collapse its content.
-     * Else: scroll it into view then crossfade its content (collapsing any active card).
+     * Toggle a card's open/closed state
      */
     async function toggleCard(card) {
         if (isAnimating) return;
         isAnimating = true;
+
         try {
             if (card.classList.contains('active')) {
-                // Collapse content.
-                await animateOpacity(card.querySelector('.card-content'), 1, 0, ANIM_DURATION);
-                await animateHeight(card.querySelector('.card-content'), card.querySelector('.card-content').offsetHeight, 0, ANIM_DURATION);
-                card.querySelector('.card-content').style.display = 'none';
+                // Close this card
+                const content = card.querySelector('.card-content');
+
+                // Create a placeholder to prevent scroll jumps
+                const placeholder = createPlaceholder(content, content.offsetHeight);
+                card.insertBefore(placeholder, content.nextSibling);
+
+                // Animate closing
+                await animateCardContent(content, {
+                    height: content.offsetHeight,
+                    opacity: 1,
+                    padding: CONTENT_PADDING
+                }, {
+                    height: 0,
+                    opacity: 0,
+                    padding: 0
+                }, ANIM_DURATION);
+
+                // Clean up
                 card.classList.remove('active');
+                setTimeout(() => card.removeChild(placeholder), 50);
                 activeCard = null;
+
             } else if (activeCard) {
-                await scrollCardIntoView(card);
-                await crossfadeContent(card);
+                // First ensure the target card is visible
+                const scrollTarget = getOptimalScrollPosition(card);
+                await smoothScrollTo(scrollTarget);
+
+                // Get content elements
+                const oldContent = activeCard.querySelector('.card-content');
+                const newContent = card.querySelector('.card-content');
+
+                // Measure the full height for animation
+                const targetHeight = measureContentHeight(newContent);
+
+                // Create placeholders
+                const closingPlaceholder = createPlaceholder(oldContent, oldContent.offsetHeight);
+                activeCard.insertBefore(closingPlaceholder, oldContent.nextSibling);
+
+                // Animate simultaneously
+                await Promise.all([
+                    // Close old card
+                    animateCardContent(oldContent, {
+                        height: oldContent.offsetHeight,
+                        opacity: 1,
+                        padding: CONTENT_PADDING
+                    }, {
+                        height: 0,
+                        opacity: 0,
+                        padding: 0
+                    }, ANIM_DURATION),
+
+                    // Open new card
+                    animateCardContent(newContent, {
+                        height: 0,
+                        opacity: 0,
+                        padding: 0
+                    }, {
+                        height: targetHeight,
+                        opacity: 1,
+                        padding: CONTENT_PADDING
+                    }, ANIM_DURATION)
+                ]);
+
+                // Update state
                 activeCard.classList.remove('active');
                 card.classList.add('active');
                 activeCard = card;
+
+                // Remove placeholder
+                setTimeout(() => {
+                    if (closingPlaceholder.parentNode) {
+                        activeCard.removeChild(closingPlaceholder);
+                    }
+                }, 50);
+
             } else {
-                await scrollCardIntoView(card);
-                await openCard(card);
+                // No card is open, just open this one
+                const scrollTarget = getOptimalScrollPosition(card);
+                await smoothScrollTo(scrollTarget);
+
+                const content = card.querySelector('.card-content');
+                const targetHeight = measureContentHeight(content);
+
+                // Animate opening
+                await animateCardContent(content, {
+                    height: 0,
+                    opacity: 0,
+                    padding: 0
+                }, {
+                    height: targetHeight,
+                    opacity: 1,
+                    padding: CONTENT_PADDING
+                }, ANIM_DURATION);
+
                 card.classList.add('active');
                 activeCard = card;
             }
+
         } catch (error) {
             console.error('Animation error:', error);
         } finally {
@@ -235,7 +283,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
-     * Load external JSON content and populate the card (unchanged).
+     * Load card content via AJAX and populate the card.
+     * This function remains unchanged from the original.
      */
     async function loadCardContent(card) {
         try {
@@ -256,39 +305,45 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
-     * Populate card elements from JSON data (unchanged).
+     * Populate card elements from JSON data.
      */
     function populateCardFromJson(card, data) {
+        // Update card image if provided.
         if (data.imageUrl) {
             const cardImage = card.querySelector('.card-header img');
             if (cardImage) {
                 cardImage.src = data.imageUrl;
             }
         }
+        // Update image alt text.
         if (data.imageAlt) {
             const cardImage = card.querySelector('.card-header img');
             if (cardImage) {
                 cardImage.alt = data.imageAlt;
             }
         }
+        // Update card title.
         if (data.title) {
             const cardTitle = card.querySelector('.card-title h3');
             if (cardTitle) {
                 cardTitle.textContent = data.title;
             }
         }
+        // Update short description.
         if (data.shortDescription) {
             const cardShortDesc = card.querySelector('.card-title p');
             if (cardShortDesc) {
                 cardShortDesc.textContent = data.shortDescription;
             }
         }
+        // Update button text.
         if (data.buttonText) {
             const button = card.querySelector('.card-button');
             if (button) {
                 button.textContent = data.buttonText;
             }
         }
+        // Update detailed content.
         const descriptionElement = card.querySelector('.card-description');
         if (descriptionElement) {
             descriptionElement.innerHTML = '';
@@ -319,7 +374,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
-     * Display an error message in the card (unchanged).
+     * Display an error message in the card.
      */
     function showErrorInCard(card) {
         const descriptionElement = card.querySelector('.card-description');
@@ -328,14 +383,23 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Attach event listeners for each card header and preload content.
+    // Set up event listeners and preload content
     cards.forEach(card => {
         const cardHeader = card.querySelector('.card-header');
         if (cardHeader) {
-            cardHeader.addEventListener('click', () => {
+            // Add special class for sticky positioning
+            cardHeader.classList.add('card-header-sticky');
+
+            cardHeader.addEventListener('click', async () => {
+                // Check if content needs to be loaded first
+                if (!card.dataset.contentLoaded) {
+                    await loadCardContent(card);
+                }
                 toggleCard(card);
             });
         }
+
+        // Preload all card content
         loadCardContent(card);
     });
 });
