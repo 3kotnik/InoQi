@@ -3,24 +3,25 @@
     "imageUrl": "assets/images/W1.webp",
     "imageAlt": "KidoKoda Workshop za programiranje",
     "shortDescription": "Tečaj programiranja za OŠ",
-    "description": "Naučite se programirati na zabaven način! Ta tečaj je namenjen otrokom osnovnošolske starosti, ki želijo odkriti svet kodiranja.",
+    "description": "Prvi koraki v svet programiranja! Tečaj prilagojen za otroke (8-11 let) in mlade (12-15 let).",
 
     "details": [
 
         {
             "type": "paragraph",
-            "content": "Na delavnici KidoKoda se otroci naučijo osnov programiranja skozi interaktivne projekte."
+            "content": "Tvoj otrok obožuje videoigre in nove izzive? Naj bo drzen in USTVARI svojo! Radoveden, kako delujejo roboti? Naši že komaj čakajo, da jih požene na nove tekme in misije!"
+
         },
 
         {
             "type": "paragraph",
-            "content": "Poudarek je na razvoju analitičnega mišljenja in kreativnega pristopa pri iskanju rešitev."
+            "content": "KIDO KODA je začetni tečaj programiranja, kjer otroci skozi igro in eksperimentiranje osvojijo osnovne veščine kodiranja, ustvarjalnega razmišljanja in reševanja problemov. Z uporabo kreativnih, brezplačnih orodij, ki jih bodo lahko raziskovali tudi po koncu tečaja, se bodo naučili razvijati igre, programirati robote, ustvarjati v 3d prostoru in uporabljati umetno inteligenco za pomoč. Predznanje ni potrebno!"
         },
 
         {
             "type": "list",
             "items": [
-                "Ustvarjanje lastnih iger in animacij",
+                "UsScratch – osvojili osnove Scratch okolja in programiranja ob ustvarjanju lastne igrice (poskočna kokoš, platformer v vesolju, lov na zaklad, animacija pravljice…)",
                 "Razvoj logičnega razmišljanja",
                 "Reševanje problemov s kodo",
                 "Razumevanje osnovnih programerskih konceptov"
