@@ -30,7 +30,7 @@ let currentSection = null;
  */
 function debounce(func, wait) {
     let timeout;
-    return function(...args) {
+    return function (...args) {
         clearTimeout(timeout);
         timeout = setTimeout(() => func.apply(this, args), wait);
     };
@@ -42,7 +42,7 @@ function debounce(func, wait) {
 function getCurrentSection() {
     const sections = document.querySelectorAll('section[id]');
     let current = '';
-    
+
     sections.forEach(section => {
         const sectionTop = section.offsetTop - 100;
         const sectionHeight = section.offsetHeight;
@@ -50,7 +50,7 @@ function getCurrentSection() {
             current = section.getAttribute('id');
         }
     });
-    
+
     return current;
 }
 
@@ -59,10 +59,10 @@ function getCurrentSection() {
  */
 function updateActiveNavLink() {
     const currentSectionId = getCurrentSection();
-    
+
     if (currentSectionId !== currentSection) {
         currentSection = currentSectionId;
-        
+
         navLinks.forEach(link => {
             link.classList.remove('active');
             if (link.getAttribute('href') === `#${currentSectionId}`) {
@@ -77,44 +77,54 @@ function updateActiveNavLink() {
  */
 function handleScroll() {
     lastScrollPosition = window.scrollY;
-    
+
     if (!ticking) {
         window.requestAnimationFrame(() => {
             updateScrollEffects(lastScrollPosition);
             ticking = false;
         });
-        
+
         ticking = true;
     }
 }
 
 /**
- * Update scroll-based visual effects
+ * Update scroll-based visual effects (MODIFIED to ONLY hero and intro sections)
  */
 function updateScrollEffects(scrollPosition) {
+    const heroSection = document.getElementById('hero');
     const introSection = document.getElementById('intro');
-    if (!introSection) return;
-    
-    // Header appearance
-    if (scrollPosition > 50) {
-        header.classList.add('scrolled');
-        hasScrolled = true;
-    } else {
-        header.classList.remove('scrolled');
-        hasScrolled = false;
+
+    // Function to check if scrolling within hero or intro sections
+    function isScrollingInHeroIntro() {
+        if (heroSection && scrollPosition <= heroSection.offsetHeight) return true; // In hero if scroll within hero height
+        if (introSection && scrollPosition >= introSection.offsetTop - 100 && scrollPosition < introSection.offsetTop + introSection.offsetHeight) return true; // In intro section
+        return false;
     }
-    
-    // Real-time logo scaling
-    if (mainLogo) {
-        const introTop = introSection.getBoundingClientRect().top;
-        const scrollRatio = Math.min(1, Math.max(0, introTop / (window.innerHeight / 3)));
-        const scaleValue = 1 + (scrollRatio * 0.4);
-        mainLogo.style.transform = `scale(${scaleValue})`;
+
+    // Header appearance and logo scaling (ONLY if in hero or intro sections)
+    if (isScrollingInHeroIntro()) {
+        // Header appearance
+        if (scrollPosition > 50) {
+            header.classList.add('scrolled');
+            hasScrolled = true;
+        } else {
+            header.classList.remove('scrolled');
+            hasScrolled = false;
+        }
+
+        // Real-time logo scaling
+        if (mainLogo) {
+            const introTop = introSection.getBoundingClientRect().top;
+            const scrollRatio = Math.min(1, Math.max(0, introTop / (window.innerHeight / 3)));
+            const scaleValue = 1 + (scrollRatio * 0.4);
+            mainLogo.style.transform = `scale(${scaleValue})`;
+        }
     }
-    
-    // Update active navigation link
+    // In all cases, update active navigation link (no change needed)
     updateActiveNavLink();
 }
+
 
 /**
  * Toggle mobile menu
@@ -133,9 +143,9 @@ function toggleMenu() {
  */
 function handleVideoSources() {
     if (!heroVideo) return;
-    
+
     const width = window.innerWidth;
-    
+
     // Only load video when visible
     if ('IntersectionObserver' in window) {
         const observer = new IntersectionObserver((entries) => {
@@ -158,15 +168,15 @@ function handleVideoSources() {
  */
 function loadAppropriateVideo(width) {
     if (!heroVideo) return;
-    
+
     const sources = heroVideo.getElementsByTagName('source');
     let selectedSource = null;
-    
+
     // Find appropriate source
     for (const source of sources) {
         const media = source.getAttribute('media');
         if (!media) continue;
-        
+
         if ((media.includes('min-width: 992px') && width >= 992) ||
             (media.includes('min-width: 768px') && media.includes('max-width: 991px') && width >= 768 && width <= 991) ||
             (media.includes('max-width: 767px') && width <= 767)) {
@@ -174,7 +184,7 @@ function loadAppropriateVideo(width) {
             break;
         }
     }
-    
+
     // Only reload if source changed
     if (selectedSource && heroVideo.src !== selectedSource) {
         heroVideo.src = selectedSource;
@@ -192,17 +202,17 @@ function smoothScroll(e) {
     e.preventDefault();
     const targetId = this.getAttribute('href');
     const targetElement = document.querySelector(targetId);
-    
+
     if (targetElement) {
         const headerOffset = header.offsetHeight;
         const elementPosition = targetElement.getBoundingClientRect().top;
         const offsetPosition = elementPosition + window.scrollY - headerOffset;
-        
+
         window.scrollTo({
             top: offsetPosition,
             behavior: 'smooth'
         });
-        
+
         if (isMenuOpen) {
             toggleMenu();
         }
@@ -218,7 +228,7 @@ function handleFormSubmit(e) {
     const submitButton = form.querySelector('button[type="submit"]');
     const originalText = submitButton.textContent;
     let isValid = true;
-    
+
     // Validate required fields
     const requiredFields = form.querySelectorAll('[required]');
     requiredFields.forEach(field => {
@@ -229,12 +239,12 @@ function handleFormSubmit(e) {
             field.classList.remove('error');
         }
     });
-    
+
     if (!isValid) {
         showNotification('Prosimo, izpolnite vsa obvezna polja.', 'error');
         return;
     }
-    
+
     // Email validation
     const emailField = form.querySelector('input[type="email"]');
     if (emailField && !isValidEmail(emailField.value)) {
@@ -242,11 +252,11 @@ function handleFormSubmit(e) {
         showNotification('Vnesite veljaven e-poštni naslov.', 'error');
         return;
     }
-    
+
     // Submit form
     submitButton.disabled = true;
     submitButton.textContent = 'Pošiljam...';
-    
+
     // Simulate form submission (replace with actual API call)
     setTimeout(() => {
         form.reset();
@@ -269,13 +279,13 @@ function isValidEmail(email) {
 function showNotification(message, type = 'success') {
     // Remove existing notifications
     document.querySelectorAll('.notification').forEach(n => n.remove());
-    
+
     // Create notification
     const notification = document.createElement('div');
     notification.className = `notification ${type}`;
     notification.textContent = message;
     document.body.appendChild(notification);
-    
+
     // Auto-remove after timeout
     setTimeout(() => {
         notification.style.animation = `slide-out ${NOTIFICATION_ANIMATION_DURATION / 1000}s forwards`;
@@ -308,23 +318,23 @@ function initializePage() {
     // Set initial states
     updateScrollEffects(window.scrollY);
     handleVideoSources();
-    
+
     // Event listeners
     window.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('resize', debounce(handleVideoSources, RESIZE_DEBOUNCE_DELAY));
     hamburger.addEventListener('click', toggleMenu);
-    
+
     navLinks.forEach(link => {
         link.addEventListener('click', smoothScroll);
     });
-    
+
     forms.forEach(form => {
         form.addEventListener('submit', handleFormSubmit);
     });
-    
+
     document.addEventListener('click', handleOutsideClick);
     document.addEventListener('keydown', handleEscKey);
-    
+
     // Set logo initial size
     if (mainLogo && window.innerWidth > MOBILE_BREAKPOINT) {
         mainLogo.style.transform = 'scale(1.4)';

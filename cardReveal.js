@@ -1,19 +1,28 @@
 /**
- * cardReveal.js - Position Tracking System
- * Ensures active card always stays visible at header
+ * cardReveal.js - CSS Transform Positioning - v4 - CSS Transform & Simplified JS
+ * Uses CSS transform for positioning, simplified JS, smooth flow
  */
 document.addEventListener('DOMContentLoaded', () => {
+    // ==============================================
+    // CONFIGURABLE SETTINGS
+    // ==============================================
+    const SETTINGS = {
+        HEADER_PADDING_PERCENT: 10,    // Percentage of viewport height for header padding
+        HEADER_BUFFER: 15,               // Minimum space below header (px) - fallback
+    };
+    // ==============================================
+
     // State tracking
     let activeCardId = null;
-    let positionMonitorTimer = null;
 
     // Find all cards
     const cards = document.querySelectorAll('.card');
 
     /**
-     * Load card content from JSON
+     * Load card content from JSON (No changes needed)
      */
     async function loadCardContent(card) {
+        // ... (same loadCardContent function as before) ...
         try {
             // Skip if already loaded
             if (card.dataset.loaded === 'true') return;
@@ -105,105 +114,64 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
-     * Get header height including buffer
+     * Get header height including padding (%) and buffer
      */
     function getHeaderOffset() {
         const headerHeight = document.getElementById('header').offsetHeight;
-        const buffer = 15; // Additional space below header
-        return headerHeight + buffer;
+        const paddingHeight = (window.innerHeight * SETTINGS.HEADER_PADDING_PERCENT) / 100;
+        return headerHeight + Math.max(paddingHeight, SETTINGS.HEADER_BUFFER);
     }
 
     /**
-     * Position active card at the header with smooth animation
+     * Position active card using CSS transform
      */
-    function positionActiveCard() {
-        if (!activeCardId) return;
+    function positionActiveCard(card) { // Pass card as argument
+        if (!card) return; // Card is already retrieved in handleCardClick
 
-        const card = document.querySelector(`.card[data-content-id="${activeCardId}"]`);
-        if (!card) return;
+        requestAnimationFrame(() => {
+            const rect = card.getBoundingClientRect();
+            const headerOffset = getHeaderOffset();
 
-        const rect = card.getBoundingClientRect();
-        const headerOffset = getHeaderOffset();
-
-        // If card is not at the right position (accounting for small tolerance)
-        if (Math.abs(rect.top - headerOffset) > 5) {
-            window.scrollTo({
-                top: window.scrollY + rect.top - headerOffset,
-                behavior: 'smooth'
-            });
-        }
+            const translateYValue = headerOffset - rect.top; // Calculate translateY
+            card.style.transform = `translateY(${translateYValue}px)`; // Apply transform
+        });
     }
 
-    /**
-     * Start monitoring position of active card
-     * This ensures card stays at header even when other elements change size
-     */
-    function startPositionMonitoring() {
-        // Clear any existing timer
-        stopPositionMonitoring();
-
-        // Set up a timer to check and adjust position
-        positionMonitorTimer = setInterval(() => {
-            positionActiveCard();
-        }, 300); // Check every 300ms during transitions
-
-        // Also listen for transition end events
-        document.addEventListener('transitionend', handleTransitionEnd);
-    }
 
     /**
-     * Stop monitoring position
+     * Handle card click - v4 - Simplified Click Handler
      */
-    function stopPositionMonitoring() {
-        if (positionMonitorTimer) {
-            clearInterval(positionMonitorTimer);
-            positionMonitorTimer = null;
-        }
-        document.removeEventListener('transitionend', handleTransitionEnd);
-    }
+    function handleCardClick(clickedCard) { // Renamed parameter for clarity
+        const cardId = clickedCard.getAttribute('data-content-id');
 
-    /**
-     * Handle transition end events
-     */
-    function handleTransitionEnd(e) {
-        // When a size-changing transition completes, check position
-        if (e.propertyName === 'max-height') {
-            positionActiveCard();
-        }
-    }
-
-    /**
-     * Handle card click
-     */
-    function handleCardClick(card) {
-        const cardId = card.getAttribute('data-content-id');
-
-        // If clicking active card, close it and stop monitoring
+        // If clicking active card, close it
         if (cardId === activeCardId) {
-            card.classList.remove('active');
-            activeCardId = null;
-            stopPositionMonitoring();
+            const currentActiveCard = document.querySelector(`.card.active`); // Get active card to reset transform
+            if (currentActiveCard) {
+                currentActiveCard.style.transform = ''; // Reset CSS transform to none, for closing animation
+                currentActiveCard.classList.remove('active');
+                activeCardId = null;
+            }
             return;
         }
 
         // Close currently open card if any
         if (activeCardId) {
-            document.querySelector(`.card[data-content-id="${activeCardId}"]`)?.classList.remove('active');
+            const currentlyActiveCard = document.querySelector(`.card.active`);
+            if (currentlyActiveCard) {
+                currentlyActiveCard.style.transform = ''; // Reset CSS transform for closing animation
+                currentlyActiveCard.classList.remove('active');
+            }
         }
 
         // Open this card
-        card.classList.add('active');
+        clickedCard.classList.add('active');
         activeCardId = cardId;
 
-        // Initial positioning (with a slight delay to let the DOM update)
-        setTimeout(() => {
-            positionActiveCard();
-            // Start monitoring position to keep it in view
-            startPositionMonitoring();
-        }, 50);
+        positionActiveCard(clickedCard); // Pass clicked card to positioning function
     }
 
-    // Initialize cards
+    // Initialize cards (No changes needed)
     cards.forEach(card => {
         // Add ID anchor if not present
         const contentId = card.getAttribute('data-content-id');
@@ -221,28 +189,14 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Handle fragment navigation on page load
+    // Handle fragment navigation on page load (No changes needed)
     if (window.location.hash) {
-        const cardId = window.location.hash.substring(1); // Remove the # character
+        const cardId = window.location.hash.substring(1);
         const targetCard = document.getElementById(cardId);
 
         if (targetCard && targetCard.classList.contains('card')) {
-            setTimeout(() => handleCardClick(targetCard), 500);
+            requestAnimationFrame(() => handleCardClick(targetCard));
         }
     }
 
-    // Stop monitoring when user scrolls manually
-    let userScrollTimer;
-    window.addEventListener('scroll', () => {
-        // Temporarily pause position monitoring during user scroll
-        stopPositionMonitoring();
-
-        // Resume after user stops scrolling
-        clearTimeout(userScrollTimer);
-        userScrollTimer = setTimeout(() => {
-            if (activeCardId) {
-                startPositionMonitoring();
-            }
-        }, 500);
-    }, { passive: true });
 });
