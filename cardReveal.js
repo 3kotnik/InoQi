@@ -1,14 +1,12 @@
 /**
- * cardReveal.js - Position Tracking System (Corrected Scroll Amount)
- * Ensures active card header is visible at top, without over-scrolling
+ * cardReveal.js - Position Tracking (Viewport Constraint & rAF) - v2 - Further Refinement
+ * Ensures card header visible, handles viewport height, uses rAF timing, *Corrected Viewport Handling*
  */
 document.addEventListener('DOMContentLoaded', () => {
     // ==============================================
     // CONFIGURABLE ANIMATION SETTINGS
     // ==============================================
     const SETTINGS = {
-        // Animation speeds (no changes needed here for scroll behavior)
-        INITIAL_POSITION_DELAY: 150,      // Increased delay (ms) - Important!
         HEADER_BUFFER: 15,               // Space between header and card (px)
     };
     // ==============================================
@@ -123,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
-     * Position active card at the header with smooth animation (Corrected Scroll)
+     * Position active card at the header (Viewport Handling, rAF) - v2 - Corrected Viewport Logic
      */
     function positionActiveCard() {
         if (!activeCardId) return;
@@ -131,26 +129,32 @@ document.addEventListener('DOMContentLoaded', () => {
         const card = document.querySelector(`.card[data-content-id="${activeCardId}"]`);
         if (!card) return;
 
-        const rect = card.getBoundingClientRect();
-        const headerOffset = getHeaderOffset();
-        const cardHeaderHeight = card.querySelector('.card-header').offsetHeight; // Get card header height
+        requestAnimationFrame(() => { // Use requestAnimationFrame
+            const rect = card.getBoundingClientRect();
+            const headerOffset = getHeaderOffset();
+            const cardHeaderHeight = card.querySelector('.card-header').offsetHeight;
+            const viewportHeight = window.innerHeight;
+            const cardContentHeight = card.offsetHeight; // Total expanded card height
 
-        // Calculate the exact scroll position to align card header just below page header
-        const scrollTarget = window.scrollY + rect.top - headerOffset;
+            let scrollTarget = 0; // Initialize scrollTarget to 0
 
-        // Scroll only if card header is below the intended position
-        if (rect.top > headerOffset) {
-            window.scrollTo({
-                top: scrollTarget,
-                behavior: 'smooth'
-            });
-        }
-        // else if (rect.top < headerOffset - cardHeaderHeight ) { // Alternative: if card header is above, also scroll. (Optional, if needed in some layouts)
-        //    window.scrollTo({
-        //        top: scrollTarget,
-        //        behavior: 'smooth'
-        //    });
-        //}
+            if (cardContentHeight > viewportHeight) {
+                // Card is taller than viewport - align header at the very top (below fixed header)
+                scrollTarget = window.scrollY + rect.top - headerOffset;
+                if (scrollTarget < 0) scrollTarget = 0; // Prevent negative scroll if card is already near top
+
+            } else {
+                // Card is shorter than viewport - align header just below page header (original logic)
+                scrollTarget = window.scrollY + rect.top - headerOffset;
+            }
+
+            if (rect.top > headerOffset || cardContentHeight > viewportHeight) { // Scroll if card is below header or taller than viewport
+                window.scrollTo({
+                    top: scrollTarget,
+                    behavior: 'smooth'
+                });
+            }
+        });
     }
 
 
@@ -176,10 +180,10 @@ document.addEventListener('DOMContentLoaded', () => {
         card.classList.add('active');
         activeCardId = cardId;
 
-        // Initial positioning (with a slight delay to let the DOM update)
-        setTimeout(() => {
+        // Initial positioning (using requestAnimationFrame now)
+        requestAnimationFrame(() => { // Use requestAnimationFrame for initial call too
             positionActiveCard(); // Call positionActiveCard once on open
-        }, SETTINGS.INITIAL_POSITION_DELAY);
+        });
     }
 
     // Initialize cards (No changes needed)
@@ -206,7 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const targetCard = document.getElementById(cardId);
 
         if (targetCard && targetCard.classList.contains('card')) {
-            setTimeout(() => handleCardClick(targetCard), 500);
+            requestAnimationFrame(() => handleCardClick(targetCard)); // Use rAF for fragment navigation too
         }
     }
 
