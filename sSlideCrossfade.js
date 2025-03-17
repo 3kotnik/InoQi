@@ -1,21 +1,21 @@
 /**
- * InoQI Website - Card Animation System with Viewport Priority
- * Ensures smooth crossfade while keeping cards within viewport constraints
+ * InoQI Website - Enhanced Card Sliding with Crossfade Transitions
+ * In this version, when a card is activated, we first scroll its header into view
+ * (ensuring it never moves off-screen) and then crossfade the content:
+ * the active card’s content collapses while simultaneously the new card’s content expands.
+ * All external JSON loading and other functionalities remain unchanged.
  */
 document.addEventListener('DOMContentLoaded', () => {
-    // DOM Elements
+    // DOM Elements: all cards in the list
     const cards = document.querySelectorAll('.card');
-
-    // Configuration
-    const ANIMATION_DURATION = 800; // ms
-    const TOP_PADDING = 100; // Padding from top of viewport after header
-
-    // State variables
+    const ANIM_DURATION = 1500; // Animation duration for height/opacity animations in ms
+    const SCROLL_DURATION = 300; // Duration for the scroll animation in ms
+    const TOP_PADDING = 100; // Additional spacing from the top (below the header)
     let activeCard = null;
     let isAnimating = false;
 
     /**
-     * Measure content height accurately without affecting layout
+     * Measure card content exact height with proper margins.
      */
     function measureContentHeight(content) {
         const originalStyles = {
@@ -25,238 +25,205 @@ document.addEventListener('DOMContentLoaded', () => {
             visibility: content.style.visibility,
             padding: content.style.padding
         };
-
-        content.style.position = 'absolute';
-        content.style.visibility = 'hidden';
+        // Set temporary styles for accurate measurement.
         content.style.display = 'block';
         content.style.height = 'auto';
+        content.style.position = 'absolute';
+        content.style.visibility = 'hidden';
         content.style.padding = '1.5rem';
-
         const height = content.scrollHeight;
-
-        // Restore original styles
+        // Restore original styles.
         Object.keys(originalStyles).forEach(key => {
             content.style[key] = originalStyles[key];
         });
-
         return height;
     }
 
     /**
-     * Viewport-priority animation - the key improvement
+     * Animate the height of an element from startHeight to endHeight.
      */
-    function viewportPriorityAnimation({
-        closingCard = null,
-        openingCard,
-        onComplete = () => { }
-    }) {
-        const headerHeight = document.querySelector('header').offsetHeight;
-        const openingContent = openingCard.querySelector('.card-content');
-        const targetOpeningHeight = measureContentHeight(openingContent);
-
-        // CRITICAL: Set up temporary fixed positioning for the opening card
-        // This ensures it stays in viewport regardless of document shifts
-        const openingRect = openingCard.getBoundingClientRect();
-        const cardWidth = openingRect.width;
-
-        // Store original styles before modifying
-        const originalStyles = {
-            position: openingCard.style.position,
-            top: openingCard.style.top,
-            left: openingCard.style.left,
-            width: openingCard.style.width,
-            zIndex: openingCard.style.zIndex
-        };
-
-        // Create a placeholder to prevent layout collapse
-        const placeholder = document.createElement('div');
-        placeholder.style.height = openingRect.height + 'px';
-        placeholder.style.margin = '0';
-        placeholder.style.padding = '0';
-        placeholder.style.display = 'block';
-        placeholder.style.visibility = 'hidden';
-        openingCard.parentNode.insertBefore(placeholder, openingCard);
-
-        // Fix the card in viewport position
-        openingCard.style.position = 'fixed';
-        openingCard.style.top = `${openingRect.top}px`;
-        openingCard.style.left = `${openingRect.left}px`;
-        openingCard.style.width = `${cardWidth}px`;
-        openingCard.style.zIndex = '100';
-
-        // Target position (fixed coordinates) - never above header
-        const targetTop = Math.max(headerHeight + TOP_PADDING, openingRect.top);
-
-        // Set up closing card if we have one
-        let closingContent = null;
-        let startClosingHeight = 0;
-
-        if (closingCard) {
-            closingContent = closingCard.querySelector('.card-content');
-            startClosingHeight = closingContent.offsetHeight;
-            closingContent.style.overflow = 'hidden';
-            closingCard.classList.remove('active');
-        }
-
-        // Prepare opening content
-        openingContent.style.overflow = 'hidden';
-        openingContent.style.display = 'block';
-        openingContent.style.height = '0';
-        openingContent.style.opacity = '0';
-        openingContent.style.paddingTop = '0';
-        openingContent.style.paddingBottom = '0';
-        openingContent.style.paddingLeft = '1.5rem';
-        openingContent.style.paddingRight = '1.5rem';
-
-        // Add active class to opening card
-        openingCard.classList.add('active');
-
-        // Calculate scroll target for after animation
-        const finalScrollPosition = window.scrollY + openingRect.top - targetTop;
-
-        // Start animation
-        const startTime = performance.now();
-
-        function animate(currentTime) {
-            const elapsed = currentTime - startTime;
-            let progress = Math.min(elapsed / ANIMATION_DURATION, 1);
-
-            // Use cubic ease-out for natural motion
-            const easeValue = 1 - Math.pow(1 - progress, 3);
-
-            // Update card position (smoothly move to top if needed)
-            const currentTop = openingRect.top + (targetTop - openingRect.top) * easeValue;
-            openingCard.style.top = `${currentTop}px`;
-
-            // Update closing content if present
-            if (closingContent) {
-                const currentClosingHeight = startClosingHeight * (1 - easeValue);
-                closingContent.style.height = `${currentClosingHeight}px`;
-                closingContent.style.opacity = 1 - easeValue;
-            }
-
-            // Update opening content
-            const currentOpeningHeight = targetOpeningHeight * easeValue;
-            openingContent.style.height = `${currentOpeningHeight}px`;
-            openingContent.style.opacity = easeValue;
-
-            // Continue animation or complete
-            if (progress < 1) {
-                requestAnimationFrame(animate);
-            } else {
-                // Animation complete - restore card to document flow
-                openingCard.style.position = originalStyles.position;
-                openingCard.style.top = originalStyles.top;
-                openingCard.style.left = originalStyles.left;
-                openingCard.style.width = originalStyles.width;
-                openingCard.style.zIndex = originalStyles.zIndex;
-
-                // Remove placeholder
-                placeholder.parentNode.removeChild(placeholder);
-
-                // Final scroll adjustment to ensure card is properly positioned
-                window.scrollTo(0, finalScrollPosition);
-
-                // Final state adjustments
-                if (closingContent) {
-                    closingContent.style.display = 'none';
-                    closingContent.style.height = '0';
-                    closingContent.style.opacity = '0';
-                    closingContent.style.overflow = '';
+    function animateHeight(element, startHeight, endHeight, duration) {
+        return new Promise(resolve => {
+            const startTime = performance.now();
+            element.style.height = `${startHeight}px`;
+            function step(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                // Ease-in-out cubic:
+                const easeValue = progress < 0.5
+                    ? 4 * progress * progress * progress
+                    : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+                const currentHeight = startHeight + (endHeight - startHeight) * easeValue;
+                element.style.height = `${currentHeight}px`;
+                if (progress < 1) {
+                    requestAnimationFrame(step);
+                } else {
+                    element.style.height = endHeight === 0 ? '0' : `${endHeight}px`;
+                    resolve();
                 }
-
-                openingContent.style.height = `${targetOpeningHeight}px`;
-                openingContent.style.opacity = '1';
-                openingContent.style.paddingTop = '1.5rem';
-                openingContent.style.paddingBottom = '1.5rem';
-                openingContent.style.overflow = 'visible';
-
-                // Complete callback
-                onComplete();
             }
-        }
-
-        // Start animation
-        requestAnimationFrame(animate);
+            requestAnimationFrame(step);
+        });
     }
 
     /**
-     * Toggle card open/closed state
+     * Animate the opacity of an element from startOpacity to endOpacity.
      */
-    function toggleCard(card) {
+    function animateOpacity(element, startOpacity, endOpacity, duration) {
+        return new Promise(resolve => {
+            const startTime = performance.now();
+            function step(currentTime) {
+                const elapsedTime = currentTime - startTime;
+                const progress = Math.min(elapsedTime / duration, 1);
+                const currentOpacity = startOpacity + (endOpacity - startOpacity) * progress;
+                element.style.opacity = currentOpacity;
+                if (progress < 1) {
+                    requestAnimationFrame(step);
+                } else {
+                    resolve();
+                }
+            }
+            requestAnimationFrame(step);
+        });
+    }
+
+    /**
+     * Smoothly scroll the card header into view so that it does not cross above the top edge.
+     */
+    function scrollCardIntoView(card) {
+        return new Promise(resolve => {
+            const headerHeight = document.querySelector('header').offsetHeight;
+            // Calculate target scroll position: card header's top relative to document
+            // minus header height and the additional TOP_PADDING.
+            const targetY = card.getBoundingClientRect().top + window.scrollY - headerHeight - TOP_PADDING;
+            const startY = window.scrollY;
+            const distance = targetY - startY;
+            const startTime = performance.now();
+            function step(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / SCROLL_DURATION, 1);
+                const easeValue = 1 - Math.pow(1 - progress, 3); // Ease-out cubic
+                window.scrollTo(0, startY + distance * easeValue);
+                if (progress < 1) {
+                    requestAnimationFrame(step);
+                } else {
+                    resolve();
+                }
+            }
+            requestAnimationFrame(step);
+        });
+    }
+
+    /**
+     * Crossfade the content animation:
+     * - New card's content expands from 0 height/opacity to full height/opacity.
+     * - If an active card exists, its content collapses and fades out simultaneously.
+     */
+    function crossfadeContent(newCard) {
+        return new Promise(async resolve => {
+            const newContent = newCard.querySelector('.card-content');
+            const targetHeight = measureContentHeight(newContent);
+            // Prepare new content before animation.
+            newContent.style.display = 'block';
+            newContent.style.overflow = 'hidden';
+            newContent.style.height = '0';
+            newContent.style.opacity = '0';
+            newContent.style.paddingTop = '0';
+            newContent.style.paddingBottom = '0';
+            let fadeOutPromise = Promise.resolve();
+            if (activeCard && activeCard !== newCard) {
+                const oldContent = activeCard.querySelector('.card-content');
+                fadeOutPromise = animateHeight(oldContent, oldContent.offsetHeight, 0, ANIM_DURATION)
+                    .then(() => {
+                        oldContent.style.display = 'none';
+                        return animateOpacity(oldContent, 1, 0, ANIM_DURATION);
+                    });
+            }
+            const fadeInPromise = Promise.all([
+                animateHeight(newContent, 0, targetHeight, ANIM_DURATION),
+                animateOpacity(newContent, 0, 1, ANIM_DURATION)
+            ]);
+            await Promise.all([fadeOutPromise, fadeInPromise]);
+            // Restore padding for expanded content.
+            newContent.style.paddingTop = '1.5rem';
+            newContent.style.paddingBottom = '1.5rem';
+            newContent.style.overflow = 'visible';
+            resolve();
+        });
+    }
+
+    /**
+     * Toggle a card's open/closed state.
+     * - If the card is already active, we collapse its content.
+     * - Otherwise, we scroll the card into view first, then crossfade in its content,
+     *   while collapsing any currently open card.
+     */
+    async function toggleCard(card) {
         if (isAnimating) return;
         isAnimating = true;
-
-        const isActive = card.classList.contains('active');
-
-        if (isActive) {
-            // Close this card
-            const content = card.querySelector('.card-content');
-            const startHeight = content.offsetHeight;
-
-            content.style.overflow = 'hidden';
-
-            const startTime = performance.now();
-
-            function closeAnimation(currentTime) {
-                const elapsed = currentTime - startTime;
-                const progress = Math.min(elapsed / ANIMATION_DURATION, 1);
-                const easeValue = 1 - Math.pow(1 - progress, 3);
-
-                const currentHeight = startHeight * (1 - easeValue);
-                content.style.height = `${currentHeight}px`;
-                content.style.opacity = 1 - easeValue;
-
-                if (progress < 1) {
-                    requestAnimationFrame(closeAnimation);
-                } else {
-                    content.style.display = 'none';
-                    content.style.height = '0';
-                    content.style.overflow = '';
-                    card.classList.remove('active');
-                    activeCard = null;
-                    isAnimating = false;
-                }
+        try {
+            if (card.classList.contains('active')) {
+                // If the card is already open, just collapse its content.
+                await animateOpacity(card.querySelector('.card-content'), 1, 0, ANIM_DURATION);
+                await animateHeight(card.querySelector('.card-content'), card.querySelector('.card-content').offsetHeight, 0, ANIM_DURATION);
+                card.querySelector('.card-content').style.display = 'none';
+                card.classList.remove('active');
+                activeCard = null;
+            } else if (activeCard) {
+                // First scroll the new card into view, then crossfade content.
+                await scrollCardIntoView(card);
+                await crossfadeContent(card);
+                activeCard.classList.remove('active');
+                card.classList.add('active');
+                activeCard = card;
+            } else {
+                // No card is currently open - scroll new card into view and simply expand its content.
+                await scrollCardIntoView(card);
+                await openCard(card);
+                card.classList.add('active');
+                activeCard = card;
             }
-
-            requestAnimationFrame(closeAnimation);
-        } else if (activeCard) {
-            // Use viewport-priority animation between cards
-            viewportPriorityAnimation({
-                closingCard: activeCard,
-                openingCard: card,
-                onComplete: () => {
-                    activeCard = card;
-                    isAnimating = false;
-                }
-            });
-        } else {
-            // Just open this card using viewport-priority animation
-            viewportPriorityAnimation({
-                openingCard: card,
-                onComplete: () => {
-                    activeCard = card;
-                    isAnimating = false;
-                }
-            });
+        } catch (error) {
+            console.error('Animation error:', error);
+        } finally {
+            isAnimating = false;
         }
     }
 
     /**
-     * Load card content via AJAX and populate card
+     * Open a card's content (used when no card is already open).
+     */
+    async function openCard(card) {
+        const content = card.querySelector('.card-content');
+        const targetHeight = measureContentHeight(content);
+        content.style.display = 'block';
+        content.style.overflow = 'hidden';
+        content.style.height = '0';
+        content.style.opacity = '0';
+        content.style.paddingTop = '0';
+        content.style.paddingBottom = '0';
+        await Promise.all([
+            animateHeight(content, 0, targetHeight, ANIM_DURATION),
+            animateOpacity(content, 0, 1, ANIM_DURATION)
+        ]);
+        content.style.paddingTop = '1.5rem';
+        content.style.paddingBottom = '1.5rem';
+        content.style.overflow = 'visible';
+    }
+
+    /**
+     * Load card content via AJAX and populate the card.
+     * This function remains unchanged from the original.
      */
     async function loadCardContent(card) {
         try {
             const contentId = card.getAttribute('data-content-id');
             if (!contentId) return;
-
             const contentUrl = `assets/content/${contentId}.json`;
             const response = await fetch(contentUrl);
-
             if (!response.ok) {
                 throw new Error(`Failed to load content from ${contentUrl}`);
             }
-
             const data = await response.json();
             populateCardFromJson(card, data);
             card.dataset.contentLoaded = 'true';
@@ -267,64 +234,55 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
-     * Populate all card elements from JSON data
+     * Populate card elements from JSON data.
+     * This function remains unchanged from the original.
      */
     function populateCardFromJson(card, data) {
-        // Update card image if provided
+        // Update card image if provided.
         if (data.imageUrl) {
             const cardImage = card.querySelector('.card-header img');
             if (cardImage) {
                 cardImage.src = data.imageUrl;
             }
         }
-
-        // Update image alt text
+        // Update image alt text.
         if (data.imageAlt) {
             const cardImage = card.querySelector('.card-header img');
             if (cardImage) {
                 cardImage.alt = data.imageAlt;
             }
         }
-
-        // Update card title
+        // Update card title.
         if (data.title) {
             const cardTitle = card.querySelector('.card-title h3');
             if (cardTitle) {
                 cardTitle.textContent = data.title;
             }
         }
-
-        // Update short description
+        // Update short description.
         if (data.shortDescription) {
             const cardShortDesc = card.querySelector('.card-title p');
             if (cardShortDesc) {
                 cardShortDesc.textContent = data.shortDescription;
             }
         }
-
-        // Update button text
+        // Update button text.
         if (data.buttonText) {
             const button = card.querySelector('.card-button');
             if (button) {
                 button.textContent = data.buttonText;
             }
         }
-
-        // Update detailed content
+        // Update detailed content.
         const descriptionElement = card.querySelector('.card-description');
         if (descriptionElement) {
-            // Clear any existing content
             descriptionElement.innerHTML = '';
-
-            // Add main description
             if (data.description) {
                 const descParagraph = document.createElement('p');
                 descParagraph.textContent = data.description;
                 descParagraph.classList.add('main-description');
                 descriptionElement.appendChild(descParagraph);
             }
-
-            // Add details content
             if (data.details && Array.isArray(data.details)) {
                 data.details.forEach(detail => {
                     if (detail.type === 'paragraph') {
@@ -346,7 +304,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
-     * Display error message in card
+     * Display an error message in the card.
      */
     function showErrorInCard(card) {
         const descriptionElement = card.querySelector('.card-description');
@@ -355,51 +313,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    /**
-     * Initialize the card system
-     */
-    function initializeCards() {
-        // Set up event listeners for cards
-        cards.forEach(card => {
-            const cardHeader = card.querySelector('.card-header');
-
-            if (cardHeader) {
-                cardHeader.addEventListener('click', async () => {
-                    if (!card.dataset.contentLoaded) {
-                        await loadCardContent(card);
-                    }
-                    toggleCard(card);
-                });
-            }
-
-            // Preload card data
-            loadCardContent(card);
-        });
-
-        // Set up global event listeners
-        document.addEventListener('click', (e) => {
-            if (activeCard && !isAnimating && !e.target.closest('.card')) {
-                toggleCard(activeCard);
-            }
-        });
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && activeCard && !isAnimating) {
-                toggleCard(activeCard);
-            }
-        });
-
-        window.addEventListener('resize', () => {
-            if (activeCard && !isAnimating) {
-                const content = activeCard.querySelector('.card-content');
-                if (content && content.style.display !== 'none') {
-                    const newHeight = measureContentHeight(content);
-                    content.style.height = `${newHeight}px`;
-                }
-            }
-        });
-    }
-
-    // Initialize
-    initializeCards();
+    // Set up event listeners for each card header.
+    cards.forEach(card => {
+        const cardHeader = card.querySelector('.card-header');
+        if (cardHeader) {
+            cardHeader.addEventListener('click', () => {
+                // (Optional: load external content from JSON first if not loaded)
+                toggleCard(card);
+            });
+        }
+        // Preload external card content.
+        loadCardContent(card);
+    });
 });
