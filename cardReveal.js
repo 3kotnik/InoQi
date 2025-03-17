@@ -1,22 +1,19 @@
 /**
- * cardReveal.js - Position Tracking (Debounced Clicks, Smooth Scroll, % Padding) - v3 - Refined for Smoothness
- * Addresses rapid clicks, jagged animation, and adds %-based header padding
+ * cardReveal.js - CSS Transform Positioning - v4 - CSS Transform & Simplified JS
+ * Uses CSS transform for positioning, simplified JS, smooth flow
  */
 document.addEventListener('DOMContentLoaded', () => {
     // ==============================================
-    // CONFIGURABLE ANIMATION SETTINGS
+    // CONFIGURABLE SETTINGS
     // ==============================================
     const SETTINGS = {
-        HEADER_PADDING_PERCENT: 15,    // Percentage of viewport height for header padding
+        HEADER_PADDING_PERCENT: 10,    // Percentage of viewport height for header padding
         HEADER_BUFFER: 15,               // Minimum space below header (px) - fallback
-        DEBOUNCE_DELAY: 200,            // Delay for debouncing card clicks (ms)
-        SCROLL_TOLERANCE: 2,             // Tolerance for scroll position check (pixels) - for smoother animation
     };
     // ==============================================
 
     // State tracking
     let activeCardId = null;
-    let cardClickDebounce = false; // Debounce flag
 
     // Find all cards
     const cards = document.querySelectorAll('.card');
@@ -26,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     async function loadCardContent(card) {
         // ... (same loadCardContent function as before) ...
-         try {
+        try {
             // Skip if already loaded
             if (card.dataset.loaded === 'true') return;
 
@@ -122,77 +119,56 @@ document.addEventListener('DOMContentLoaded', () => {
     function getHeaderOffset() {
         const headerHeight = document.getElementById('header').offsetHeight;
         const paddingHeight = (window.innerHeight * SETTINGS.HEADER_PADDING_PERCENT) / 100;
-        return headerHeight + Math.max(paddingHeight, SETTINGS.HEADER_BUFFER); // Use percentage padding, or buffer if % is smaller
+        return headerHeight + Math.max(paddingHeight, SETTINGS.HEADER_BUFFER);
     }
 
     /**
-     * Position active card at the header (Viewport Handling, rAF, Smooth Scroll) - v3 - Debounced, Smoother
+     * Position active card using CSS transform
      */
-    function positionActiveCard() {
-        if (!activeCardId) return;
-
-        const card = document.querySelector(`.card[data-content-id="${activeCardId}"]`);
-        if (!card) return;
+    function positionActiveCard(card) { // Pass card as argument
+        if (!card) return; // Card is already retrieved in handleCardClick
 
         requestAnimationFrame(() => {
             const rect = card.getBoundingClientRect();
             const headerOffset = getHeaderOffset();
-            const cardContentHeight = card.offsetHeight;
-            const viewportHeight = window.innerHeight;
 
-            let scrollTarget = 0;
-
-            if (cardContentHeight > viewportHeight) {
-                scrollTarget = window.scrollY + rect.top - headerOffset;
-                if (scrollTarget < 0) scrollTarget = 0;
-            } else {
-                scrollTarget = window.scrollY + rect.top - headerOffset;
-            }
-
-            // Refined scroll condition with tolerance for smoother animation
-            if (Math.abs(rect.top - headerOffset) > SETTINGS.SCROLL_TOLERANCE || cardContentHeight > viewportHeight) {
-                window.scrollTo({
-                    top: scrollTarget,
-                    behavior: 'smooth'
-                });
-            }
+            const translateYValue = headerOffset - rect.top; // Calculate translateY
+            card.style.transform = `translateY(${translateYValue}px)`; // Apply transform
         });
     }
 
 
     /**
-     * Handle card click (Debounced) - v3 - Debounced Card Clicks
+     * Handle card click - v4 - Simplified Click Handler
      */
-    function handleCardClick(card) {
-        if (cardClickDebounce) {
-            return; // Ignore clicks during debounce
-        }
-        cardClickDebounce = true;
-
-        const cardId = card.getAttribute('data-content-id');
+    function handleCardClick(clickedCard) { // Renamed parameter for clarity
+        const cardId = clickedCard.getAttribute('data-content-id');
 
         // If clicking active card, close it
         if (cardId === activeCardId) {
-            card.classList.remove('active');
-            activeCardId = null;
-            cardClickDebounce = false; // Reset debounce immediately on close
+            const currentActiveCard = document.querySelector(`.card.active`); // Get active card to reset transform
+            if (currentActiveCard) {
+                currentActiveCard.style.transform = ''; // Reset CSS transform to none, for closing animation
+                currentActiveCard.classList.remove('active');
+                activeCardId = null;
+            }
             return;
         }
 
         // Close currently open card if any
         if (activeCardId) {
-            document.querySelector(`.card[data-content-id="${activeCardId}"]`)?.classList.remove('active');
+            const currentlyActiveCard = document.querySelector(`.card.active`);
+            if (currentlyActiveCard) {
+                currentlyActiveCard.style.transform = ''; // Reset CSS transform for closing animation
+                currentlyActiveCard.classList.remove('active');
+            }
         }
 
         // Open this card
-        card.classList.add('active');
+        clickedCard.classList.add('active');
         activeCardId = cardId;
 
-        // Initial positioning (using requestAnimationFrame)
-        requestAnimationFrame(() => {
-            positionActiveCard();
-            setTimeout(() => { cardClickDebounce = false; }, SETTINGS.DEBOUNCE_DELAY); // Reset debounce after delay
-        });
+        positionActiveCard(clickedCard); // Pass clicked card to positioning function
     }
 
     // Initialize cards (No changes needed)

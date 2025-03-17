@@ -1,4 +1,6 @@
-﻿/**
+﻿/* --- cardReveal.css --- (Modified) */
+
+/**
  * cardReveal.css - Enhanced Card Styling
  * With configurable animation speeds
  */
@@ -25,6 +27,7 @@
     gap: 2rem;
     margin-bottom: 2rem;
     scroll-margin-top: 100px; /* For anchor navigation */
+    position: relative; /* ADDED: To contain absolutely positioned cards */
 }
 
 /* Card Base */
@@ -35,6 +38,7 @@
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
     transition: box-shadow var(--card-hover-duration) var(--standard-ease), transform var(--card-hover-duration) var(--standard-ease);
     scroll-margin-top: 100px; /* For anchor navigation */
+    position: relative; /* ADDED: For stacking context of absolute elements inside */
 }
 
     .card:hover {
@@ -42,7 +46,20 @@
         transform: translateY(-3px);
     }
 
-/* Card Header */
+    /* Active Card Styles */
+    .card.active {
+        position: absolute; /* CHANGED: Absolute positioning when active */
+        top: 0; /* Align to top of card-list container */
+        left: 0;
+        right: 0;
+        z-index: 10; /* Ensure it's on top of other cards */
+        box-shadow: var(--shadow); /* Keep shadow when active */
+        transform: translateY(0); /* Initial vertical position - will be adjusted by JS */
+        transition: transform var(--content-animation-duration) var(--standard-ease), max-height var(--content-animation-duration) var(--standard-ease), opacity var(--content-animation-duration) var(--standard-ease), padding-top var(--content-animation-duration) var(--standard-ease), padding-bottom var(--content-animation-duration) var(--standard-ease); /* Keep existing transitions + transform */
+    }
+
+
+/* Card Header (No changes) */
 .card-header {
     position: relative;
     overflow: hidden;
@@ -61,7 +78,7 @@
     transform: scale(1.05);
 }
 
-/* Card Title */
+/* Card Title (No changes) */
 .card-title {
     position: absolute;
     bottom: 0;
@@ -94,7 +111,7 @@ time {
     opacity: 0.9;
 }
 
-/* Card Content Animation */
+/* Card Content Animation (No changes) */
 .card-content {
     max-height: 0;
     overflow: hidden;
@@ -109,7 +126,7 @@ time {
     opacity: 1;
 }
 
-/* Content Styling */
+/* Content Styling (No changes) */
 .card-description {
     margin-bottom: 1.5rem;
 }
@@ -135,7 +152,7 @@ time {
         margin-bottom: 0.5rem;
     }
 
-/* Action button */
+/* Action button (No changes) */
 .card-button {
     display: inline-block;
     margin-top: 1rem;
@@ -161,7 +178,7 @@ time {
         box-shadow: 0 7px 14px rgba(0, 0, 0, 0.1);
     }
 
-/* Responsive adjustments */
+/* Responsive adjustments (No changes) */
 @media (max-width: 768px) {
     .card {
         border-radius: 0;
