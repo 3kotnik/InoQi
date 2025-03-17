@@ -1,18 +1,22 @@
 /**
- * cardReveal.js - Position Tracking (Viewport Constraint & rAF) - v2 - Further Refinement
- * Ensures card header visible, handles viewport height, uses rAF timing, *Corrected Viewport Handling*
+ * cardReveal.js - Position Tracking (Debounced Clicks, Smooth Scroll, % Padding) - v3 - Refined for Smoothness
+ * Addresses rapid clicks, jagged animation, and adds %-based header padding
  */
 document.addEventListener('DOMContentLoaded', () => {
     // ==============================================
     // CONFIGURABLE ANIMATION SETTINGS
     // ==============================================
     const SETTINGS = {
-        HEADER_BUFFER: 15,               // Space between header and card (px)
+        HEADER_PADDING_PERCENT: 10,    // Percentage of viewport height for header padding
+        HEADER_BUFFER: 15,               // Minimum space below header (px) - fallback
+        DEBOUNCE_DELAY: 200,            // Delay for debouncing card clicks (ms)
+        SCROLL_TOLERANCE: 2,             // Tolerance for scroll position check (pixels) - for smoother animation
     };
     // ==============================================
 
     // State tracking
     let activeCardId = null;
+    let cardClickDebounce = false; // Debounce flag
 
     // Find all cards
     const cards = document.querySelectorAll('.card');
@@ -113,15 +117,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     /**
-     * Get header height including buffer (No changes needed)
+     * Get header height including padding (%) and buffer
      */
     function getHeaderOffset() {
         const headerHeight = document.getElementById('header').offsetHeight;
-        return headerHeight + SETTINGS.HEADER_BUFFER;
+        const paddingHeight = (window.innerHeight * SETTINGS.HEADER_PADDING_PERCENT) / 100;
+        return headerHeight + Math.max(paddingHeight, SETTINGS.HEADER_BUFFER); // Use percentage padding, or buffer if % is smaller
     }
 
     /**
-     * Position active card at the header (Viewport Handling, rAF) - v2 - Corrected Viewport Logic
+     * Position active card at the header (Viewport Handling, rAF, Smooth Scroll) - v3 - Debounced, Smoother
      */
     function positionActiveCard() {
         if (!activeCardId) return;
@@ -129,26 +134,23 @@ document.addEventListener('DOMContentLoaded', () => {
         const card = document.querySelector(`.card[data-content-id="${activeCardId}"]`);
         if (!card) return;
 
-        requestAnimationFrame(() => { // Use requestAnimationFrame
+        requestAnimationFrame(() => {
             const rect = card.getBoundingClientRect();
             const headerOffset = getHeaderOffset();
-            const cardHeaderHeight = card.querySelector('.card-header').offsetHeight;
+            const cardContentHeight = card.offsetHeight;
             const viewportHeight = window.innerHeight;
-            const cardContentHeight = card.offsetHeight; // Total expanded card height
 
-            let scrollTarget = 0; // Initialize scrollTarget to 0
+            let scrollTarget = 0;
 
             if (cardContentHeight > viewportHeight) {
-                // Card is taller than viewport - align header at the very top (below fixed header)
                 scrollTarget = window.scrollY + rect.top - headerOffset;
-                if (scrollTarget < 0) scrollTarget = 0; // Prevent negative scroll if card is already near top
-
+                if (scrollTarget < 0) scrollTarget = 0;
             } else {
-                // Card is shorter than viewport - align header just below page header (original logic)
                 scrollTarget = window.scrollY + rect.top - headerOffset;
             }
 
-            if (rect.top > headerOffset || cardContentHeight > viewportHeight) { // Scroll if card is below header or taller than viewport
+            // Refined scroll condition with tolerance for smoother animation
+            if (Math.abs(rect.top - headerOffset) > SETTINGS.SCROLL_TOLERANCE || cardContentHeight > viewportHeight) {
                 window.scrollTo({
                     top: scrollTarget,
                     behavior: 'smooth'
@@ -159,16 +161,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     /**
-     * Handle card click (No changes needed)
+     * Handle card click (Debounced) - v3 - Debounced Card Clicks
      */
     function handleCardClick(card) {
+        if (cardClickDebounce) {
+            return; // Ignore clicks during debounce
+        }
+        cardClickDebounce = true;
+
         const cardId = card.getAttribute('data-content-id');
 
         // If clicking active card, close it
         if (cardId === activeCardId) {
             card.classList.remove('active');
             activeCardId = null;
-            return; // Important: Stop here, no positioning needed on close
+            cardClickDebounce = false; // Reset debounce immediately on close
+            return;
         }
 
         // Close currently open card if any
@@ -180,9 +188,10 @@ document.addEventListener('DOMContentLoaded', () => {
         card.classList.add('active');
         activeCardId = cardId;
 
-        // Initial positioning (using requestAnimationFrame now)
-        requestAnimationFrame(() => { // Use requestAnimationFrame for initial call too
-            positionActiveCard(); // Call positionActiveCard once on open
+        // Initial positioning (using requestAnimationFrame)
+        requestAnimationFrame(() => {
+            positionActiveCard();
+            setTimeout(() => { cardClickDebounce = false; }, SETTINGS.DEBOUNCE_DELAY); // Reset debounce after delay
         });
     }
 
@@ -206,15 +215,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Handle fragment navigation on page load (No changes needed)
     if (window.location.hash) {
-        const cardId = window.location.hash.substring(1); // Remove the # character
+        const cardId = window.location.hash.substring(1);
         const targetCard = document.getElementById(cardId);
 
         if (targetCard && targetCard.classList.contains('card')) {
-            requestAnimationFrame(() => handleCardClick(targetCard)); // Use rAF for fragment navigation too
+            requestAnimationFrame(() => handleCardClick(targetCard));
         }
     }
-
-    // No more scroll event listener needed for forced scroll prevention!
-    // The user now has full scroll control after the card opens.
 
 });
