@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     async function loadCardContent(card) {
         // ... (same loadCardContent function as before) ...
-        try {
+         try {
             // Skip if already loaded
             if (card.dataset.loaded === 'true') return;
 
