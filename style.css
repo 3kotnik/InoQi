@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* ========== ROOT VARIABLES AND RESET ========== */
 :root {
     --primary-color: #ff5a5f;
@@ -38,9 +39,66 @@ body {
     color: var(--text-color);
     margin: 0;
     padding-top: var(--header-height);
-    line-height: 1.6;
+=======
+/* ========================================
+   ROOT VARIABLES AND RESET
+   ======================================== */
+   :root {
+    /* Colors */
+    --primary: #ff5a5f;
+    --primary-dark: #e04e50;
+    --secondary: #333;
+    --text: #333;
+    --bg: #f8f8f8;
+    --bg-alt: #e6e6e6;
+    --white: #ffffff;
+    --form-border: #e2e2e2;
+    --form-focus: #d8d8d8;
+    --overlay: rgba(0, 0, 0, 0.7);
+    --overlay-light: rgba(255, 255, 255, 0.1);
+    --overlay-light-hover: rgba(255, 255, 255, 0.15);
+    
+    /* Layout */
+    --max-width: 1450px;
+    --form-max: 800px;
+    --radius-sm: 5px;
+    --radius: 8px;
+    --radius-lg: 12px;
+    --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.08);
+    --shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+    --padding-section: 4rem 0;
+    --padding-content: 0 2rem;
+    --gap-sm: 1rem;
+    --gap: 1.5rem;
+    --gap-lg: 2.5rem;
+    --gap-xl: 3rem;
+    
+    /* Header */
+    --header: 90px;
+    --header-mobile: 60px;
+    --header-scrolled: 70px;
+    --header-padding: 1.5rem;
+    
+    /* Effects */
+    --transition: all 0.3s ease;
 }
 
+/* Reset and Base Styles */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Raleway', sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    padding-top: var(--header);
+>>>>>>> parent of d3f99eb (Code optimization 1)
+    line-height: 1.6;
+}
+img { max-width: 100%; height: auto; display: block; }
+a { text-decoration: none; color: inherit; transition: var(--transition); }
+button { cursor: pointer; font-family: inherit; background: none; border: none; padding: 0; }
+ul, ol { list-style: none; }
+
+<<<<<<< HEAD
 img {
     max-width: 100%;
     height: auto;
@@ -66,13 +124,44 @@ ul, ol {
 }
 
 /* ========== UTILITY & LAYOUT ========== */
+=======
+/* Typography */
+h1, h2, h3 { line-height: 1.2; font-weight: 700; }
+h2 {
+    font-size: clamp(2rem, 4vw, 2.5rem);
+    margin-bottom: 2.5rem;
+    text-align: center;
+    padding-bottom: 1rem;
+    position: relative;
+}
+h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background-color: var(--primary);
+}
+h3 { font-size: 1.75rem; margin-bottom: 1.5rem; font-weight: 600; }
+p { margin-bottom: 1rem; }
+
+/* Layout and Utility */
+>>>>>>> parent of d3f99eb (Code optimization 1)
 .content {
     width: 100%;
     max-width: var(--max-width);
     margin: 0 auto;
-    padding: var(--content-padding);
+    padding: var(--padding-content);
+}
+section {
+    padding: var(--padding-section);
+    position: relative;
+    overflow: hidden;
 }
 
+<<<<<<< HEAD
 section {
     padding: 4rem 0;
     position: relative;
@@ -80,6 +169,45 @@ section {
 }
 
 /* ========== HEADER & NAVIGATION ========== */
+=======
+/* Buttons */
+.button {
+    background-color: var(--primary);
+    color: var(--white);
+    padding: 0.85rem 1.75rem;
+    border-radius: var(--radius);
+    font-size: 1rem;
+    font-weight: 600;
+    display: inline-block;
+    text-align: center;
+    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    border: none;
+    outline: none;
+}
+.button:hover, .button:focus {
+    background-color: var(--primary-dark);
+    transform: translateY(-3px);
+    box-shadow: 0 7px 14px rgba(0, 0, 0, 0.1);
+}
+.button:active {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Card and Box Styles */
+.card-base, .vision, .mission, .application-form, .contact-form {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    padding: 2rem;
+}
+.hover-lift { transition: var(--transition); }
+.hover-lift:hover { transform: translateY(-5px); box-shadow: var(--shadow); }
+
+/* ========================================
+   HEADER & NAVIGATION
+   ======================================== */
+>>>>>>> parent of d3f99eb (Code optimization 1)
 header {
     position: fixed;
     top: 0;
@@ -90,14 +218,12 @@ header {
     background-color: transparent;
     height: var(--header-height);
 }
-
 header.scrolled {
     background-color: rgba(51, 51, 51, 0.5);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     height: var(--header-height-scrolled);
 }
-
 .header-container {
     display: flex;
     justify-content: space-between;
@@ -106,22 +232,23 @@ header.scrolled {
     width: 100%;
     padding: 0 var(--header-padding);
 }
-
 .logo {
     display: flex;
     align-items: center;
     height: 100%;
 }
-
 .logo img {
     height: calc(var(--header-height) * 0.7);
     width: auto;
     transition: var(--transition);
     transform-origin: left center;
 }
-
 header.scrolled .logo img {
+<<<<<<< HEAD
     height: calc(var(--header-height-scrolled) * 0.7);
+=======
+    height: calc(var(--header-scrolled) * 0.7);
+>>>>>>> parent of d3f99eb (Code optimization 1)
 }
 
 /* Hamburger Menu */
@@ -139,7 +266,6 @@ header.scrolled .logo img {
     position: relative;
     z-index: 1001;
 }
-
 .hamburger span {
     width: 28px;
     height: 2px;
@@ -147,6 +273,7 @@ header.scrolled .logo img {
     transition: var(--transition);
     border-radius: 2px;
 }
+<<<<<<< HEAD
 
 .hamburger.active span:nth-child(1) {
     transform: translateY(8px) rotate(45deg);
@@ -159,6 +286,11 @@ header.scrolled .logo img {
 .hamburger.active span:nth-child(3) {
     transform: translateY(-8px) rotate(-45deg);
 }
+=======
+.hamburger.active span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+.hamburger.active span:nth-child(2) { opacity: 0; }
+.hamburger.active span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+>>>>>>> parent of d3f99eb (Code optimization 1)
 
 .nav-menu {
     position: fixed;
@@ -172,27 +304,39 @@ header.scrolled .logo img {
     -webkit-backdrop-filter: blur(10px);
     z-index: 1000;
     transition: var(--transition);
+<<<<<<< HEAD
     padding-top: var(--header-height);
+=======
+    padding-top: var(--header);
+>>>>>>> parent of d3f99eb (Code optimization 1)
     display: flex;
     flex-direction: column;
     overflow-y: auto;
 }
+<<<<<<< HEAD
 
 .nav-menu.active {
     right: 0;
 }
 
+=======
+.nav-menu.active { right: 0; }
+>>>>>>> parent of d3f99eb (Code optimization 1)
 .nav-links {
     display: flex;
     flex-direction: column;
     padding: 2rem;
     width: 100%;
 }
+<<<<<<< HEAD
 
 .nav-links li {
     margin-bottom: 1rem;
 }
 
+=======
+.nav-links li { margin-bottom: 1rem; }
+>>>>>>> parent of d3f99eb (Code optimization 1)
 .nav-links a {
     color: var(--white);
     font-size: 1.25rem;
@@ -201,7 +345,10 @@ header.scrolled .logo img {
     display: block;
     position: relative;
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> parent of d3f99eb (Code optimization 1)
 .nav-links a::after {
     content: '';
     position: absolute;
@@ -209,6 +356,7 @@ header.scrolled .logo img {
     left: 0;
     width: 0;
     height: 2px;
+<<<<<<< HEAD
     background-color: var(--primary-color);
     transition: var(--transition);
 }
@@ -216,7 +364,12 @@ header.scrolled .logo img {
 .nav-links a:hover::after,
 .nav-links a:focus::after {
     width: 100%;
+=======
+    background-color: var(--primary);
+    transition: var(--transition);
+>>>>>>> parent of d3f99eb (Code optimization 1)
 }
+.nav-links a:hover::after, .nav-links a:focus::after { width: 100%; }
 
 /* ========== HERO SECTION ========== */
 .hero {
@@ -226,7 +379,6 @@ header.scrolled .logo img {
     margin-top: calc(-1 * var(--header-height));
     background-color: #000;
 }
-
 .hero video {
     position: absolute;
     top: 50%;
@@ -239,7 +391,6 @@ header.scrolled .logo img {
     object-fit: cover;
     z-index: 1;
 }
-
 .hero-overlay {
     position: absolute;
     bottom: 0;
@@ -252,21 +403,18 @@ header.scrolled .logo img {
     align-items: flex-end;
     padding-bottom: 4rem;
 }
-
 .hero-content {
     color: var(--white);
     text-align: center;
     width: 100%;
     padding: 0 1rem;
 }
-
 .hero-content h1 {
     font-size: clamp(2.5rem, 5vw, 4rem);
     margin-bottom: 1rem;
     font-weight: 700;
     line-height: 1.2;
 }
-
 .hero-content h2 {
     font-size: clamp(1.25rem, 2.5vw, 2rem);
     margin-bottom: 2rem;
@@ -275,14 +423,21 @@ header.scrolled .logo img {
     margin-left: auto;
     margin-right: auto;
 }
+<<<<<<< HEAD
 
 /* ========== INTRO SECTION ========== */
+=======
+.hero-content h2::after { display: none; }
+
+/* ========================================
+   INTRO SECTION
+   ======================================== */
+>>>>>>> parent of d3f99eb (Code optimization 1)
 .intro {
     background-color: rgba(10, 10, 10, 0.8);
     color: var(--white);
     padding: 3rem 0;
 }
-
 .main-intro {
     font-size: clamp(1.25rem, 2vw, 1.75rem);
     text-align: center;
@@ -291,7 +446,6 @@ header.scrolled .logo img {
     font-weight: 500;
     line-height: 1.5;
 }
-
 .qualities {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -299,7 +453,6 @@ header.scrolled .logo img {
     max-width: 1000px;
     margin: 0 auto;
 }
-
 .quality-item {
     background: rgba(255, 255, 255, 0.1);
     padding: 1.5rem;
@@ -307,17 +460,20 @@ header.scrolled .logo img {
     text-align: center;
     transition: var(--transition);
 }
-
 .quality-item:hover {
     transform: translateY(-5px);
+<<<<<<< HEAD
     background: rgba(255, 255, 255, 0.15);
+=======
+    background: var(--overlay-light-hover);
+>>>>>>> parent of d3f99eb (Code optimization 1)
 }
-
 .quality-item p {
     font-size: 1.1rem;
     font-weight: 500;
 }
 
+<<<<<<< HEAD
 /* ========== CARD STYLES (WORKSHOPS & EVENTS) ========== */
 .card-list {
     display: flex;
@@ -445,6 +601,14 @@ section h3 {
     margin-top: 3rem;
 }
 
+=======
+/* ========================================
+   WORKSHOPS & EVENTS SECTIONS
+   ======================================== */
+.workshops { background-color: var(--bg-alt); }
+.events { background-color: var(--bg); }
+.action-footer { margin-top: 3rem; }
+>>>>>>> parent of d3f99eb (Code optimization 1)
 .action-group {
     display: flex;
     justify-content: space-between;
@@ -454,12 +618,12 @@ section h3 {
     border-radius: var(--card-border-radius);
     box-shadow: var(--shadow-sm);
 }
-
 .special-features {
     font-weight: 500;
     font-size: 1.1rem;
 }
 
+<<<<<<< HEAD
 /* ========== ABOUT US SECTION ========== */
 .about-us {
     background-color: #f2f2f2;
@@ -491,15 +655,31 @@ section h3 {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 2.5rem;
+=======
+/* ========================================
+   ABOUT US SECTION
+   ======================================== */
+.about-us { background-color: var(--bg-alt); }
+.vision-mission {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: var(--gap-xl);
+    margin: 3rem 0;
+}
+.vision h3, .mission h3 { color: var(--primary); }
+.team-section { margin-top: 4rem; }
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: var(--gap-lg);
+>>>>>>> parent of d3f99eb (Code optimization 1)
     margin-top: 2.5rem;
 }
-
 .team-member {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
-
 .team-member img {
     width: 150px;
     height: 150px;
@@ -509,28 +689,35 @@ section h3 {
     box-shadow: var(--shadow-sm);
     transition: var(--transition);
 }
-
 .team-member:hover img {
     transform: scale(1.1);
     box-shadow: var(--shadow-md);
 }
 
+<<<<<<< HEAD
 /* ========== GALLERY SECTION ========== */
+=======
+/* ========================================
+   GALLERY SECTION
+   ======================================== */
+>>>>>>> parent of d3f99eb (Code optimization 1)
 .gallery-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 1.5rem;
 }
-
 .gallery-grid img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+<<<<<<< HEAD
     border-radius: var(--card-border-radius);
     aspect-ratio: 4/3;
+=======
+    border-radius: var(--radius-lg);
+>>>>>>> parent of d3f99eb (Code optimization 1)
     transition: var(--transition);
 }
-
 .gallery-grid img:hover {
     transform: scale(1.03);
     box-shadow: var(--shadow-md);
@@ -541,6 +728,7 @@ section h3 {
     max-width: var(--form-max-width);
     margin: 0 auto;
 }
+<<<<<<< HEAD
 
 .application-form,
 .contact-form {
@@ -554,12 +742,20 @@ section h3 {
     margin-bottom: 1.75rem;
 }
 
+=======
+.application-form, .contact-form {
+    padding: 2.5rem;
+    box-shadow: var(--shadow);
+}
+.form-row { margin-bottom: 1.75rem; }
+>>>>>>> parent of d3f99eb (Code optimization 1)
 .form-row label {
     display: block;
     margin-bottom: 0.75rem;
     font-weight: 500;
     color: var(--secondary-color);
 }
+<<<<<<< HEAD
 
 .form-row input,
 .form-row select,
@@ -568,10 +764,18 @@ section h3 {
     padding: 0.85rem 1rem;
     border: 1px solid var(--form-border-color);
     border-radius: 8px;
+=======
+.form-row input, .form-row select, .form-row textarea {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    border: 1px solid var(--form-border);
+    border-radius: var(--radius);
+>>>>>>> parent of d3f99eb (Code optimization 1)
     font-size: 1rem;
     font-family: inherit;
     transition: var(--transition);
 }
+<<<<<<< HEAD
 
 .form-row input:focus,
 .form-row select:focus,
@@ -581,11 +785,17 @@ section h3 {
     box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
 }
 
+=======
+.form-row input:focus, .form-row select:focus, .form-row textarea:focus {
+    outline: none;
+    border-color: var(--form-focus);
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+}
+>>>>>>> parent of d3f99eb (Code optimization 1)
 .form-row textarea {
     resize: vertical;
     min-height: 120px;
 }
-
 .disclaimer {
     font-size: 0.875rem;
     color: #666;
@@ -595,7 +805,6 @@ section h3 {
     background: #f8f8f8;
     border-radius: 8px;
 }
-
 .form-actions {
     display: flex;
     justify-content: center;
@@ -606,16 +815,18 @@ section h3 {
 .contact-container {
     display: grid;
     grid-template-columns: 1fr;
+<<<<<<< HEAD
     gap: 2.5rem;
+=======
+    gap: var(--gap-lg);
+>>>>>>> parent of d3f99eb (Code optimization 1)
 }
-
 .map-container {
     height: 400px;
     border-radius: var(--card-border-radius);
     overflow: hidden;
     box-shadow: var(--shadow-sm);
 }
-
 .map-container iframe {
     width: 100%;
     height: 100%;
@@ -657,18 +868,21 @@ footer {
     padding: 3rem 0;
     margin-top: 5rem;
 }
-
 .footer-content {
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
 }
+<<<<<<< HEAD
 
 .footer-links {
     margin-top: 1.5rem;
 }
 
+=======
+.footer-links { margin-top: 1.5rem; }
+>>>>>>> parent of d3f99eb (Code optimization 1)
 .footer-links a {
     color: var(--white);
     text-decoration: none;
@@ -676,12 +890,10 @@ footer {
     opacity: 0.8;
     transition: var(--transition);
 }
-
 .footer-links a:hover {
     opacity: 1;
     text-decoration: underline;
 }
-
 .footer-links span {
     color: rgba(255, 255, 255, 0.3);
     margin: 0 0.25rem;
@@ -699,6 +911,7 @@ footer {
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     animation: slide-in 0.3s ease forwards;
 }
+<<<<<<< HEAD
 
 .notification.success {
     background-color: #4CAF50;
@@ -707,6 +920,10 @@ footer {
 .notification.error {
     background-color: #f44336;
 }
+=======
+.notification.success { background-color: #4CAF50; }
+.notification.error { background-color: #f44336; }
+>>>>>>> parent of d3f99eb (Code optimization 1)
 
 @keyframes slide-in {
     0% {
@@ -718,7 +935,6 @@ footer {
         transform: translateX(0);
     }
 }
-
 @keyframes slide-out {
     0% {
         opacity: 1;
@@ -738,22 +954,31 @@ footer {
 }
 
 @media (max-width: 992px) {
+<<<<<<< HEAD
     :root {
         --content-padding: 0 1.5rem;
     }
     
+=======
+    :root { --padding-content: 0 1.5rem; }
+>>>>>>> parent of d3f99eb (Code optimization 1)
     .vision-mission {
         grid-template-columns: 1fr;
         gap: 2rem;
     }
+<<<<<<< HEAD
     
     .team-grid {
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     }
+=======
+    .team-grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+>>>>>>> parent of d3f99eb (Code optimization 1)
 }
 
 @media (max-width: 768px) {
     :root {
+<<<<<<< HEAD
         --header-height: var(--header-height-mobile);
         --content-padding: var(--content-padding-mobile);
     }
@@ -770,10 +995,20 @@ footer {
         height: calc(var(--header-height-mobile) * 0.6);
     }
     
+=======
+        --header: var(--header-mobile);
+        --padding-content: 0 1rem;
+        --padding-section: 3rem 0;
+    }
+    body { padding-top: var(--header-mobile); }
+    .header-container { padding: 0 1rem; }
+    .logo img { height: calc(var(--header-mobile) * 0.6); }
+>>>>>>> parent of d3f99eb (Code optimization 1)
     .hero {
         height: 65vh;
         margin-top: calc(-1 * var(--header-height-mobile));
     }
+<<<<<<< HEAD
     
     .hero-overlay {
         padding-bottom: 2rem;
@@ -783,11 +1018,16 @@ footer {
         grid-template-columns: 1fr 1fr;
     }
     
+=======
+    .hero-overlay { padding-bottom: 2rem; }
+    .qualities { grid-template-columns: 1fr 1fr; }
+>>>>>>> parent of d3f99eb (Code optimization 1)
     .action-group {
         flex-direction: column;
         gap: 1rem;
         text-align: center;
     }
+<<<<<<< HEAD
     
     .special-features {
         margin-bottom: 1rem;
@@ -824,19 +1064,33 @@ footer {
         padding: 1.25rem;
     }
     
+=======
+    .special-features { margin-bottom: 1rem; }
+    .application-form, .contact-form { padding: 1.5rem; }
+}
+
+@media (max-width: 576px) {
+    .qualities { grid-template-columns: 1fr; }
+    .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+>>>>>>> parent of d3f99eb (Code optimization 1)
     .footer-links {
         display: flex;
         flex-direction: column;
         gap: 1rem;
     }
+<<<<<<< HEAD
     
     .footer-links span {
         display: none;
     }
+=======
+    .footer-links span { display: none; }
+>>>>>>> parent of d3f99eb (Code optimization 1)
 }
 
 /* ========== PRINT STYLES ========== */
 @media print {
+<<<<<<< HEAD
     .hero video,
     .map-container,
     .gallery-grid,
@@ -850,24 +1104,30 @@ footer {
         color: #000;
     }
     
+=======
+    .hero video, .map-container, .gallery-grid, .button, .hamburger { display: none; }
+    body { padding-top: 0; color: #000; }
+>>>>>>> parent of d3f99eb (Code optimization 1)
     header {
         position: relative;
         height: auto;
         padding: 1rem 0;
     }
-    
     .hero {
         height: auto;
         margin-top: 0;
     }
-    
     .hero-content {
         position: relative;
         color: #000;
     }
+<<<<<<< HEAD
     
     a {
         text-decoration: none;
         color: #000;
     }
+=======
+    a { color: #000; }
+>>>>>>> parent of d3f99eb (Code optimization 1)
 }
