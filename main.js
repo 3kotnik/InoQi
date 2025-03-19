@@ -1,202 +1,132 @@
 /**
  * InoQI Website - Main JavaScript File
- * Handles general site functionality
+ * Handles general site functionality (navigation, scroll effects, form handling)
  */
 
-// DOM Elements
+// DOM Elements - Header & Navigation
 const header = document.getElementById('header');
 const hamburger = document.querySelector('.hamburger');
 const navMenu = document.getElementById('nav-menu');
 const mainLogo = document.getElementById('main-logo');
 const navLinks = document.querySelectorAll('.nav-links a');
+
+// DOM Elements - Video
 const heroVideo = document.getElementById('hero-video');
+
+// DOM Elements - Forms
 const forms = document.querySelectorAll('form');
 
-// Constants
-const NOTIFICATION_DURATION = 3000;
-const NOTIFICATION_ANIMATION_DURATION = 300;
-const RESIZE_DEBOUNCE_DELAY = 250;
+// Animation Variables
+const NOTIFICATION_DURATION = 3000; // 3 seconds
+const NOTIFICATION_ANIMATION_DURATION = 300; // 0.3 seconds
+const SCROLL_DEBOUNCE_DELAY = 100; // 100ms for better performance
+const RESIZE_DEBOUNCE_DELAY = 250; // 250ms
+
+// Breakpoints
 const MOBILE_BREAKPOINT = 768;
 
 // State Variables
 let isMenuOpen = false;
 let hasScrolled = false;
-let lastScrollPosition = 0;
-let ticking = false;
-let currentSection = null;
 
 /**
- * Debounce function for performance
+ * Debounce function to limit the rate at which a function is called
+ * @param {Function} func - Function to debounce
+ * @param {number} wait - Delay in milliseconds
+ * @returns {Function} Debounced function
  */
 function debounce(func, wait) {
     let timeout;
-    return function (...args) {
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
         clearTimeout(timeout);
-        timeout = setTimeout(() => func.apply(this, args), wait);
+        timeout = setTimeout(later, wait);
     };
 }
 
 /**
- * Get current section based on scroll position
- */
-function getCurrentSection() {
-    const sections = document.querySelectorAll('section[id]');
-    let current = '';
-
-    sections.forEach(section => {
-        const sectionTop = section.offsetTop - 100;
-        const sectionHeight = section.offsetHeight;
-        if (window.scrollY >= sectionTop && window.scrollY < sectionTop + sectionHeight) {
-            current = section.getAttribute('id');
-        }
-    });
-
-    return current;
-}
-
-/**
- * Update active navigation link
- */
-function updateActiveNavLink() {
-    const currentSectionId = getCurrentSection();
-
-    if (currentSectionId !== currentSection) {
-        currentSection = currentSectionId;
-
-        navLinks.forEach(link => {
-            link.classList.remove('active');
-            if (link.getAttribute('href') === `#${currentSectionId}`) {
-                link.classList.add('active');
-            }
-        });
-    }
-}
-
-/**
- * Smooth, performant scroll handling
+ * Handles header appearance and logo size based on scroll position
  */
 function handleScroll() {
-    lastScrollPosition = window.scrollY;
-
-    if (!ticking) {
-        window.requestAnimationFrame(() => {
-            updateScrollEffects(lastScrollPosition);
-            ticking = false;
-        });
-
-        ticking = true;
-    }
-}
-
-/**
- * Update scroll-based visual effects (MODIFIED to ONLY hero and intro sections)
- */
-function updateScrollEffects(scrollPosition) {
-    const heroSection = document.getElementById('hero');
     const introSection = document.getElementById('intro');
+    if (!introSection) return;
 
-    // Function to check if scrolling within hero or intro sections
-    function isScrollingInHeroIntro() {
-        if (heroSection && scrollPosition <= heroSection.offsetHeight) return true; // In hero if scroll within hero height
-        if (introSection && scrollPosition >= introSection.offsetTop - 100 && scrollPosition < introSection.offsetTop + introSection.offsetHeight) return true; // In intro section
-        return false;
-    }
-
-    // Header appearance and logo scaling (ONLY if in hero or intro sections)
-    if (isScrollingInHeroIntro()) {
-        // Header appearance
-        if (scrollPosition > 50) {
-            header.classList.add('scrolled');
+    const scrollPosition = window.scrollY;
+    const introTop = introSection.getBoundingClientRect().top;
+    const heroHeight = document.querySelector('.hero').offsetHeight;
+    
+    // Check if we've scrolled down enough to change header
+    if (scrollPosition > 50) {
+        header.classList.add('scrolled');
+        if (!hasScrolled) {
             hasScrolled = true;
-        } else {
-            header.classList.remove('scrolled');
-            hasScrolled = false;
         }
-
-        // Real-time logo scaling
-        if (mainLogo) {
-            const introTop = introSection.getBoundingClientRect().top;
-            const scrollRatio = Math.min(1, Math.max(0, introTop / (window.innerHeight / 3)));
-            const scaleValue = 1 + (scrollRatio * 0.4);
-            mainLogo.style.transform = `scale(${scaleValue})`;
-        }
+    } else {
+        header.classList.remove('scrolled');
+        hasScrolled = false;
     }
-    // In all cases, update active navigation link (no change needed)
-    updateActiveNavLink();
+    
+    // Animate logo size based on scroll position
+    if (mainLogo) {
+        const scrollRatio = Math.min(1, Math.max(0, introTop / (window.innerHeight / 3)));
+        const scaleValue = 1 + (scrollRatio * 0.4); // Scale from 1.0 to 1.4
+        mainLogo.style.transform = `scale(${scaleValue})`;
+    }
 }
 
-
 /**
- * Toggle mobile menu
+ * Toggles mobile menu visibility
  */
 function toggleMenu() {
     isMenuOpen = !isMenuOpen;
     hamburger.classList.toggle('active', isMenuOpen);
     navMenu.classList.toggle('active', isMenuOpen);
+    
+    // Update accessibility attributes
     hamburger.setAttribute('aria-expanded', isMenuOpen);
     navMenu.setAttribute('aria-hidden', !isMenuOpen);
+    
+    // Prevent body scroll when menu is open
     document.body.style.overflow = isMenuOpen ? 'hidden' : '';
 }
 
 /**
- * Load appropriate video source
+ * Updates video source based on screen width
  */
 function handleVideoSources() {
     if (!heroVideo) return;
 
-    const width = window.innerWidth;
-
-    // Only load video when visible
-    if ('IntersectionObserver' in window) {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    loadAppropriateVideo(width);
-                    observer.disconnect();
-                }
-            });
-        });
-        observer.observe(heroVideo);
-    } else {
-        // Fallback for browsers without IntersectionObserver
-        loadAppropriateVideo(width);
-    }
-}
-
-/**
- * Load the appropriate video source based on screen width
- */
-function loadAppropriateVideo(width) {
-    if (!heroVideo) return;
-
     const sources = heroVideo.getElementsByTagName('source');
+    const width = window.innerWidth;
     let selectedSource = null;
 
-    // Find appropriate source
+    // Find the appropriate source based on media queries
     for (const source of sources) {
         const media = source.getAttribute('media');
-        if (!media) continue;
-
-        if ((media.includes('min-width: 992px') && width >= 992) ||
-            (media.includes('min-width: 768px') && media.includes('max-width: 991px') && width >= 768 && width <= 991) ||
-            (media.includes('max-width: 767px') && width <= 767)) {
-            selectedSource = source.src;
-            break;
+        
+        if (media) {
+            if ((media.includes('min-width: 992px') && width >= 992) ||
+                (media.includes('min-width: 768px') && media.includes('max-width: 991px') && width >= 768 && width <= 991) ||
+                (media.includes('max-width: 767px') && width <= 767)) {
+                selectedSource = source.src;
+                break;
+            }
         }
     }
 
-    // Only reload if source changed
+    // Only reload if we're changing sources
     if (selectedSource && heroVideo.src !== selectedSource) {
         heroVideo.src = selectedSource;
         heroVideo.load();
-        heroVideo.play().catch(() => {
-            console.log('Auto-play prevented. User interaction required.');
-        });
     }
 }
 
 /**
- * Smooth scroll to target section
+ * Implements smooth scrolling to target sections
+ * @param {Event} e - Click event
  */
 function smoothScroll(e) {
     e.preventDefault();
@@ -204,15 +134,17 @@ function smoothScroll(e) {
     const targetElement = document.querySelector(targetId);
 
     if (targetElement) {
+        // Calculate header offset for accurate scrolling
         const headerOffset = header.offsetHeight;
         const elementPosition = targetElement.getBoundingClientRect().top;
-        const offsetPosition = elementPosition + window.scrollY - headerOffset;
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
         window.scrollTo({
             top: offsetPosition,
             behavior: 'smooth'
         });
-
+        
+        // Close menu if open
         if (isMenuOpen) {
             toggleMenu();
         }
@@ -220,7 +152,8 @@ function smoothScroll(e) {
 }
 
 /**
- * Form validation and submission
+ * Handles form submissions with validation
+ * @param {Event} e - Submit event
  */
 function handleFormSubmit(e) {
     e.preventDefault();
@@ -229,7 +162,7 @@ function handleFormSubmit(e) {
     const originalText = submitButton.textContent;
     let isValid = true;
 
-    // Validate required fields
+    // Basic validation for required fields
     const requiredFields = form.querySelectorAll('[required]');
     requiredFields.forEach(field => {
         if (!field.value.trim()) {
@@ -253,7 +186,7 @@ function handleFormSubmit(e) {
         return;
     }
 
-    // Submit form
+    // Disable button and show loading state
     submitButton.disabled = true;
     submitButton.textContent = 'Pošiljam...';
 
@@ -267,34 +200,45 @@ function handleFormSubmit(e) {
 }
 
 /**
- * Email validation
+ * Validates email format
+ * @param {string} email - Email to validate
+ * @returns {boolean} Whether email is valid
  */
 function isValidEmail(email) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
 }
 
 /**
- * Show notification
+ * Shows notification messages
+ * @param {string} message - Message to display
+ * @param {string} type - Notification type ('success' or 'error')
  */
 function showNotification(message, type = 'success') {
     // Remove existing notifications
-    document.querySelectorAll('.notification').forEach(n => n.remove());
-
-    // Create notification
+    const existingNotifications = document.querySelectorAll('.notification');
+    existingNotifications.forEach(notification => {
+        notification.remove();
+    });
+    
+    // Create new notification
     const notification = document.createElement('div');
     notification.className = `notification ${type}`;
     notification.textContent = message;
     document.body.appendChild(notification);
 
-    // Auto-remove after timeout
+    // Automatically remove after duration
     setTimeout(() => {
         notification.style.animation = `slide-out ${NOTIFICATION_ANIMATION_DURATION / 1000}s forwards`;
-        setTimeout(() => notification.remove(), NOTIFICATION_ANIMATION_DURATION);
+        setTimeout(() => {
+            notification.remove();
+        }, NOTIFICATION_ANIMATION_DURATION);
     }, NOTIFICATION_DURATION);
 }
 
 /**
- * Handle clicks outside the menu
+ * Handles click outside the navigation menu to close it
+ * @param {Event} e - Click event
  */
 function handleOutsideClick(e) {
     if (isMenuOpen && !navMenu.contains(e.target) && !hamburger.contains(e.target)) {
@@ -303,7 +247,8 @@ function handleOutsideClick(e) {
 }
 
 /**
- * Handle escape key press
+ * Handles escape key to close navigation menu
+ * @param {Event} e - Keydown event
  */
 function handleEscKey(e) {
     if (e.key === 'Escape' && isMenuOpen) {
@@ -312,34 +257,48 @@ function handleEscKey(e) {
 }
 
 /**
- * Initialize page
+ * Initialize all event listeners
  */
-function initializePage() {
-    // Set initial states
-    updateScrollEffects(window.scrollY);
-    handleVideoSources();
-
-    // Event listeners
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('resize', debounce(handleVideoSources, RESIZE_DEBOUNCE_DELAY));
+function initializeEventListeners() {
+    // Scroll handling
+    window.addEventListener('scroll', debounce(handleScroll, SCROLL_DEBOUNCE_DELAY));
+    
+    // Menu handling
     hamburger.addEventListener('click', toggleMenu);
-
+    
+    // Smooth scroll for navigation links
     navLinks.forEach(link => {
         link.addEventListener('click', smoothScroll);
     });
-
+    
+    // Window resize handler
+    window.addEventListener('resize', debounce(() => {
+        handleVideoSources();
+    }, RESIZE_DEBOUNCE_DELAY));
+    
+    // Form submissions
     forms.forEach(form => {
         form.addEventListener('submit', handleFormSubmit);
     });
-
+    
+    // Close menu when clicking outside or pressing escape
     document.addEventListener('click', handleOutsideClick);
     document.addEventListener('keydown', handleEscKey);
-
-    // Set logo initial size
-    if (mainLogo && window.innerWidth > MOBILE_BREAKPOINT) {
-        mainLogo.style.transform = 'scale(1.4)';
-    }
 }
 
-// Initialize on DOM load
+/**
+ * Initialize page on load
+ */
+function initializePage() {
+    // Set initial header state
+    handleScroll();
+    
+    // Set appropriate video source
+    handleVideoSources();
+    
+    // Setup all event listeners
+    initializeEventListeners();
+}
+
+// Initialize everything when DOM is fully loaded
 document.addEventListener('DOMContentLoaded', initializePage);
