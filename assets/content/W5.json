@@ -1,37 +1,22 @@
 {
-    "title": "XR svetovi",
-    "imageUrl": "assets/images/W5.webp",
-    "imageAlt": "Tehnologije razširjene resničnosti",
-    "shortDescription": "Raziskujte in ustvarjajte v razširjeni resničnosti (14-18 let)",
-    "description": "Zakorakajte v prihodnost z virtualnimi in obogateno resničnostjo! Na tem tečaju boste spoznali najsodobnejše XR tehnologije in ustvarili svoje lastne XR izkušnje.",
-    "details": [
-        {
-            "type": "paragraph",
-            "content": "Delavnica XR svetovi predstavlja edinstveno priložnost za mlade, da raziskujejo razširjeno resničnost (XR), ki vključuje virtualno resničnost (VR) in obogateno resničnost (AR). Pod vodstvom strokovnjakov bodo udeleženci spoznali osnove in razvili lastne XR projekte."
-        },
-        {
-            "type": "paragraph",
-            "content": "Tečaj vključuje praktično delo z najnovejšimi XR napravami, programiranje interaktivnih elementov in osnove oblikovanja uporabniških vmesnikov za XR."
-        },
-        {
-            "type": "list",
-            "items": [
-                "Osnove XR tehnologij in njihova uporaba",
-                "Uvod v razvoj VR in AR izkušenj",
-                "3D modeliranje za XR okolja",
-                "Oblikovanje interaktivnih elementov",
-                "Testiranje in optimizacija XR projektov"
-            ]
-        },
-        {
-            "type": "paragraph",
-            "content": "Udeleženci bodo imeli priložnost preizkusiti najnovejše VR očala in AR naprave ter razviti osnovno razumevanje, kako se lahko XR tehnologije uporabljajo na različnih področjih, od zabave do izobraževanja in industrije."
-        },
-        {
-            "type": "paragraph",
-            "content": "Ob koncu delavnice bodo predstavili svoje XR projekte, ki jih bodo lahko nadaljevali tudi po zaključku tečaja."
-        }
-    ],
-    "buttonText": "Prijava na XR svetovi",
-    "buttonLink": "#apply"
+  "title": "Uvod v 3D modeliranje",
+  "type": "workshop",
+  "description": "Odkrijte svet 3D modeliranja! Ta tečaj je namenjen vsem, ki jih zanima 3D oblikovanje.",
+  "details": [
+    {
+      "type": "paragraph",
+      "content": "Na delavnici Uvod v 3D modeliranje se boste naučili osnov 3D modeliranja."
+    },
+    {
+      "type": "paragraph",
+      "content": "Skozi praktične primere boste izdelali svoje prve 3D modele."
+    },
+    {
+      "type": "paragraph",
+      "content": "Poudarek je na razumevanju osnovnih konceptov in praktični uporabi."
+    }
+  ],
+  "image": "assets/images/W5_3D.webp",
+  "buttonText": "Prijava na Uvod v 3D modeliranje",
+  "buttonLink": "#apply"
 }

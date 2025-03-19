@@ -1,39 +1,22 @@
 {
-    "title": "Workshop Weekend",
-    "imageUrl": "assets/images/E2.webp",
-    "imageAlt": "Intenzivni vikend delavnic",
-    "shortDescription": "Intenzivni vikend delavnic za vse nivoje znanja",
-    "description": "Potopite se v intenzivni vikend učenja in ustvarjanja! Workshop Weekend prinaša 48 ur praktičnih delavnic, sodelovanja in razvoja projektov.",
-    "details": [
-        {
-            "type": "paragraph",
-            "content": "Workshop Weekend je intenzivni dvodnevni dogodek, kjer se udeleženci poglobijo v različne tehnološke tematike. Program je zasnovan tako, da udeležencem omogoča izbiro med različnimi delavnicami glede na njihove interese in stopnjo predznanja."
-        },
-        {
-            "type": "paragraph",
-            "content": "Dogodek bo potekal od sobote zjutraj do nedelje popoldne, z možnostjo prenočitve v prostorih centra za tiste, ki želijo delati na projektih pozno v noč."
-        },
-        {
-            "type": "list",
-            "items": [
-                "Vzporedne delavnice za različne stopnje znanja",
-                "Mentorstvo izkušenih strokovnjakov iz industrije",
-                "Delo na konkretnih projektih in izzivih",
-                "Sodelovanje v skupinah ali samostojno delo",
-                "Predstavitev projektov in podelitev nagrad ob zaključku"
-            ]
-        },
-        {
-            "type": "paragraph",
-            "content": "Med letošnjim Workshop Weekendom se bodo udeleženci lahko udeležili delavnic na temo razvoja spletnih aplikacij, podatkovne znanosti, umetne inteligence, IoT projektov in mobilnega razvoja."
-        },
-        {
-            "type": "paragraph",
-            "content": "Poskrbljeno bo za vse obroke, pijačo in prijetno delovno vzdušje. Udeleženci naj prinesejo svoje prenosnike in dobro voljo za učenje novih veščin."
-        }
-    ],
-    "buttonText": "Prijava na Workshop Weekend",
-    "buttonLink": "#apply",
-    "eventDate": "2025-05-10",
-    "eventLocation": "InoQI Center, Ljubljana"
+  "title": "Hackathon",
+  "type": "event",
+  "description": "Izzovite se na našem Hackathonu! Tekmujte z drugimi programerji in razvijte inovativne rešitve.",
+  "details": [
+    {
+      "type": "paragraph",
+      "content": "Na Hackathonu boste imeli priložnost pokazati svoje znanje in ustvarjalnost."
+    },
+    {
+      "type": "paragraph",
+      "content": "Tekmovali boste v ekipah in razvijali inovativne rešitve za izzive, ki jih bomo postavili."
+    },
+    {
+      "type": "paragraph",
+      "content": "Najboljše ekipe bodo prejele nagrade."
+    }
+  ],
+  "image": "assets/images/E2_Hackathon.webp",
+  "buttonText": "Prijavi se na Hackathon",
+  "buttonLink": "#apply"
 }

@@ -1,33 +1,22 @@
 {
-    "title": "3D umetniki",
-    "imageUrl": "assets/images/W4.webp",
-    "imageAlt": "3D modeliranje za najstnike",
-    "shortDescription": "Odkrijte umetnost oblikovanja v digitalnem prostoru (13 - 18 let)",
-    "description": "Napreden tečaj 3D modeliranja za najstnike, ki želijo razvijati svoje digitalne kreativne veščine in raziskovati možnosti 3D oblikovanja.",
-    "details": [
-        {
-            "type": "paragraph",
-            "content": "Tečaj 3D umetniki je namenjen najstnikom, ki želijo poglobiti svoje znanje na področju digitalnega oblikovanja. Udeleženci se bodo naučili uporabljati profesionalna orodja za 3D modeliranje pod vodstvom izkušenih mentorjev."
-        },
-        {
-            "type": "paragraph",
-            "content": "Skozi intenzivne praktične vaje bodo ustvarjali vse zahtevnejše modele in projekte, od preprostih predmetov do kompleksnih scen."
-        },
-        {
-            "type": "list",
-            "items": [
-                "Modeliranje kompleksnih organskih struktur",
-                "Napredno teksturiranje in materiali",
-                "Osnove osvetljevanja in renderiranja",
-                "Rigging in osnove animacije",
-                "Uvod v 3D tisk modelov"
-            ]
-        },
-        {
-            "type": "paragraph",
-            "content": "Tečaj je zasnovan kot kombinacija vodenih vaj in samostojnega dela, kjer udeleženci razvijajo lastne projekte. Ob zaključku tečaja bodo udeleženci pripravili portfolio svojih del, ki ga lahko uporabijo za nadaljnje izobraževanje ali osebno predstavitev."
-        }
-    ],
-    "buttonText": "Prijava na 3D umetniki",
-    "buttonLink": "#apply"
+  "title": "Uvod v Arduino",
+  "type": "workshop",
+  "description": "Spoznajte svet Arduina! Ta tečaj je namenjen vsem, ki jih zanima elektronika in programiranje.",
+  "details": [
+    {
+      "type": "paragraph",
+      "content": "Na delavnici Uvod v Arduino se boste naučili osnov elektronike in programiranja z Arduinom."
+    },
+    {
+      "type": "paragraph",
+      "content": "Skozi praktične primere boste izdelali svoje prve elektronske projekte."
+    },
+    {
+      "type": "paragraph",
+      "content": "Poudarek je na razumevanju osnovnih konceptov in praktični uporabi."
+    }
+  ],
+  "image": "assets/images/W4_Arduino.webp",
+  "buttonText": "Prijava na Uvod v Arduino",
+  "buttonLink": "#apply"
 }

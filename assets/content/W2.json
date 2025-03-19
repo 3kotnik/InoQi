@@ -1,32 +1,22 @@
 {
-    "title": "Prvi virtualni koraki",
-    "imageUrl": "assets/images/W2.webp",
-    "imageAlt": "3D modeliranje za začetnike",
-    "shortDescription": "Začetni tečaj 3D oblikovanja (OŠ)",
-    "description": "Odpravite se na potovanje v svet 3D modeliranja! Otroci bodo spoznali osnove oblikovanja v treh dimenzijah in razvijali prostorsko predstavo.",
-    "details": [
-        {
-            "type": "paragraph",
-            "content": "Delavnica Prvi virtualni koraki je zasnovana za učence osnovne šole, ki jih zanima digitalna umetnost in oblikovanje. Skozi praktične projekte udeleženci spoznajo osnove 3D sveta."
-        },
-        {
-            "type": "list",
-            "items": [
-                "Spoznavanje uporabniških vmesnikov za 3D modeliranje",
-                "Kreiranje preprostih 3D modelov",
-                "Barvanje in teksturiranje objektov",
-                "Osnove 3D animacije"
-            ]
-        },
-        {
-            "type": "paragraph",
-            "content": "Delavnica poteka v manjših skupinah, s prilagojenim tempom za različne starosti. Učenci delajo na računalnikih z vso potrebno programsko opremo."
-        },
-        {
-            "type": "paragraph",
-            "content": "Ob koncu delavnice bodo otroci odnesli domov svoje prve 3D kreacije in novo znanje, ki ga lahko nadgrajujejo v prihodnje."
-        }
-    ],
-    "buttonText": "Prijava na Prvi virtualni koraki",
-    "buttonLink": "#apply"
+  "title": "Razvoj spletnih strani",
+  "type": "workshop",
+  "description": "Naučite se izdelati svojo spletno stran! Ta tečaj je namenjen vsem, ki želijo osvojiti osnove spletnega razvoja.",
+  "details": [
+    {
+      "type": "paragraph",
+      "content": "Na delavnici Razvoj spletnih strani se boste naučili osnov HTML, CSS in JavaScript."
+    },
+    {
+      "type": "paragraph",
+      "content": "Skozi praktične primere boste izdelali svojo prvo spletno stran."
+    },
+    {
+      "type": "paragraph",
+      "content": "Poudarek je na razumevanju osnovnih konceptov in praktični uporabi."
+    }
+  ],
+  "image": "assets/images/W2_WebDev.webp",
+  "buttonText": "Prijava na Razvoj spletnih strani",
+  "buttonLink": "#apply"
 }

@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
     "title": "KidoKoda",
     "imageUrl": "assets/images/W1.webp",
     "imageAlt": "KidoKoda Workshop za programiranje",
@@ -40,3 +41,21 @@
     "buttonLink": "#apply"
 
 }
+=======
+  "title": "KidoKoda",
+  "type": "workshop",
+  "description": "Naučite se programirati na zabaven način! Ta tečaj je namenjen otrokom osnovnošolske starosti, ki želijo odkriti svet kodiranja.",
+  "details": [
+    {
+      "type": "paragraph",
+      "content": "Na delavnici KidoKoda se otroci naučijo osnov programiranja skozi interaktivne projekte."
+    },
+    {
+      "type": "paragraph",
+      "content": "Poudarek je na razvoju analitičnega mišljenja in kreativnega pristopa pri iskanju rešitev."
+    }
+  ],
+  "buttonText": "Prijava na KidoKoda",
+  "buttonLink": "#apply"
+}
+>>>>>>> parent of 7d64d38 (JSON updated)

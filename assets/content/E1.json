@@ -1,35 +1,22 @@
 {
-    "title": "Tech Talks",
-    "imageUrl": "assets/images/E1.webp",
-    "imageAlt": "Tech Talks predavanja in mreženje",
-    "shortDescription": "Mesečna srečanja z vodilnimi strokovnjaki v industriji",
-    "description": "Pridružite se nam na rednih mesečnih srečanjih, kjer vodilni strokovnjaki delijo svoje izkušnje in najnovejše trende v tehnologiji.",
-    "details": [
-        {
-            "type": "paragraph",
-            "content": "Tech Talks so serija mesečnih dogodkov, kjer gostimo priznane strokovnjake iz različnih področij tehnologije. Vsak dogodek se osredotoča na specifično temo, od umetne inteligence do kibernetske varnosti in trajnostnega razvoja."
-        },
-        {
-            "type": "paragraph",
-            "content": "Na aprilskem srečanju bomo gostili strokovnjake s področja umetne inteligence, ki bodo predstavili najnovejše trende in praktične primere uporabe AI v vsakdanjem življenju in poslovanju."
-        },
-        {
-            "type": "list",
-            "items": [
-                "Predstavitve in predavanja vodilnih strokovnjakov",
-                "Vprašanja in odgovori z govorci",
-                "Priložnost za mreženje s profesionalci iz industrije",
-                "Praktične demonstracije novih tehnologij",
-                "Lahek prigrizek in pijača za vse udeležence"
-            ]
-        },
-        {
-            "type": "paragraph",
-            "content": "Dogodek je primeren za vse, ki jih zanima tehnologija, ne glede na predznanje. Število mest je omejeno, zato priporočamo zgodnjo prijavo."
-        }
-    ],
-    "buttonText": "Prijava na Tech Talks",
-    "buttonLink": "#apply",
-    "eventDate": "2025-04-15",
-    "eventLocation": "InoQI Center, Ljubljana"
+  "title": "Tech Talks",
+  "type": "event",
+  "description": "Pridružite se nam na mesečnih srečanjih z vodilnimi strokovnjaki v industriji.",
+  "details": [
+    {
+      "type": "paragraph",
+      "content": "Spoznajte najnovejše trende in se povežite z drugimi navdušenci nad tehnologijo."
+    },
+    {
+      "type": "list",
+      "items": [
+        "Raznolike teme",
+        "Izkušeni govorci",
+        "Mreženje"
+      ]
+    }
+  ],
+  "image": "assets/images/E1_TechTalks.webp",
+  "buttonText": "Prijavi se na Tech Talks",
+  "buttonLink": "#apply"
 }

@@ -1,39 +1,22 @@
 {
-    "title": "VR Experience Day",
-    "imageUrl": "assets/images/E3.webp",
-    "imageAlt": "Dan odprtih vrat z VR tehnologijami",
-    "shortDescription": "Dan odprtih vrat z VR tehnologijami",
-    "description": "Doživite prihodnost danes! Pridružite se nam na dnevu odprtih vrat, kjer boste lahko preizkusili najnovejše VR tehnologije in se potopili v virtualne svetove.",
-    "details": [
-        {
-            "type": "paragraph",
-            "content": "VR Experience Day je posebni dogodek, kjer odpiramo vrata našega centra vsem, ki jih zanima virtualna resničnost. Obiskovalci bodo imeli priložnost preizkusiti najsodobnejšo VR opremo in različne aplikacije, od iger do izobraževalnih in poslovnih orodij."
-        },
-        {
-            "type": "paragraph",
-            "content": "Dogodek je organiziran v obliki postaj, kjer lahko udeleženci preizkusijo različne vrste VR izkušenj, pod vodstvom naših izkušenih mentorjev."
-        },
-        {
-            "type": "list",
-            "items": [
-                "Preizkus najnovejših VR očal in krmilnikov",
-                "Potopitev v virtualne svetove in igre",
-                "Izobraževalne VR aplikacije za različna področja",
-                "Demonstracije uporabe VR v industriji in medicini",
-                "Predstavitve VR projektov naših študentov"
-            ]
-        },
-        {
-            "type": "paragraph",
-            "content": "VR Experience Day je primeren za vse starosti in ne zahteva predhodnega znanja. Za mlajše od 12 let je obvezno spremstvo odrasle osebe."
-        },
-        {
-            "type": "paragraph",
-            "content": "Vstop je prost, vendar je zaradi omejenega števila opreme in prostora potrebna predhodna registracija. Vsak udeleženec bo imel na voljo najmanj 30 minut za preizkus različnih VR izkušenj."
-        }
-    ],
-    "buttonText": "Prijava na VR Experience Day",
-    "buttonLink": "#apply",
-    "eventDate": "2025-06-22",
-    "eventLocation": "InoQI Center, Ljubljana"
+  "title": "Srečanje z mentorji",
+  "type": "event",
+  "description": "Spoznajte naše mentorje! Na srečanju z mentorji boste imeli priložnost spoznati naše izkušene mentorje.",
+  "details": [
+    {
+      "type": "paragraph",
+      "content": "Mentorji vam bodo predstavili svoje izkušnje in vam svetovali pri vaših projektih."
+    },
+    {
+      "type": "paragraph",
+      "content": "Spoznajte mentorje in se povežite z njimi."
+    },
+    {
+      "type": "paragraph",
+      "content": "Pridobite nasvete in se učite iz izkušenj drugih."
+    }
+  ],
+  "image": "assets/images/E3_Mentors.webp",
+  "buttonText": "Prijavi se na Srečanje z mentorji",
+  "buttonLink": "#apply"
 }
