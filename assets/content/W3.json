@@ -1,22 +1,33 @@
 {
-  "title": "Uvod v Python",
-  "type": "workshop",
-  "description": "Odkrijte moč Pythona! Ta tečaj je namenjen vsem, ki se želijo naučiti programirati v Pythonu.",
-  "details": [
-    {
-      "type": "paragraph",
-      "content": "Na delavnici Uvod v Python se boste naučili osnovnih konceptov programiranja v Pythonu."
-    },
-    {
-      "type": "paragraph",
-      "content": "Skozi praktične primere boste pisali svoje prve programe."
-    },
-    {
-      "type": "paragraph",
-      "content": "Poudarek je na razumevanju osnovnih konceptov in praktični uporabi."
-    }
-  ],
-  "image": "assets/images/W3_Python.webp",
-  "buttonText": "Prijava na Uvod v Python",
-  "buttonLink": "#apply"
+    "title": "Robotske avanture",
+    "imageUrl": "assets/images/W3.webp",
+    "imageAlt": "Programiranje robotov za otroke",
+    "shortDescription": "Programiranje in gradnja robotov za praktične izzive (OŠ)",
+    "description": "Vstopite v fascinantni svet robotike! Na tej delavnici se bodo otroci naučili graditi in programirati robote za reševanje praktičnih nalog.",
+    "details": [
+        {
+            "type": "paragraph",
+            "content": "Delavnica Robotske avanture je idealna za mlade raziskovalce, ki jih zanima povezava med programiranjem in fizičnim svetom. Z uporabo posebnih robotskih kompletov bodo udeleženci gradili različne modele robotov."
+        },
+        {
+            "type": "paragraph",
+            "content": "Poudarek je na praktičnem delu in razumevanju osnovnih principov delovanja robotov skozi igro in raziskovanje."
+        },
+        {
+            "type": "list",
+            "items": [
+                "Osnove mehanike in elektronike",
+                "Sestavljanje robotskih modelov iz komponent",
+                "Programiranje robotov za izvajanje nalog",
+                "Reševanje izzivov z lastnimi roboti",
+                "Timsko delo in sodelovanje"
+            ]
+        },
+        {
+            "type": "paragraph",
+            "content": "Delavnica se zaključi z robotskim tekmovanjem, kjer lahko udeleženci pokažejo svoje nove veščine in ustvarjalnost. Vsi udeleženci prejmejo diplomo in knjižico z navodili za nadaljnje robotske projekte."
+        }
+    ],
+    "buttonText": "Prijava na Robotske avanture",
+    "buttonLink": "#apply"
 }

@@ -1,32 +1,29 @@
 {
-<<<<<<< HEAD
     "title": "KidoKoda",
     "imageUrl": "assets/images/W1.webp",
     "imageAlt": "KidoKoda Workshop za programiranje",
     "shortDescription": "Tečaj programiranja za OŠ",
-    "description": "Prvi koraki v svet programiranja! Tečaj prilagojen za otroke (8-11 let) in mlade (12-15 let).",
+    "description": "Naučite se programirati na zabaven način! Ta tečaj je namenjen otrokom osnovnošolske starosti, ki želijo odkriti svet kodiranja.",
 
     "details": [
 
         {
             "type": "paragraph",
-            "content": "Tvoj otrok obožuje videoigre in nove izzive? Naj bo drzen in USTVARI svojo! Radoveden, kako delujejo roboti? Naši že komaj čakajo, da jih požene na nove tekme in misije!"
-
+            "content": "Na delavnici KidoKoda se otroci naučijo osnov programiranja skozi interaktivne projekte."
         },
 
         {
             "type": "paragraph",
-            "content": "KIDO KODA je začetni tečaj programiranja, kjer otroci skozi igro in eksperimentiranje osvojijo osnovne veščine kodiranja, ustvarjalnega razmišljanja in reševanja problemov. Z uporabo kreativnih, brezplačnih orodij, ki jih bodo lahko raziskovali tudi po koncu tečaja, se bodo naučili razvijati igre, programirati robote, ustvarjati v 3d prostoru in uporabljati umetno inteligenco za pomoč. Predznanje ni potrebno!"
+            "content": "Poudarek je na razvoju analitičnega mišljenja in kreativnega pristopa pri iskanju rešitev."
         },
 
         {
-            "title": "Kaj bodo otroci pridobili?",
             "type": "list",
             "items": [
-                "Scratch – osvojili osnove Scratch okolja in programiranja ob ustvarjanju lastne igrice (platformer v vesolju, lov na zaklad, interaktivna zgodba…)",
-                "Kodu Game Lab – oblikovali svojo sceno, gradnike in karakterje, programirali interakcijo, preizkusili umetno inteligenco ob ustvarjanju igrice (superjunak proti robotom, bežanje pred duhovi, platformerska avantura…)",
-                "Robotika – sestavljanje, programiranje in tekme z robotQi (vozila, poligoni, robotske roke…)",
-                "Zaključni dogodek – staršem in prijateljem bodo predstavili svoje inovativne izdelke."
+                "Ustvarjanje lastnih iger in animacij",
+                "Razvoj logičnega razmišljanja",
+                "Reševanje problemov s kodo",
+                "Razumevanje osnovnih programerskih konceptov"
             ]
         },
 
@@ -41,21 +38,3 @@
     "buttonLink": "#apply"
 
 }
-=======
-  "title": "KidoKoda",
-  "type": "workshop",
-  "description": "Naučite se programirati na zabaven način! Ta tečaj je namenjen otrokom osnovnošolske starosti, ki želijo odkriti svet kodiranja.",
-  "details": [
-    {
-      "type": "paragraph",
-      "content": "Na delavnici KidoKoda se otroci naučijo osnov programiranja skozi interaktivne projekte."
-    },
-    {
-      "type": "paragraph",
-      "content": "Poudarek je na razvoju analitičnega mišljenja in kreativnega pristopa pri iskanju rešitev."
-    }
-  ],
-  "buttonText": "Prijava na KidoKoda",
-  "buttonLink": "#apply"
-}
->>>>>>> parent of 7d64d38 (JSON updated)

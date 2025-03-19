@@ -1,150 +1,208 @@
 /**
  * InoQI Website - Main JavaScript File
- * Handles general site functionality (navigation, scroll effects, form handling)
+ * Handles general site functionality
  */
 
-// DOM Elements - Header & Navigation
+// DOM Elements
 const header = document.getElementById('header');
 const hamburger = document.querySelector('.hamburger');
 const navMenu = document.getElementById('nav-menu');
 const mainLogo = document.getElementById('main-logo');
 const navLinks = document.querySelectorAll('.nav-links a');
-
-// DOM Elements - Video
 const heroVideo = document.getElementById('hero-video');
-
-// DOM Elements - Forms
 const forms = document.querySelectorAll('form');
 
-// Animation Variables
-const NOTIFICATION_DURATION = 3000; // 3 seconds
-const NOTIFICATION_ANIMATION_DURATION = 300; // 0.3 seconds
-const SCROLL_DEBOUNCE_DELAY = 100; // 100ms for better performance
-const RESIZE_DEBOUNCE_DELAY = 250; // 250ms
-
-// Breakpoints
+// Constants
+const NOTIFICATION_DURATION = 3000;
+const NOTIFICATION_ANIMATION_DURATION = 300;
+const RESIZE_DEBOUNCE_DELAY = 250;
 const MOBILE_BREAKPOINT = 768;
 
 // State Variables
 let isMenuOpen = false;
 let hasScrolled = false;
+let lastScrollPosition = 0;
+let ticking = false;
+let currentSection = null;
 
 /**
- * Debounce function to limit the rate at which a function is called
- * @param {Function} func - Function to debounce
- * @param {number} wait - Delay in milliseconds
- * @returns {Function} Debounced function
+ * Debounce function for performance
  */
 function debounce(func, wait) {
     let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
+    return function(...args) {
         clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
+        timeout = setTimeout(() => func.apply(this, args), wait);
     };
 }
 
 /**
- * Handles header appearance and logo size based on scroll position
+ * Get current section based on scroll position
+ */
+function getCurrentSection() {
+    const sections = document.querySelectorAll('section[id]');
+    let current = '';
+    
+    sections.forEach(section => {
+        const sectionTop = section.offsetTop - 100;
+        const sectionHeight = section.offsetHeight;
+        if (window.scrollY >= sectionTop && window.scrollY < sectionTop + sectionHeight) {
+            current = section.getAttribute('id');
+        }
+    });
+    
+    return current;
+}
+
+/**
+ * Update active navigation link
+ */
+function updateActiveNavLink() {
+    const currentSectionId = getCurrentSection();
+    
+    if (currentSectionId !== currentSection) {
+        currentSection = currentSectionId;
+        
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === `#${currentSectionId}`) {
+                link.classList.add('active');
+            }
+        });
+    }
+}
+
+/**
+ * Smooth, performant scroll handling
  */
 function handleScroll() {
+    lastScrollPosition = window.scrollY;
+    
+    if (!ticking) {
+        window.requestAnimationFrame(() => {
+            updateScrollEffects(lastScrollPosition);
+            ticking = false;
+        });
+        
+        ticking = true;
+    }
+}
+
+/**
+ * Update scroll-based visual effects
+ */
+function updateScrollEffects(scrollPosition) {
     const introSection = document.getElementById('intro');
     if (!introSection) return;
-
-    const scrollPosition = window.scrollY;
-    const introTop = introSection.getBoundingClientRect().top;
-    const heroHeight = document.querySelector('.hero').offsetHeight;
     
-    // Check if we've scrolled down enough to change header
+    // Header appearance
     if (scrollPosition > 50) {
         header.classList.add('scrolled');
-        if (!hasScrolled) {
-            hasScrolled = true;
-        }
+        hasScrolled = true;
     } else {
         header.classList.remove('scrolled');
         hasScrolled = false;
     }
     
-    // Animate logo size based on scroll position
+    // Real-time logo scaling
     if (mainLogo) {
+        const introTop = introSection.getBoundingClientRect().top;
         const scrollRatio = Math.min(1, Math.max(0, introTop / (window.innerHeight / 3)));
-        const scaleValue = 1 + (scrollRatio * 0.4); // Scale from 1.0 to 1.4
+        const scaleValue = 1 + (scrollRatio * 0.4);
         mainLogo.style.transform = `scale(${scaleValue})`;
     }
+    
+    // Update active navigation link
+    updateActiveNavLink();
 }
 
 /**
- * Toggles mobile menu visibility
+ * Toggle mobile menu
  */
 function toggleMenu() {
     isMenuOpen = !isMenuOpen;
     hamburger.classList.toggle('active', isMenuOpen);
     navMenu.classList.toggle('active', isMenuOpen);
-    
-    // Update accessibility attributes
     hamburger.setAttribute('aria-expanded', isMenuOpen);
     navMenu.setAttribute('aria-hidden', !isMenuOpen);
-    
-    // Prevent body scroll when menu is open
     document.body.style.overflow = isMenuOpen ? 'hidden' : '';
 }
 
 /**
- * Updates video source based on screen width
+ * Load appropriate video source
  */
 function handleVideoSources() {
     if (!heroVideo) return;
-
-    const sources = heroVideo.getElementsByTagName('source');
+    
     const width = window.innerWidth;
-    let selectedSource = null;
-
-    // Find the appropriate source based on media queries
-    for (const source of sources) {
-        const media = source.getAttribute('media');
-        
-        if (media) {
-            if ((media.includes('min-width: 992px') && width >= 992) ||
-                (media.includes('min-width: 768px') && media.includes('max-width: 991px') && width >= 768 && width <= 991) ||
-                (media.includes('max-width: 767px') && width <= 767)) {
-                selectedSource = source.src;
-                break;
-            }
-        }
-    }
-
-    // Only reload if we're changing sources
-    if (selectedSource && heroVideo.src !== selectedSource) {
-        heroVideo.src = selectedSource;
-        heroVideo.load();
+    
+    // Only load video when visible
+    if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    loadAppropriateVideo(width);
+                    observer.disconnect();
+                }
+            });
+        });
+        observer.observe(heroVideo);
+    } else {
+        // Fallback for browsers without IntersectionObserver
+        loadAppropriateVideo(width);
     }
 }
 
 /**
- * Implements smooth scrolling to target sections
- * @param {Event} e - Click event
+ * Load the appropriate video source based on screen width
+ */
+function loadAppropriateVideo(width) {
+    if (!heroVideo) return;
+    
+    const sources = heroVideo.getElementsByTagName('source');
+    let selectedSource = null;
+    
+    // Find appropriate source
+    for (const source of sources) {
+        const media = source.getAttribute('media');
+        if (!media) continue;
+        
+        if ((media.includes('min-width: 992px') && width >= 992) ||
+            (media.includes('min-width: 768px') && media.includes('max-width: 991px') && width >= 768 && width <= 991) ||
+            (media.includes('max-width: 767px') && width <= 767)) {
+            selectedSource = source.src;
+            break;
+        }
+    }
+    
+    // Only reload if source changed
+    if (selectedSource && heroVideo.src !== selectedSource) {
+        heroVideo.src = selectedSource;
+        heroVideo.load();
+        heroVideo.play().catch(() => {
+            console.log('Auto-play prevented. User interaction required.');
+        });
+    }
+}
+
+/**
+ * Smooth scroll to target section
  */
 function smoothScroll(e) {
     e.preventDefault();
     const targetId = this.getAttribute('href');
     const targetElement = document.querySelector(targetId);
-
+    
     if (targetElement) {
-        // Calculate header offset for accurate scrolling
         const headerOffset = header.offsetHeight;
         const elementPosition = targetElement.getBoundingClientRect().top;
-        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-
+        const offsetPosition = elementPosition + window.scrollY - headerOffset;
+        
         window.scrollTo({
             top: offsetPosition,
             behavior: 'smooth'
         });
         
-        // Close menu if open
         if (isMenuOpen) {
             toggleMenu();
         }
@@ -152,8 +210,7 @@ function smoothScroll(e) {
 }
 
 /**
- * Handles form submissions with validation
- * @param {Event} e - Submit event
+ * Form validation and submission
  */
 function handleFormSubmit(e) {
     e.preventDefault();
@@ -161,8 +218,8 @@ function handleFormSubmit(e) {
     const submitButton = form.querySelector('button[type="submit"]');
     const originalText = submitButton.textContent;
     let isValid = true;
-
-    // Basic validation for required fields
+    
+    // Validate required fields
     const requiredFields = form.querySelectorAll('[required]');
     requiredFields.forEach(field => {
         if (!field.value.trim()) {
@@ -172,12 +229,12 @@ function handleFormSubmit(e) {
             field.classList.remove('error');
         }
     });
-
+    
     if (!isValid) {
         showNotification('Prosimo, izpolnite vsa obvezna polja.', 'error');
         return;
     }
-
+    
     // Email validation
     const emailField = form.querySelector('input[type="email"]');
     if (emailField && !isValidEmail(emailField.value)) {
@@ -185,11 +242,11 @@ function handleFormSubmit(e) {
         showNotification('Vnesite veljaven e-poštni naslov.', 'error');
         return;
     }
-
-    // Disable button and show loading state
+    
+    // Submit form
     submitButton.disabled = true;
     submitButton.textContent = 'Pošiljam...';
-
+    
     // Simulate form submission (replace with actual API call)
     setTimeout(() => {
         form.reset();
@@ -200,45 +257,34 @@ function handleFormSubmit(e) {
 }
 
 /**
- * Validates email format
- * @param {string} email - Email to validate
- * @returns {boolean} Whether email is valid
+ * Email validation
  */
 function isValidEmail(email) {
-    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(String(email).toLowerCase());
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
 /**
- * Shows notification messages
- * @param {string} message - Message to display
- * @param {string} type - Notification type ('success' or 'error')
+ * Show notification
  */
 function showNotification(message, type = 'success') {
     // Remove existing notifications
-    const existingNotifications = document.querySelectorAll('.notification');
-    existingNotifications.forEach(notification => {
-        notification.remove();
-    });
+    document.querySelectorAll('.notification').forEach(n => n.remove());
     
-    // Create new notification
+    // Create notification
     const notification = document.createElement('div');
     notification.className = `notification ${type}`;
     notification.textContent = message;
     document.body.appendChild(notification);
-
-    // Automatically remove after duration
+    
+    // Auto-remove after timeout
     setTimeout(() => {
         notification.style.animation = `slide-out ${NOTIFICATION_ANIMATION_DURATION / 1000}s forwards`;
-        setTimeout(() => {
-            notification.remove();
-        }, NOTIFICATION_ANIMATION_DURATION);
+        setTimeout(() => notification.remove(), NOTIFICATION_ANIMATION_DURATION);
     }, NOTIFICATION_DURATION);
 }
 
 /**
- * Handles click outside the navigation menu to close it
- * @param {Event} e - Click event
+ * Handle clicks outside the menu
  */
 function handleOutsideClick(e) {
     if (isMenuOpen && !navMenu.contains(e.target) && !hamburger.contains(e.target)) {
@@ -247,8 +293,7 @@ function handleOutsideClick(e) {
 }
 
 /**
- * Handles escape key to close navigation menu
- * @param {Event} e - Keydown event
+ * Handle escape key press
  */
 function handleEscKey(e) {
     if (e.key === 'Escape' && isMenuOpen) {
@@ -257,48 +302,34 @@ function handleEscKey(e) {
 }
 
 /**
- * Initialize all event listeners
+ * Initialize page
  */
-function initializeEventListeners() {
-    // Scroll handling
-    window.addEventListener('scroll', debounce(handleScroll, SCROLL_DEBOUNCE_DELAY));
+function initializePage() {
+    // Set initial states
+    updateScrollEffects(window.scrollY);
+    handleVideoSources();
     
-    // Menu handling
+    // Event listeners
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', debounce(handleVideoSources, RESIZE_DEBOUNCE_DELAY));
     hamburger.addEventListener('click', toggleMenu);
     
-    // Smooth scroll for navigation links
     navLinks.forEach(link => {
         link.addEventListener('click', smoothScroll);
     });
     
-    // Window resize handler
-    window.addEventListener('resize', debounce(() => {
-        handleVideoSources();
-    }, RESIZE_DEBOUNCE_DELAY));
-    
-    // Form submissions
     forms.forEach(form => {
         form.addEventListener('submit', handleFormSubmit);
     });
     
-    // Close menu when clicking outside or pressing escape
     document.addEventListener('click', handleOutsideClick);
     document.addEventListener('keydown', handleEscKey);
+    
+    // Set logo initial size
+    if (mainLogo && window.innerWidth > MOBILE_BREAKPOINT) {
+        mainLogo.style.transform = 'scale(1.4)';
+    }
 }
 
-/**
- * Initialize page on load
- */
-function initializePage() {
-    // Set initial header state
-    handleScroll();
-    
-    // Set appropriate video source
-    handleVideoSources();
-    
-    // Setup all event listeners
-    initializeEventListeners();
-}
-
-// Initialize everything when DOM is fully loaded
+// Initialize on DOM load
 document.addEventListener('DOMContentLoaded', initializePage);
